@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "452287493666",
+    "project_id": "dissertationproject-fb613",
+    "storage_bucket": "dissertationproject-fb613.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452287493666:android:e3f25251f16f363eacfc7b",
+        "android_client_info": {
+          "package_name": "com.example.dissertationproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452287493666-is7ge4gk9sqcqm5fnilo7blm42eu9cmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7s-xXutemmZ9pmkbLxdagiCpXr181aFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452287493666-is7ge4gk9sqcqm5fnilo7blm42eu9cmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
