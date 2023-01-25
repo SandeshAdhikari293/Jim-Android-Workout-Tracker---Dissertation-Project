@@ -13,14 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.dissertationproject.databinding.FragmentStatsBinding;
 
 
-public class DashboardFragment extends Fragment {
+public class StatsFragment extends Fragment {
 
     private FragmentStatsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        StatsViewModel dashboardViewModel =
+                new ViewModelProvider(this).get(StatsViewModel.class);
 
         binding = FragmentStatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

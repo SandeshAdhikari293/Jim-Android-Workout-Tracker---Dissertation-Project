@@ -1,6 +1,8 @@
 package com.example.dissertationproject;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -34,4 +36,7 @@ public class DashboardActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+    public void addExercise(View v){
+        startActivity(new Intent(DashboardActivity.this, CreateExerciseActivity.class));
+    }
 }

@@ -12,19 +12,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dissertationproject.databinding.FragmentWorkoutsBinding;
 
-public class NotificationsFragment extends Fragment {
+public class WorkoutsFragment extends Fragment {
 
     private FragmentWorkoutsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        WorkoutsViewModel notificationsViewModel =
+                new ViewModelProvider(this).get(WorkoutsViewModel.class);
 
         binding = FragmentWorkoutsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
+        final TextView textView = binding.textWorkouts;
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }

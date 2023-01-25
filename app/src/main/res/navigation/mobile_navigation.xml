@@ -7,24 +7,23 @@
 
     <fragment
         android:id="@+id/navigation_log"
-        android:name="com.example.dissertationproject.ui.log.HomeFragment"
+        android:name="com.example.dissertationproject.ui.log.LogFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_stats" />
 
     <fragment
         android:id="@+id/navigation_stats"
-        android:name="com.example.dissertationproject.ui.stats.DashboardFragment"
+        android:name="com.example.dissertationproject.ui.stats.StatsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_log" />
 
     <fragment
         android:id="@+id/navigation_workouts"
-        android:name="com.example.dissertationproject.ui.workouts.NotificationsFragment"
+        android:name="com.example.dissertationproject.ui.workouts.WorkoutsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_workouts" />
     <fragment
         android:id="@+id/navigation_exercises"
-        android:name="com.example.dissertationproject.ui.workouts.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_workouts" />
+        android:name="com.example.dissertationproject.ui.exercises.ExercisesFragment"
+        android:label="@string/title_notifications" />
 </navigation>

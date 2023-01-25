@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.dissertationproject.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -47,6 +48,11 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            new User(user.getUid(), user.getDisplayName(), user.getEmail()).setActiveUser();
+
+                            //TODO: load all the exercises and workouts for the user from the database.
+
                             System.out.println("Login success");
                             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
 

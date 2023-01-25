@@ -12,14 +12,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dissertationproject.databinding.FragmentLogBinding;
 
-public class HomeFragment extends Fragment {
+public class LogFragment extends Fragment {
 
     private FragmentLogBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        LogViewModel homeViewModel =
+                new ViewModelProvider(this).get(LogViewModel.class);
 
         binding = FragmentLogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
