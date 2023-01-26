@@ -63,6 +63,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

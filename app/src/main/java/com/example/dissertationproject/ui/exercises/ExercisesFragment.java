@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dissertationproject.databinding.FragmentExercisesBinding;
+import com.example.dissertationproject.objects.ExerciseTemplate;
+import com.example.dissertationproject.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,8 +24,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class ExercisesFragment extends Fragment {
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private FragmentExercisesBinding binding;
 
@@ -45,24 +45,12 @@ public class ExercisesFragment extends Fragment {
     }
 
     public void displayExercises(){
-        db.collection("exercises")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            String s = "";
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                if(document.get())
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                s = s + document.getData().toString();
-                            }
-                            binding.tvExerciseList.setText(s);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+        String s = "";
+        for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
+            s = s + exerciseTemplate.getCategory() + " | " + exerciseTemplate.getName() + " | "
+                    + exerciseTemplate.getDesc() +" \n";
+        }
+        binding.tvExerciseList.setText(s);
     }
 
     @Override

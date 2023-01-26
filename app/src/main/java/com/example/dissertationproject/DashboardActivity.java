@@ -39,4 +39,9 @@ public class DashboardActivity extends AppCompatActivity {
     public void addExercise(View v){
         startActivity(new Intent(DashboardActivity.this, CreateExerciseActivity.class));
     }
+
+    public void createWorkoutPlan(View v){
+        startActivity(new Intent(DashboardActivity.this, CreateWorkoutActivity.class));
+
+    }
 }
