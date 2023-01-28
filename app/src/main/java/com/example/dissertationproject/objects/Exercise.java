@@ -1,10 +1,11 @@
 package com.example.dissertationproject.objects;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Exercise {
     private ExerciseTemplate template;
-    private HashMap<Integer, Integer> repSets;
+    private ArrayList<Integer> reps;
 
     public Exercise(ExerciseTemplate template){
 
@@ -18,11 +19,11 @@ public class Exercise {
         this.template = template;
     }
 
-    public HashMap<Integer, Integer> getRepSets() {
-        return repSets;
+    public ArrayList<Integer> getReps() {
+        return reps;
     }
 
-    public void setRepSets(HashMap<Integer, Integer> repSets) {
-        this.repSets = repSets;
+    public void setReps(ArrayList<Integer> reps) {
+        this.reps = reps;
     }
 }
