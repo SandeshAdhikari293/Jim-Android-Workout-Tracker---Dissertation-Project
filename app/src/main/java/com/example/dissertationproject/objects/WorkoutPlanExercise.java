@@ -15,6 +15,11 @@ public class WorkoutPlanExercise{
         this.targetReps = new ArrayList<>();
     }
 
+    public WorkoutPlanExercise(ExerciseTemplate exerciseTemplate){
+        this.exerciseTemplate =  exerciseTemplate;
+        this.targetReps = new ArrayList<>();
+    }
+
     public WorkoutPlan getWorkoutPlan() {
         return workoutPlan;
     }

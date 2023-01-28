@@ -44,4 +44,13 @@ public class ExerciseTemplate {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public static ExerciseTemplate getFromName(String name){
+        for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
+            if(exerciseTemplate.getName().equals(name)){
+                return exerciseTemplate;
+            }
+        }
+        return null;
+    }
 }

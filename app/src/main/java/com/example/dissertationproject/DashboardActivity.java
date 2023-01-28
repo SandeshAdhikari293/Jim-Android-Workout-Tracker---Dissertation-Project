@@ -14,6 +14,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.dissertationproject.databinding.ActivityCreateExerciseBinding;
 
+import java.util.ArrayList;
+
 public class DashboardActivity extends AppCompatActivity {
 
     private ActivityCreateExerciseBinding binding;
