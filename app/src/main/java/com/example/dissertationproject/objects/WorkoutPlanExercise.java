@@ -7,17 +7,21 @@ public class WorkoutPlanExercise{
     private ExerciseTemplate exerciseTemplate;
     private WorkoutPlan workoutPlan;
 
+    private ArrayList<RepLine> repLines;
+
     private ArrayList<Integer> targetReps;
 
     public WorkoutPlanExercise(WorkoutPlan plan, ExerciseTemplate exerciseTemplate){
         this.workoutPlan = plan;
         this.exerciseTemplate =  exerciseTemplate;
         this.targetReps = new ArrayList<>();
+        this.repLines = new ArrayList<>();
     }
 
     public WorkoutPlanExercise(ExerciseTemplate exerciseTemplate){
         this.exerciseTemplate =  exerciseTemplate;
         this.targetReps = new ArrayList<>();
+        this.repLines = new ArrayList<>();
     }
 
     public WorkoutPlan getWorkoutPlan() {
@@ -42,5 +46,14 @@ public class WorkoutPlanExercise{
 
     public void setTargetReps(ArrayList<Integer> targetReps) {
         this.targetReps = targetReps;
+    }
+
+
+    public ArrayList<RepLine> getRepLines() {
+        return repLines;
+    }
+
+    public void setRepLines(ArrayList<RepLine> repLines) {
+        this.repLines = repLines;
     }
 }

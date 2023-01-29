@@ -16,4 +16,28 @@ public class RepLine {
         this.reps = reps;
         this.remove = remove;
     }
+
+    public TextView getTxt() {
+        return txt;
+    }
+
+    public void setTxt(TextView txt) {
+        this.txt = txt;
+    }
+
+    public EditText getReps() {
+        return reps;
+    }
+
+    public void setReps(EditText reps) {
+        this.reps = reps;
+    }
+
+    public Button getRemove() {
+        return remove;
+    }
+
+    public void setRemove(Button remove) {
+        this.remove = remove;
+    }
 }

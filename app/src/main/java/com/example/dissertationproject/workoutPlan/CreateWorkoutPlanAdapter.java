@@ -44,11 +44,9 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		WorkoutPlanExercise model = workoutPlanExercises.get(position);
-
 		holder.exerciseNameTV.setText(model.getExerciseTemplate().getName());
 		holder.exerciseDescTV.setText(model.getExerciseTemplate().getDesc());
 
-		ArrayList<RepLine> repLines = new ArrayList<>();
 
 		holder.add.setOnClickListener(view -> {
 
@@ -58,7 +56,7 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 			holder.linearLayout.addView(hor);
 
 			TextView txt = new TextView(view.getContext());
-			txt.setText((repLines.size() + 1) +") ");
+			txt.setText((model.getRepLines().size() + 1) +") ");
 
 			EditText et = new EditText(view.getContext());
 			et.setHint("Enter the target reps");
@@ -67,13 +65,13 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 			rm.setText("-");
 
 			RepLine rl = new RepLine(txt, et, rm);
-			repLines.add(rl);
+			model.getRepLines().add(rl);
 
 			rm.setOnClickListener(view1 -> {
 
 				holder.linearLayout.removeView(hor);
 
-				repLines.remove(rl);
+				model.getRepLines().remove(rl);
 			});
 
 

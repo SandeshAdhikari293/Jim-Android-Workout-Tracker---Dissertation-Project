@@ -1,22 +1,35 @@
 package com.example.dissertationproject;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.example.dissertationproject.objects.RepLine;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.example.dissertationproject.workoutPlan.CreateWorkoutPlanAdapter;
 import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateWorkoutActivity extends AppCompatActivity {
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     RecyclerView recyclerView;
 
@@ -70,7 +83,79 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     }
 
     public void saveWorkoutPlan(View view){
-        finish();
+
+        Map<String, Object> workout = new HashMap<>();
+        workout.put("user", User.activeUser.getId());
+        workout.put("name", workoutPlan.getName());
+        workout.put("description", workoutPlan.getDesc());
+//        workout.put("description", workoutPlan.get);
+
+        // Add a new document with a generated ID
+        db.collection("workout_plans")
+                .add(workout)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                        for(WorkoutPlanExercise e : exercises){
+
+                            for(RepLine repLine : e.getRepLines()){
+                                e.getTargetReps().add(Integer.parseInt(repLine.getReps().getText().toString()));
+                            }
+
+                            Map<String, Object> exercises = new HashMap<>();
+                            exercises.put("exercise_template_id", e.getExerciseTemplate().getId());
+                            exercises.put("workout_plan_id", documentReference.getId());
+
+                            db.collection("exercise_plans")
+                                    .add(exercises)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                                            for(int reps : e.getTargetReps()){
+
+                                                Map<String, Object> exerciseReps = new HashMap<>();
+                                                exerciseReps.put("exercise_plan_id", documentReference.getId());
+                                                exerciseReps.put("reps", reps);
+
+                                                db.collection("exercise_plan_sets")
+                                                        .add(exerciseReps)
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.w(TAG, "Error adding document", e);
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error adding document", e);
+                                        }
+                                    });
+                        }
+
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     public void addExerciseToPlan(View view){
