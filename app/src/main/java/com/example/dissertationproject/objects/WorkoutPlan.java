@@ -7,7 +7,7 @@ public class WorkoutPlan {
     User user;
     String name;
     String desc;
-    ArrayList exercises;
+    ArrayList<Exercise> exercises;
 
     public WorkoutPlan(String id, User user, String name, String desc){
         this.id = id;
@@ -50,11 +50,11 @@ public class WorkoutPlan {
         this.desc = desc;
     }
 
-    public ArrayList getExercises() {
+    public ArrayList<Exercise> getExercises() {
         return exercises;
     }
 
-    public void setExercises(ArrayList exercises) {
+    public void setExercises(ArrayList<Exercise> exercises) {
         this.exercises = exercises;
     }
 }

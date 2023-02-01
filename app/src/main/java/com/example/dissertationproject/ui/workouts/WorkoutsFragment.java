@@ -61,12 +61,12 @@ public class WorkoutsFragment extends Fragment {
         // we are initializing our adapter class and passing our arraylist to it.
 //        CourseAdapter courseAdapter = new CourseAdapter(getContext(), courseModelArrayList);
 
-        WorkoutPlan workoutPlan = new WorkoutPlan("abc", User.activeUser, "abc", "abc");
+//        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(0)));
+//        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(1)));
 
-        ArrayList<WorkoutPlanExercise> exercises = new ArrayList<>();
-        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(0)));
-        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(1)));
-        WorkoutPlanAdapter wpAdapter = new WorkoutPlanAdapter(getContext(), exercises);
+        System.out.println(User.activeUser.getWorkoutList());
+
+        WorkoutPlanAdapter wpAdapter = new WorkoutPlanAdapter(getContext(), User.activeUser.getWorkoutList());
 
 
         // below line is for setting a layout manager for our recycler view.

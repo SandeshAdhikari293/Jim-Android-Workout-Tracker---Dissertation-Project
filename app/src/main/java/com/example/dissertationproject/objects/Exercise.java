@@ -1,5 +1,7 @@
 package com.example.dissertationproject.objects;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,7 +10,8 @@ public class Exercise {
     private ArrayList<Integer> reps;
 
     public Exercise(ExerciseTemplate template){
-
+        this.template = template;
+        setReps(new ArrayList<>());
     }
 
     public ExerciseTemplate getTemplate() {

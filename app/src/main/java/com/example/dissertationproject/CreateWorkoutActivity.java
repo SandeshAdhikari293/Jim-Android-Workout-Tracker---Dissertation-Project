@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.RepLine;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.WorkoutPlan;
@@ -90,6 +91,29 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         workout.put("description", workoutPlan.getDesc());
 //        workout.put("description", workoutPlan.get);
 
+
+
+
+        for(WorkoutPlanExercise e : exercises){
+            Exercise exercise = new Exercise(e.getExerciseTemplate());
+
+            for(RepLine repLine : e.getRepLines()) {
+                int rep = Integer.parseInt(repLine.getReps().getText().toString());
+                exercise.getReps().add(rep);
+            }
+            workoutPlan.getExercises().add(exercise);
+
+        }
+
+        User.activeUser.getWorkoutList().add(workoutPlan);
+
+        System.out.println("Workouts: " + User.activeUser.getWorkoutList().size());
+        for(WorkoutPlan wk : User.activeUser.getWorkoutList()){
+            for(Exercise ex : wk.getExercises()){
+                System.out.println(ex.getTemplate().getName() + " : " + ex.getReps());
+            }
+        }
+
         // Add a new document with a generated ID
         db.collection("workout_plans")
                 .add(workout)
@@ -100,9 +124,15 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
                         for(WorkoutPlanExercise e : exercises){
 
+                            Exercise exercise = new Exercise(e.getExerciseTemplate());
+
                             for(RepLine repLine : e.getRepLines()){
-                                e.getTargetReps().add(Integer.parseInt(repLine.getReps().getText().toString()));
+                                int rep = Integer.parseInt(repLine.getReps().getText().toString());
+                                e.getTargetReps().add(rep);
+                                exercise.getReps().add(rep);
                             }
+
+                            workoutPlan.getExercises().add(exercise);
 
                             Map<String, Object> exercises = new HashMap<>();
                             exercises.put("exercise_template_id", e.getExerciseTemplate().getId());
@@ -127,6 +157,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess(DocumentReference documentReference) {
                                                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
 
                                                             }
                                                         })
@@ -156,6 +187,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+//        System.out.println(User.activeUser.getWorkoutList());
     }
 
     public void addExerciseToPlan(View view){

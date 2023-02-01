@@ -53,4 +53,13 @@ public class ExerciseTemplate {
         }
         return null;
     }
+
+    public static ExerciseTemplate getFromID(String id){
+        for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
+            if(exerciseTemplate.getId().equals(id)){
+                return exerciseTemplate;
+            }
+        }
+        return null;
+    }
 }

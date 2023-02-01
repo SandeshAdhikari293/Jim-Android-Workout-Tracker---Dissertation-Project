@@ -20,12 +20,12 @@ import java.util.ArrayList;
 public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.ViewHolder> {
 
 	private final Context context;
-	private final ArrayList<WorkoutPlanExercise> workoutPlanExercises;
+	private final ArrayList<WorkoutPlan> workoutPlan;
 
 	// Constructor
-	public WorkoutPlanAdapter(Context context, ArrayList<WorkoutPlanExercise> workoutPlanExercises) {
+	public WorkoutPlanAdapter(Context context, ArrayList<WorkoutPlan> workoutPlan) {
 		this.context = context;
-		this.workoutPlanExercises = workoutPlanExercises;
+		this.workoutPlan = workoutPlan;
 	}
 
 	@NonNull
@@ -38,9 +38,9 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-		WorkoutPlanExercise model = workoutPlanExercises.get(position);
-		holder.courseNameTV.setText(model.getExerciseTemplate().getName());
-		holder.courseRatingTV.setText("" + model.getWorkoutPlan().getName());
+		WorkoutPlan model = workoutPlan.get(position);
+		holder.courseNameTV.setText(model.getName());
+		holder.courseRatingTV.setText("" + model.getDesc());
 //		holder.courseIV.setImageResource(model.getCourse_image());
 	}
 
@@ -48,7 +48,7 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 	@Override
 	public int getItemCount() {
 		// this method is used for showing number of card items in recycler view
-		return workoutPlanExercises.size();
+		return workoutPlan.size();
 	}
 
 
