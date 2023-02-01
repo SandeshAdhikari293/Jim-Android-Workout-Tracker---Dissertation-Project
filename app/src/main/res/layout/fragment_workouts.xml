@@ -20,8 +20,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvWorkouts"
-        android:layout_width="1239dp"
-        android:layout_height="618dp"
+        android:layout_width="1263dp"
+        android:layout_height="501dp"
         app:layout_constraintBottom_toTopOf="@+id/btnCreateWorkoutPlan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.628"

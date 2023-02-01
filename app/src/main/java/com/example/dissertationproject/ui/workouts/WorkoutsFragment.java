@@ -12,17 +12,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dissertationproject.cards.CourseAdapter;
-import com.example.dissertationproject.cards.CourseModel;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.databinding.FragmentWorkoutsBinding;
-import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
-import com.example.dissertationproject.objects.WorkoutPlan;
-import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
-
-import java.util.ArrayList;
 
 public class WorkoutsFragment extends Fragment {
 

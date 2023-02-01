@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.RepLine;
@@ -42,15 +43,15 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_workout);
 
-        workoutPlan = new WorkoutPlan("idk", User.activeUser, "testiguess", "no descr");
+        workoutPlan = new WorkoutPlan("n/a", User.activeUser, "Unavailable", "Unavailable");
 
 
         exercises = new ArrayList<>();
         recyclerView = findViewById(R.id.rcCreateWorkout);
         recyclerView.setHasFixedSize(true);
 
-        WorkoutPlan workoutPlan = new WorkoutPlan("abc", User.activeUser, "abc", "abc");
-
+//        WorkoutPlan workoutPlan = new WorkoutPlan("abc", User.activeUser, "abc", "abc");
+//
 //        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(0)));
 //        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(1)));
 
@@ -84,6 +85,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     }
 
     public void saveWorkoutPlan(View view){
+        workoutPlan.setName(((EditText)findViewById(R.id.etWorkoutPlanName)).getText().toString());
+        workoutPlan.setDesc(((EditText)findViewById(R.id.etWorkoutPlanDescription)).getText().toString());
+
 
         Map<String, Object> workout = new HashMap<>();
         workout.put("user", User.activeUser.getId());
@@ -107,12 +111,14 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
         User.activeUser.getWorkoutList().add(workoutPlan);
 
-        System.out.println("Workouts: " + User.activeUser.getWorkoutList().size());
-        for(WorkoutPlan wk : User.activeUser.getWorkoutList()){
-            for(Exercise ex : wk.getExercises()){
-                System.out.println(ex.getTemplate().getName() + " : " + ex.getReps());
-            }
-        }
+        // Debugging info
+
+//        System.out.println("Workouts: " + User.activeUser.getWorkoutList().size());
+//        for(WorkoutPlan wk : User.activeUser.getWorkoutList()){
+//            for(Exercise ex : wk.getExercises()){
+//                System.out.println(ex.getTemplate().getName() + " : " + ex.getReps());
+//            }
+//        }
 
         // Add a new document with a generated ID
         db.collection("workout_plans")

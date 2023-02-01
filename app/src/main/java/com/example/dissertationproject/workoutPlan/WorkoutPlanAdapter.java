@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.R;
+import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
@@ -39,9 +41,26 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		WorkoutPlan model = workoutPlan.get(position);
-		holder.courseNameTV.setText(model.getName());
-		holder.courseRatingTV.setText("" + model.getDesc());
+		holder.planName.setText(model.getName());
+		holder.planDesc.setText("" + model.getDesc());
 //		holder.courseIV.setImageResource(model.getCourse_image());
+
+
+
+		for(Exercise exercise : model.getExercises()){
+			TextView textView = new TextView(context);
+			textView.setText(exercise.getTemplate().getName());
+			holder.linearLayout.addView(textView);
+
+			int set = 1;
+			for(int rep : exercise.getReps()){
+				TextView reps = new TextView(context);
+				reps.setText(set+") 1 x "+ rep);
+				set++;
+
+				holder.linearLayout.addView(reps);
+			}
+		}
 	}
 
 
@@ -54,15 +73,16 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 
 	// View holder class for initializing of your views such as TextView and Imageview
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		private final ImageView courseIV;
-		private final TextView courseNameTV;
-		private final TextView courseRatingTV;
+		private final TextView planName;
+		private final TextView planDesc;
+
+		private final LinearLayout linearLayout;
 
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
-			courseIV = itemView.findViewById(R.id.idIVCourseImage);
-			courseNameTV = itemView.findViewById(R.id.idTVCourseName);
-			courseRatingTV = itemView.findViewById(R.id.idTVCourseRating);
+			planName = itemView.findViewById(R.id.idTVCourseName);
+			planDesc = itemView.findViewById(R.id.idTVCourseRating);
+			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 		}
 	}
 }
