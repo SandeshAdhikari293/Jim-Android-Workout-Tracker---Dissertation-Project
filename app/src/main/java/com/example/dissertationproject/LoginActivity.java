@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
+import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -194,6 +195,72 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loadWorkouts(){
+        db.collection("workout_log")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.get("user").toString().equals(User.activeUser.getId())) {
 
+                                    Workout workout = new Workout(document.get("name").toString());
+                                    workout.setId(document.getId());
+
+                                    User.getActiveUser().getWorkoutLog().add(workout);
+
+                                    db.collection("exercise_workout_log")
+                                            .get()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document1 : task1.getResult()) {
+
+                                                        if(document1.get("workout_id").toString().equals(workout.getId())) {
+
+                                                            String exerciseLogId = document1.getId();
+                                                            Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
+
+                                                            System.out.println("workout: " + workout.getId() + " | " + workout.getName());
+                                                            System.out.println(exercise.getTemplate().getName() + "");
+                                                            workout.getExercises().add(exercise);
+
+
+                                                            db.collection("exercise_workout_sets")
+                                                                    .get()
+                                                                    .addOnCompleteListener(task11 -> {
+                                                                        if (task11.isSuccessful()) {
+
+                                                                            for (QueryDocumentSnapshot document11 : task11.getResult()) {
+
+//                                                                                System.out.println("the id is: " + exerciseLogId +" current id is: "+ document11.get("exercise_workout_id").toString());
+                                                                                if(document11.get("exercise_workout_id").toString().equals(exerciseLogId)) {
+//                                                                                    System.out.println("found, now add " + document11.get("reps"));
+                                                                                    exercise.getReps().add(Integer.parseInt(document11.get("reps").toString()));
+                                                                                }
+
+                                                                            }
+
+                                                                        } else {
+                                                                            Log.w(TAG, "Error getting documents.", task11.getException());
+                                                                        }
+                                                                    });
+
+
+                                                        }
+
+                                                    }
+                                                } else {
+                                                    Log.w(TAG, "Error getting documents.", task1.getException());
+                                                }
+                                            });
+
+                                }
+
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 }

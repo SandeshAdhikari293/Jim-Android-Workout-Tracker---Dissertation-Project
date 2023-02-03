@@ -7,14 +7,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dissertationproject.R;
 import com.example.dissertationproject.databinding.FragmentLogBinding;
+import com.example.dissertationproject.objects.User;
+import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
 
 public class LogFragment extends Fragment {
 
     private FragmentLogBinding binding;
+    private RecyclerView recyclerView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -26,7 +33,29 @@ public class LogFragment extends Fragment {
 
         final TextView textView = binding.textDashboard;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.rcvWorkoutLog);
+        recyclerView.setHasFixedSize(true);
+
+        WorkoutLogAdapter wpAdapter = new WorkoutLogAdapter(getContext(), User.activeUser.getWorkoutLog());
+
+
+        // below line is for setting a layout manager for our recycler view.
+        // here we are creating vertical list so we will provide orientation as vertical
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        // in below two lines we are setting layout manager and adapter to our recycler view.
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(wpAdapter);
+
     }
 
     @Override

@@ -42,8 +42,6 @@ public class WorkoutsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rcvWorkouts);
         recyclerView.setHasFixedSize(true);
 
-        System.out.println(User.activeUser.getWorkoutList());
-
         WorkoutPlanAdapter wpAdapter = new WorkoutPlanAdapter(getContext(), User.activeUser.getWorkoutList());
 
 
@@ -55,29 +53,12 @@ public class WorkoutsFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
 
-//        ArrayList<WorkoutPlan> workoutPlans = new ArrayList<>();
-//        WorkoutPlan plan = new WorkoutPlan("abc", User.activeUser, "Test", "Test");
-//        WorkoutPlan plan1 = new WorkoutPlan("1", User.activeUser, "Test1", "Test1");
-//
-//        workoutPlans.add(plan);
-//        workoutPlans.add(plan1);
-//
-//        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-//        recyclerView.setLayoutManager(llm);
-//
-//        WorkoutAdapter adapter = new WorkoutAdapter(workoutPlans);
-//        recyclerView.setAdapter(adapter);
-//        System.out.println("Adapter attached");
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-//        EditText editText = new EditText(getContext());
-//        editText.setText("Hello");
-//
-//        recyclerView.addView(editText);
+
     }
 
     @Override

@@ -7,10 +7,20 @@ public class Workout {
     private String date;
     private ArrayList<Exercise> exercises;
 
+    private String id;
+
     public Workout(String name) {
         this.name = name;
 
         this.exercises = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

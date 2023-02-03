@@ -2,7 +2,6 @@ package com.example.dissertationproject;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.RepLine;
@@ -22,12 +18,8 @@ import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.example.dissertationproject.workoutPlan.CreateWorkoutPlanAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +28,6 @@ import java.util.Map;
 public class ActiveWorkoutActivity extends AppCompatActivity {
 
     public static WorkoutPlan plan;
-    Workout workout;
     RecyclerView recyclerView;
     public static ArrayList<WorkoutPlanExercise> exercises;
 
@@ -80,12 +71,14 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
         // here we are creating vertical list so we will provide orientation as vertical
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
-        // in below two lines we are setting layoutmanager and adapter to our recycler view.
+        // in below two lines we are setting layout manager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
     }
 
     public void saveActiveWorkout(View v){
+
+        Workout wk = new Workout(name.getText().toString());
 
         Map<String, Object> workout = new HashMap<>();
         workout.put("user", User.activeUser.getId());
@@ -104,10 +97,11 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                         for(RepLine repLine : e.getRepLines()){
                             int rep = Integer.parseInt(repLine.getReps().getText().toString());
                             e.getTargetReps().add(rep);
+
                             exercise.getReps().add(rep);
                         }
 
-//                            workoutPlan.getExercises().add(exercise);
+                        wk.getExercises().add(exercise);
 
                         Map<String, Object> exercises = new HashMap<>();
                         exercises.put("exercise_template_id", e.getExerciseTemplate().getId());
@@ -119,7 +113,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                                 .addOnSuccessListener(documentReference12 -> {
                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
 
-                                    for(int reps : e.getTargetReps()){
+                                    for(int reps : exercise.getReps()){
 
                                         Map<String, Object> exerciseReps = new HashMap<>();
                                         exerciseReps.put("exercise_workout_id", documentReference12.getId());
@@ -136,15 +130,11 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                     }
 
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
-
+        User.activeUser.getWorkoutLog().add(wk);
         finish();
+
     }
 
 

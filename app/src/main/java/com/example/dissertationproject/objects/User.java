@@ -10,6 +10,8 @@ public class User {
     private ArrayList<ExerciseTemplate> exerciseList;
     private ArrayList<WorkoutPlan> workoutList;
 
+    private ArrayList<Workout> workoutLog;
+
     public User(String id, String name, String email){
         this.id = id;
         this.name = name;
@@ -17,6 +19,7 @@ public class User {
 
         this.exerciseList = new ArrayList<>();
         this.workoutList = new ArrayList<>();
+        this.workoutLog = new ArrayList<>();
     }
 
     public String getId() {
@@ -59,7 +62,19 @@ public class User {
         this.workoutList = workoutList;
     }
 
+    public ArrayList<Workout> getWorkoutLog() {
+        return workoutLog;
+    }
+
+    public void setWorkoutLog(ArrayList<Workout> workoutLog) {
+        this.workoutLog = workoutLog;
+    }
+
     public void setActiveUser() {
         User.activeUser = this;
+    }
+
+    public static User getActiveUser() {
+        return activeUser;
     }
 }
