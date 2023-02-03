@@ -37,6 +37,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
     WorkoutPlan workoutPlan;
 
+    CreateWorkoutPlanAdapter wpAdapter;
+    LinearLayoutManager linearLayoutManager;
+
     public static ArrayList<WorkoutPlanExercise> exercises;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         workoutPlan = new WorkoutPlan("n/a", User.activeUser, "Unavailable", "Unavailable");
 
 
-        exercises = new ArrayList<>();
+//        exercises = new ArrayList<>();
         recyclerView = findViewById(R.id.rcCreateWorkout);
         recyclerView.setHasFixedSize(true);
 
@@ -56,10 +59,10 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 //        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(1)));
 
 
-        CreateWorkoutPlanAdapter wpAdapter = new CreateWorkoutPlanAdapter(this, exercises);
+        wpAdapter = new CreateWorkoutPlanAdapter(this, exercises);
                 // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
-       LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+       linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -72,14 +75,16 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         System.out.println(exercises);
 
 
-        CreateWorkoutPlanAdapter wpAdapter = new CreateWorkoutPlanAdapter(this, exercises);
+//        CreateWorkoutPlanAdapter wpAdapter = new CreateWorkoutPlanAdapter(this, exercises);
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
+
+
 
         super.onResume();
     }

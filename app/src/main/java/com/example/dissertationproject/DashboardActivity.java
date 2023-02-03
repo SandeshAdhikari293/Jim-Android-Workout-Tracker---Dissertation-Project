@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.dissertationproject.objects.WorkoutPlan;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class DashboardActivity extends AppCompatActivity {
 
     private ActivityCreateExerciseBinding binding;
+    public static WorkoutPlan activeWorkoutPlan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,11 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void createWorkoutPlan(View v){
+        CreateWorkoutActivity.exercises = new ArrayList<>();
         startActivity(new Intent(DashboardActivity.this, CreateWorkoutActivity.class));
-
     }
+
+//    public void startWorkout(View v){
+//        startActivity(new Intent(DashboardActivity.this, ActiveWorkoutActivity.class));
+//    }
 }

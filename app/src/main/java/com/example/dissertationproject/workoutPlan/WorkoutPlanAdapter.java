@@ -1,6 +1,7 @@
 package com.example.dissertationproject.workoutPlan;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dissertationproject.ActiveWorkoutActivity;
+import com.example.dissertationproject.DashboardActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -45,7 +49,10 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 		holder.planDesc.setText("" + model.getDesc());
 //		holder.courseIV.setImageResource(model.getCourse_image());
 
-
+		holder.playWorkout.setOnClickListener(view -> {
+			ActiveWorkoutActivity.plan = model;
+			context.startActivity(new Intent(context, ActiveWorkoutActivity.class));
+		});
 
 		for(Exercise exercise : model.getExercises()){
 			TextView textView = new TextView(context);
@@ -78,11 +85,14 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 
 		private final LinearLayout linearLayout;
 
+		private final FloatingActionButton playWorkout;
+
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
 			planName = itemView.findViewById(R.id.idTVCourseName);
 			planDesc = itemView.findViewById(R.id.idTVCourseRating);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
+			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);
 		}
 	}
 }

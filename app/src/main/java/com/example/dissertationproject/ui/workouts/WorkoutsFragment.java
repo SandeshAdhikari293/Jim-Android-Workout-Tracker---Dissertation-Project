@@ -42,21 +42,6 @@ public class WorkoutsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rcvWorkouts);
         recyclerView.setHasFixedSize(true);
 
-//        ArrayList<CourseModel> courseModelArrayList = new ArrayList<CourseModel>();
-//        courseModelArrayList.add(new CourseModel("DSA in Java", 4, R.drawable.ic_home_black_24dp));
-//        courseModelArrayList.add(new CourseModel("Java Course", 3, R.drawable.ic_home_black_24dp));
-//        courseModelArrayList.add(new CourseModel("C++ Course", 4, R.drawable.ic_home_black_24dp));
-//        courseModelArrayList.add(new CourseModel("DSA in C++", 4, R.drawable.ic_home_black_24dp));
-//        courseModelArrayList.add(new CourseModel("Kotlin for Android", 4, R.drawable.ic_home_black_24dp));
-//        courseModelArrayList.add(new CourseModel("Java for Android", 4, R.drawable.ic_home_black_24dp));
-//        courseModelArrayList.add(new CourseModel("HTML and CSS", 4, R.drawable.ic_home_black_24dp));
-
-        // we are initializing our adapter class and passing our arraylist to it.
-//        CourseAdapter courseAdapter = new CourseAdapter(getContext(), courseModelArrayList);
-
-//        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(0)));
-//        exercises.add(new WorkoutPlanExercise(workoutPlan, User.activeUser.getExerciseList().get(1)));
-
         System.out.println(User.activeUser.getWorkoutList());
 
         WorkoutPlanAdapter wpAdapter = new WorkoutPlanAdapter(getContext(), User.activeUser.getWorkoutList());

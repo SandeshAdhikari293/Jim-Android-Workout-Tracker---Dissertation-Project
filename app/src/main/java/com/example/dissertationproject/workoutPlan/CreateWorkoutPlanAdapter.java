@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dissertationproject.ActiveWorkoutActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.RepLine;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
@@ -38,6 +39,8 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		// to inflate the layout for each item of recycler view.
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_workout_card, parent, false);
+
+
 		return new ViewHolder(view);
 	}
 
@@ -47,6 +50,78 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 		holder.exerciseNameTV.setText(model.getExerciseTemplate().getName());
 		holder.exerciseDescTV.setText(model.getExerciseTemplate().getDesc());
 
+		if(!model.getTargetReps().isEmpty()){
+			int count = 1;
+			for(int rep : model.getTargetReps()){
+
+				LinearLayout hor = new LinearLayout(context);
+				hor.setOrientation(LinearLayout.HORIZONTAL);
+
+				holder.linearLayout.addView(hor);
+
+				TextView txt = new TextView(context);
+				txt.setText((count) +") ");
+
+				EditText et = new EditText(context);
+				et.setHint("Target reps: "+rep);
+
+				Button rm = new Button(context);
+				rm.setText("-");
+
+				RepLine rl = new RepLine(txt, et, rm, hor);
+
+				model.getRepLines().add(rl);
+
+				rm.setOnClickListener(view1 -> {
+
+					holder.linearLayout.removeView(hor);
+
+					model.getRepLines().remove(rl);
+				});
+
+				hor.addView(txt);
+				hor.addView(et);
+				hor.addView(rm);
+
+				count++;
+			}
+		}else {
+
+			for (RepLine line : new ArrayList<>(model.getRepLines())) {
+				LinearLayout hor = new LinearLayout(context);
+				hor.setOrientation(LinearLayout.HORIZONTAL);
+
+				holder.linearLayout.addView(hor);
+
+				TextView txt = new TextView(context);
+				txt.setText(line.getTxt().toString());
+
+				EditText et = new EditText(context);
+				et.setHint("Enter the target reps");
+				et.setText(line.getReps().getText());
+
+				Button rm = new Button(context);
+				rm.setText("-");
+
+				RepLine rl = new RepLine(txt, et, rm, hor);
+
+				model.getRepLines().add(rl);
+
+				rm.setOnClickListener(view1 -> {
+
+					holder.linearLayout.removeView(hor);
+
+					model.getRepLines().remove(rl);
+				});
+
+				hor.addView(txt);
+				hor.addView(et);
+				hor.addView(rm);
+
+
+				model.getRepLines().remove(line);
+			}
+		}
 
 		holder.add.setOnClickListener(view -> {
 
@@ -64,7 +139,8 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 			Button rm = new Button(view.getContext());
 			rm.setText("-");
 
-			RepLine rl = new RepLine(txt, et, rm);
+			RepLine rl = new RepLine(txt, et, rm, hor);
+
 			model.getRepLines().add(rl);
 
 			rm.setOnClickListener(view1 -> {
@@ -73,7 +149,6 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 				model.getRepLines().remove(rl);
 			});
-
 
 			hor.addView(txt);
 			hor.addView(et);
@@ -112,7 +187,6 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 			exerciseNameTV = itemView.findViewById(R.id.idTVExerciseName);
 			exerciseDescTV = itemView.findViewById(R.id.idTVExerciseDescription);
 			add = itemView.findViewById(R.id.fabtnAddSet);
-
 		}
 	}
 }

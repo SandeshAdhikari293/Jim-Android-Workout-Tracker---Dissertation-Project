@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActiveWorkoutActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fbtnSaveActiveWorkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="28dp"
+        android:clickable="true"
+        android:onClick="saveActiveWorkout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
+    <EditText
+        android:id="@+id/etActiveWorkoutName"
+        android:layout_width="439dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etActiveWorkoutDesc"
+        android:layout_width="804dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etActiveWorkoutName" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvActiveWorkout"
+        android:layout_width="1276dp"
+        android:layout_height="510dp"
+        app:layout_constraintBottom_toTopOf="@+id/fbtnSaveActiveWorkout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etActiveWorkoutDesc" />
+</androidx.constraintlayout.widget.ConstraintLayout>
