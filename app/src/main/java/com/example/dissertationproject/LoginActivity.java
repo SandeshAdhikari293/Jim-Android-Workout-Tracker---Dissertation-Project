@@ -207,6 +207,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Workout workout = new Workout(document.get("name").toString());
                                     workout.setId(document.getId());
 
+                                    workout.setEndTime(Long.parseLong(document.get("end_time").toString()));
+
                                     User.getActiveUser().getWorkoutLog().add(workout);
 
                                     db.collection("exercise_workout_log")
@@ -232,7 +234,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                                                             for (QueryDocumentSnapshot document11 : task11.getResult()) {
 
-//                                                                                System.out.println("the id is: " + exerciseLogId +" current id is: "+ document11.get("exercise_workout_id").toString());
                                                                                 if(document11.get("exercise_workout_id").toString().equals(exerciseLogId)) {
 //                                                                                    System.out.println("found, now add " + document11.get("reps"));
                                                                                     exercise.getReps().add(Integer.parseInt(document11.get("reps").toString()));
@@ -253,9 +254,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     Log.w(TAG, "Error getting documents.", task1.getException());
                                                 }
                                             });
-
                                 }
-
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());

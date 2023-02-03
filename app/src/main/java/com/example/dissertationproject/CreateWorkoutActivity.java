@@ -111,8 +111,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                 exercise.getReps().add(rep);
             }
             workoutPlan.getExercises().add(exercise);
-
         }
+
+
 
         User.activeUser.getWorkoutList().add(workoutPlan);
 
@@ -143,7 +144,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                                 exercise.getReps().add(rep);
                             }
 
-                            workoutPlan.getExercises().add(exercise);
+//                            workoutPlan.getExercises().add(exercise);
 
                             Map<String, Object> exercises = new HashMap<>();
                             exercises.put("exercise_template_id", e.getExerciseTemplate().getId());

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Workout {
     private String name;
     private String date;
+
+    private long endTime;
     private ArrayList<Exercise> exercises;
 
     private String id;
@@ -45,5 +47,13 @@ public class Workout {
 
     public void setExercises(ArrayList<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 }

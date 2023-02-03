@@ -79,11 +79,13 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
     public void saveActiveWorkout(View v){
 
         Workout wk = new Workout(name.getText().toString());
+        wk.setEndTime(System.currentTimeMillis());
 
         Map<String, Object> workout = new HashMap<>();
         workout.put("user", User.activeUser.getId());
         workout.put("name", name.getText().toString());
         workout.put("description", desc.getText().toString());
+        workout.put("end_time", wk.getEndTime());
 
         db.collection("workout_log")
                 .add(workout)
