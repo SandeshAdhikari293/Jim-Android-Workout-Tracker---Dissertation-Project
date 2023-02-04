@@ -22,6 +22,7 @@ import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.ViewHolder> {
 
@@ -60,9 +61,9 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 			holder.linearLayout.addView(textView);
 
 			int set = 1;
-			for(int rep : exercise.getReps()){
+			for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
 				TextView reps = new TextView(context);
-				reps.setText(set+") 1 x "+ rep);
+				reps.setText(set+") 1 x "+ rep.getValue());
 				set++;
 
 				holder.linearLayout.addView(reps);

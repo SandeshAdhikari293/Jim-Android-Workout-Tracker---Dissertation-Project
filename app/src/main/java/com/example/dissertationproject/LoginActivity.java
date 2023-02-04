@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -158,11 +159,11 @@ public class LoginActivity extends AppCompatActivity {
                                                                             @Override
                                                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                                                 if (task.isSuccessful()) {
-                                                                                    ArrayList<Integer> reps = new ArrayList<>();
+                                                                                    HashMap<Integer, Integer> reps = new HashMap<>();
                                                                                     for (QueryDocumentSnapshot document : task.getResult()) {
 
                                                                                         if(document.get("exercise_plan_id").toString().equals(exercisePlanId)) {
-                                                                                            reps.add(Integer.parseInt(document.get("reps").toString()));
+                                                                                            reps.put(0,Integer.parseInt(document.get("reps").toString()));
                                                                                         }
 
                                                                                     }
@@ -236,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                                                 if(document11.get("exercise_workout_id").toString().equals(exerciseLogId)) {
 //                                                                                    System.out.println("found, now add " + document11.get("reps"));
-                                                                                    exercise.getReps().add(Integer.parseInt(document11.get("reps").toString()));
+                                                                                    exercise.getReps().put(Integer.parseInt(document11.get("weight").toString()) ,Integer.parseInt(document11.get("reps").toString()));
                                                                                 }
 
                                                                             }

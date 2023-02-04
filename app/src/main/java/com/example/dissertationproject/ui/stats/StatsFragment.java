@@ -90,8 +90,8 @@ public class StatsFragment extends Fragment {
             for(Exercise exercise : workout.getExercises()){
                 String category = exercise.getTemplate().getCategory();
                 int volume = 0;
-                for(int rep : exercise.getReps()){
-                    volume = volume + rep;
+                for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
+                    volume = volume + (rep.getKey() * rep.getValue());
                 }
                 if(!categoryCount.containsKey(category)){
                     categoryCount.put(category, volume);
@@ -100,37 +100,43 @@ public class StatsFragment extends Fragment {
             }
 
         }
+
+//        System.out.println(categoryCount);
+        radarEntries.add(new RadarEntry(0, 0));
         radarEntries.add(new RadarEntry(0, 1));
-        radarEntries.add(new RadarEntry(1, 1));
-        radarEntries.add(new RadarEntry(2, 1));
-        radarEntries.add(new RadarEntry(3, 1));
-        radarEntries.add(new RadarEntry(4, 1));
-        radarEntries.add(new RadarEntry(5, 1));
-        radarEntries.add(new RadarEntry(6, 1));
+        radarEntries.add(new RadarEntry(0, 2));
+        radarEntries.add(new RadarEntry(0, 3));
+        radarEntries.add(new RadarEntry(0, 4));
+        radarEntries.add(new RadarEntry(0, 5));
+        radarEntries.add(new RadarEntry(0, 6));
+
+//        radarEntries.add(new RadarEntry(512, 0));
+//        radarEntries.add(new RadarEntry(90, 1));
+//        radarEntries.add(new RadarEntry(2, 2));
 
 
         for(Map.Entry<String, Integer> entry : categoryCount.entrySet()){
 
             if(entry.getKey().equals("Chest")){
-                radarEntries.add(new RadarEntry(0, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(), 0));
             }
             if(entry.getKey().equals("Back")){
-                radarEntries.add(new RadarEntry(1, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(), 1));
             }
             if(entry.getKey().equals("Shoulders")){
-                radarEntries.add(new RadarEntry(2, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(), 2));
             }
             if(entry.getKey().equals("Biceps")){
-                radarEntries.add(new RadarEntry(3, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(), 3));
             }
             if(entry.getKey().equals("Triceps")){
-                radarEntries.add(new RadarEntry(4, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(),4));
             }
             if(entry.getKey().equals("Quads")){
-                radarEntries.add(new RadarEntry(5, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(), 5));
             }
             if(entry.getKey().equals("Hamstrings")){
-                radarEntries.add(new RadarEntry(6, entry.getValue()));
+                radarEntries.add(new RadarEntry(entry.getValue(), 6));
             }
         }
 
@@ -189,9 +195,9 @@ public class StatsFragment extends Fragment {
             int maxWeight = -1;
             for(Exercise exercise : workout.getExercises()){
                 if(exercise.getTemplate().equals(exerciseTemplate)){
-                    for(int rep : exercise.getReps()){
-                        if(rep > maxWeight){
-                            maxWeight = rep;
+                    for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
+                        if(rep.getKey() > maxWeight){
+                            maxWeight = rep.getKey();
                         }
                     }
                 }

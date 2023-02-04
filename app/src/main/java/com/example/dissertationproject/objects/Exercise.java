@@ -7,11 +7,11 @@ import java.util.HashMap;
 
 public class Exercise {
     private ExerciseTemplate template;
-    private ArrayList<Integer> reps;
+    private HashMap<Integer, Integer> reps;
 
     public Exercise(ExerciseTemplate template){
         this.template = template;
-        setReps(new ArrayList<>());
+        setReps(new HashMap<>());
     }
 
     public ExerciseTemplate getTemplate() {
@@ -22,11 +22,12 @@ public class Exercise {
         this.template = template;
     }
 
-    public ArrayList<Integer> getReps() {
+
+    public HashMap<Integer, Integer> getReps() {
         return reps;
     }
 
-    public void setReps(ArrayList<Integer> reps) {
+    public void setReps(HashMap<Integer, Integer> reps) {
         this.reps = reps;
     }
 }

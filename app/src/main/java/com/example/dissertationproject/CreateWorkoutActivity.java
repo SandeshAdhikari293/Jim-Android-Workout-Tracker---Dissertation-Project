@@ -108,7 +108,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
             for(RepLine repLine : e.getRepLines()) {
                 int rep = Integer.parseInt(repLine.getReps().getText().toString());
-                exercise.getReps().add(rep);
+//                int weight = Integer.parseInt(repLine.getWeight().getText().toString());
+                exercise.getReps().put(0,rep);
             }
             workoutPlan.getExercises().add(exercise);
         }
@@ -141,7 +142,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                             for(RepLine repLine : e.getRepLines()){
                                 int rep = Integer.parseInt(repLine.getReps().getText().toString());
                                 e.getTargetReps().add(rep);
-                                exercise.getReps().add(rep);
+                                exercise.getReps().put(0,rep);
                             }
 
 //                            workoutPlan.getExercises().add(exercise);

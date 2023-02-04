@@ -17,6 +17,7 @@ import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
+import com.example.dissertationproject.ui.workouts.ActiveWorkoutAdapter;
 import com.example.dissertationproject.workoutPlan.CreateWorkoutPlanAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -59,14 +60,14 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
             System.out.println(exercise.getTemplate().getName());
 
             WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(exercise.getTemplate());
-            for(int rep : exercise.getReps()){
-                workoutPlanExercise.getTargetReps().add(rep);
+            for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
+                workoutPlanExercise.getTargetReps().add(rep.getValue());
             }
             exercises.add(workoutPlanExercise);
 
         }
 
-        CreateWorkoutPlanAdapter wpAdapter = new CreateWorkoutPlanAdapter(this, exercises);
+        ActiveWorkoutAdapter wpAdapter = new ActiveWorkoutAdapter(this, exercises);
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -98,9 +99,10 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
 
                         for(RepLine repLine : e.getRepLines()){
                             int rep = Integer.parseInt(repLine.getReps().getText().toString());
+                            int weight = Integer.parseInt(repLine.getWeight().getText().toString());
                             e.getTargetReps().add(rep);
 
-                            exercise.getReps().add(rep);
+                            exercise.getReps().put(weight, rep);
                         }
 
                         wk.getExercises().add(exercise);
@@ -115,11 +117,12 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                                 .addOnSuccessListener(documentReference12 -> {
                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
 
-                                    for(int reps : exercise.getReps()){
+                                    for(Map.Entry<Integer, Integer> reps : exercise.getReps().entrySet()){
 
                                         Map<String, Object> exerciseReps = new HashMap<>();
                                         exerciseReps.put("exercise_workout_id", documentReference12.getId());
-                                        exerciseReps.put("reps", reps);
+                                        exerciseReps.put("reps", reps.getValue());
+                                        exerciseReps.put("weight", reps.getKey());
 
 
                                         db.collection("exercise_workout_sets")

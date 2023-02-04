@@ -1,4 +1,4 @@
-package com.example.dissertationproject.workoutPlan;
+package com.example.dissertationproject.ui.workouts;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,30 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dissertationproject.ActiveWorkoutActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.RepLine;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkoutPlanAdapter.ViewHolder> {
+public class ActiveWorkoutAdapter extends RecyclerView.Adapter<ActiveWorkoutAdapter.ViewHolder> {
 
 	private final Context context;
 	private final ArrayList<WorkoutPlanExercise> workoutPlanExercises;
 
 	// Constructor
-	public CreateWorkoutPlanAdapter(Context context, ArrayList<WorkoutPlanExercise> workoutPlanExercises) {
+	public ActiveWorkoutAdapter(Context context, ArrayList<WorkoutPlanExercise> workoutPlanExercises) {
 		this.context = context;
 		this.workoutPlanExercises = workoutPlanExercises;
 	}
@@ -72,6 +68,7 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 				rm.setText("-");
 
 				RepLine rl = new RepLine(txt, et, rm, hor);
+				rl.setWeight(etWeight);
 
 				model.getRepLines().add(rl);
 
@@ -89,42 +86,6 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 				count++;
 			}
-		}else {
-
-			for (RepLine line : new ArrayList<>(model.getRepLines())) {
-				LinearLayout hor = new LinearLayout(context);
-				hor.setOrientation(LinearLayout.HORIZONTAL);
-
-				holder.linearLayout.addView(hor);
-
-				TextView txt = new TextView(context);
-				txt.setText(line.getTxt().toString());
-
-				EditText et = new EditText(context);
-				et.setHint("Enter the target reps");
-				et.setText(line.getReps().getText());
-
-				Button rm = new Button(context);
-				rm.setText("-");
-
-				RepLine rl = new RepLine(txt, et, rm, hor);
-
-				model.getRepLines().add(rl);
-
-				rm.setOnClickListener(view1 -> {
-
-					holder.linearLayout.removeView(hor);
-
-					model.getRepLines().remove(rl);
-				});
-
-				hor.addView(txt);
-				hor.addView(et);
-				hor.addView(rm);
-
-
-				model.getRepLines().remove(line);
-			}
 		}
 
 		holder.add.setOnClickListener(view -> {
@@ -137,8 +98,13 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 			TextView txt = new TextView(view.getContext());
 			txt.setText((model.getRepLines().size() + 1) +") ");
 
+
+			EditText etWeight = new EditText(context);
+			etWeight.setHint("Weight: ");
+
+
 			EditText et = new EditText(view.getContext());
-			et.setHint("Enter the target reps");
+			et.setHint("Enter the reps");
 
 			Button rm = new Button(view.getContext());
 			rm.setText("-");
@@ -155,6 +121,7 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 			});
 
 			hor.addView(txt);
+			hor.addView(etWeight);
 			hor.addView(et);
 			hor.addView(rm);
 

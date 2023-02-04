@@ -10,6 +10,8 @@ import org.w3c.dom.Text;
 public class RepLine {
     private TextView txt;
     private EditText reps;
+
+    private EditText weight;
     private Button remove;
 
     private LinearLayout horizontalLine;
@@ -51,5 +53,13 @@ public class RepLine {
 
     public void setHorizontalLine(LinearLayout horizontalLine) {
         this.horizontalLine = horizontalLine;
+    }
+
+    public EditText getWeight() {
+        return weight;
+    }
+
+    public void setWeight(EditText weight) {
+        this.weight = weight;
     }
 }
