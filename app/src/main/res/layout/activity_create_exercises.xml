@@ -61,4 +61,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnDeleteExercise"
+        android:layout_width="125dp"
+        android:layout_height="59dp"
+        android:onClick="deleteExercise"
+        android:text="Delete"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="#FF0000"
+        app:strokeColor="#FF0000" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
