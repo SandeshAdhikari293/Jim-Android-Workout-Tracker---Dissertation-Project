@@ -60,8 +60,10 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
             System.out.println(exercise.getTemplate().getName());
 
             WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(exercise.getTemplate());
-            for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
-                workoutPlanExercise.getTargetReps().add(rep.getValue());
+            for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
+                for(int r : rep.getValue().values()){
+                    workoutPlanExercise.getTargetReps().add(r);
+                }
             }
             exercises.add(workoutPlanExercise);
 
@@ -102,7 +104,9 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                             int weight = Integer.parseInt(repLine.getWeight().getText().toString());
                             e.getTargetReps().add(rep);
 
-                            exercise.getReps().put(weight, rep);
+                            HashMap<Integer, Integer> val = new HashMap<>();
+                            val.put(weight, rep);
+                            exercise.getReps().put(exercise.getReps().size(), val);
                         }
 
                         wk.getExercises().add(exercise);
@@ -117,18 +121,21 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                                 .addOnSuccessListener(documentReference12 -> {
                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
 
-                                    for(Map.Entry<Integer, Integer> reps : exercise.getReps().entrySet()){
+                                    for(Map.Entry<Integer, HashMap<Integer, Integer>> reps : exercise.getReps().entrySet()){
 
-                                        Map<String, Object> exerciseReps = new HashMap<>();
-                                        exerciseReps.put("exercise_workout_id", documentReference12.getId());
-                                        exerciseReps.put("reps", reps.getValue());
-                                        exerciseReps.put("weight", reps.getKey());
+                                        for(Map.Entry<Integer, Integer> r : reps.getValue().entrySet()){
+                                            Map<String, Object> exerciseReps = new HashMap<>();
+                                            exerciseReps.put("exercise_workout_id", documentReference12.getId());
+                                            exerciseReps.put("reps", r.getValue());
+                                            exerciseReps.put("weight", r.getKey());
 
 
-                                        db.collection("exercise_workout_sets")
-                                                .add(exerciseReps)
-                                                .addOnSuccessListener(documentReference1 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference1.getId()))
-                                                .addOnFailureListener(e1 -> Log.w(TAG, "Error adding document", e1));
+                                            db.collection("exercise_workout_sets")
+                                                    .add(exerciseReps)
+                                                    .addOnSuccessListener(documentReference1 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference1.getId()))
+                                                    .addOnFailureListener(e1 -> Log.w(TAG, "Error adding document", e1));
+
+                                        }
                                     }
                                 })
                                 .addOnFailureListener(e12 -> Log.w(TAG, "Error adding document", e12));

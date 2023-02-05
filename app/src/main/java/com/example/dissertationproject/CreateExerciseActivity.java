@@ -124,19 +124,11 @@ public class CreateExerciseActivity extends AppCompatActivity {
         if(isUpdating()){
             db.collection("exercises").document(updating.getId())
                     .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                            User.getActiveUser().getExerciseList().remove(updating);
-                        }
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        User.getActiveUser().getExerciseList().remove(updating);
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error deleting document", e);
-                        }
-                    });
+                    .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
         }
         finish();
 

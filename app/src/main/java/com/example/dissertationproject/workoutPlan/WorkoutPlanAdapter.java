@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.ActiveWorkoutActivity;
+import com.example.dissertationproject.CreateWorkoutActivity;
 import com.example.dissertationproject.DashboardActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.Exercise;
@@ -22,6 +24,7 @@ import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.ViewHolder> {
@@ -55,18 +58,28 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 			context.startActivity(new Intent(context, ActiveWorkoutActivity.class));
 		});
 
+
+		holder.editWorkout.setOnClickListener(view1 -> {
+			CreateWorkoutActivity.exercises = new ArrayList<>();
+			Intent intent = new Intent(context, CreateWorkoutActivity.class);
+			intent.putExtra("workoutPlanID", model.getId());
+			context.startActivity(intent);
+		});
+
 		for(Exercise exercise : model.getExercises()){
 			TextView textView = new TextView(context);
 			textView.setText(exercise.getTemplate().getName());
 			holder.linearLayout.addView(textView);
 
 			int set = 1;
-			for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
-				TextView reps = new TextView(context);
-				reps.setText(set+") 1 x "+ rep.getValue());
-				set++;
+			for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
+				for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
+					TextView reps = new TextView(context);
+					reps.setText(rep.getKey()+") 1 x "+ r.getValue());
+					set++;
 
-				holder.linearLayout.addView(reps);
+					holder.linearLayout.addView(reps);
+				}
 			}
 		}
 	}
@@ -88,12 +101,16 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 
 		private final FloatingActionButton playWorkout;
 
+		private final FloatingActionButton editWorkout;
+
+
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
 			planName = itemView.findViewById(R.id.idTVCourseName);
 			planDesc = itemView.findViewById(R.id.idTVCourseRating);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);
+			editWorkout = itemView.findViewById(R.id.fbtnEditWorkoutPlan);
 		}
 	}
 }

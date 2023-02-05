@@ -1,9 +1,11 @@
 package com.example.dissertationproject.ui.workouts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,10 +14,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dissertationproject.CreateWorkoutActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.databinding.FragmentWorkoutsBinding;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
+
+import java.util.ArrayList;
 
 public class WorkoutsFragment extends Fragment {
 

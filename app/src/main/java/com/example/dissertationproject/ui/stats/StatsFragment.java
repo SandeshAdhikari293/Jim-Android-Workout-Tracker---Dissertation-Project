@@ -90,8 +90,10 @@ public class StatsFragment extends Fragment {
             for(Exercise exercise : workout.getExercises()){
                 String category = exercise.getTemplate().getCategory();
                 int volume = 0;
-                for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
-                    volume = volume + (rep.getKey() * rep.getValue());
+                for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
+                    for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
+                        volume = volume + (r.getKey() * r.getValue());
+                    }
                 }
                 if(!categoryCount.containsKey(category)){
                     categoryCount.put(category, volume);
@@ -195,9 +197,11 @@ public class StatsFragment extends Fragment {
             int maxWeight = -1;
             for(Exercise exercise : workout.getExercises()){
                 if(exercise.getTemplate().equals(exerciseTemplate)){
-                    for(Map.Entry<Integer, Integer> rep : exercise.getReps().entrySet()){
-                        if(rep.getKey() > maxWeight){
-                            maxWeight = rep.getKey();
+                    for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
+                        for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
+                            if(rep.getKey() > maxWeight){
+                                maxWeight = r.getKey();
+                            }
                         }
                     }
                 }

@@ -1,13 +1,10 @@
 package com.example.dissertationproject.objects;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Exercise {
     private ExerciseTemplate template;
-    private HashMap<Integer, Integer> reps;
+    private HashMap<Integer, HashMap<Integer, Integer>> reps;
 
     public Exercise(ExerciseTemplate template){
         this.template = template;
@@ -23,11 +20,11 @@ public class Exercise {
     }
 
 
-    public HashMap<Integer, Integer> getReps() {
+    public HashMap<Integer, HashMap<Integer, Integer>> getReps() {
         return reps;
     }
 
-    public void setReps(HashMap<Integer, Integer> reps) {
+    public void setReps(HashMap<Integer, HashMap<Integer, Integer>> reps) {
         this.reps = reps;
     }
 }

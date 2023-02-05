@@ -62,11 +62,10 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 				TextView txt = new TextView(context);
 				txt.setText((count) +") ");
 
-				EditText etWeight = new EditText(context);
-				etWeight.setHint("Weight: ");
 
 				EditText et = new EditText(context);
 				et.setHint("Target reps: "+rep);
+				et.setText(rep + "");
 
 				Button rm = new Button(context);
 				rm.setText("-");
@@ -83,7 +82,6 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 				});
 
 				hor.addView(txt);
-				hor.addView(etWeight);
 				hor.addView(et);
 				hor.addView(rm);
 

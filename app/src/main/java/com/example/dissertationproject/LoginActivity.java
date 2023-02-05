@@ -137,51 +137,47 @@ public class LoginActivity extends AppCompatActivity {
 
                                     User.activeUser.getWorkoutList().add(workoutPlan);
 
-                                    db.collection("exercise_plans")
+                                    db.collection("plan_exercises")
                                             .get()
-                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document1 : task1.getResult()) {
 
-                                                            if(document.get("workout_plan_id").toString().equals(workoutPlan.getId())) {
+                                                        if(document1.get("workout_plan_id").toString().equals(workoutPlan.getId())) {
 
-                                                                String exercisePlanId = document.getId();
-                                                                Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document.get("exercise_template_id").toString()));
+                                                            String exercisePlanId = document1.getId();
+                                                            Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
 
-                                                                workoutPlan.getExercises().add(exercise);
+                                                            workoutPlan.getExercises().add(exercise);
 
 
-                                                                db.collection("exercise_plan_sets")
-                                                                        .get()
-                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                            @Override
-                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                if (task.isSuccessful()) {
-                                                                                    HashMap<Integer, Integer> reps = new HashMap<>();
-                                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            db.collection("exercise_plan_sets")
+                                                                    .get()
+                                                                    .addOnCompleteListener(task11 -> {
+                                                                        if (task11.isSuccessful()) {
+                                                                            HashMap<Integer, HashMap<Integer,Integer>> reps = new HashMap<>();
+                                                                            for (QueryDocumentSnapshot document11 : task11.getResult()) {
 
-                                                                                        if(document.get("exercise_plan_id").toString().equals(exercisePlanId)) {
-                                                                                            reps.put(0,Integer.parseInt(document.get("reps").toString()));
-                                                                                        }
-
-                                                                                    }
-                                                                                    exercise.setReps(reps);
-
-                                                                                } else {
-                                                                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                                                                if(document11.get("exercise_plan_id").toString().equals(exercisePlanId)) {
+                                                                                    HashMap<Integer, Integer> val = new HashMap<>();
+                                                                                    val.put(0,Integer.parseInt(document11.get("reps").toString()));
+                                                                                    reps.put(reps.size(), val);
                                                                                 }
+
                                                                             }
-                                                                        });
+                                                                            exercise.setReps(reps);
 
+                                                                        } else {
+                                                                            Log.w(TAG, "Error getting documents.", task11.getException());
+                                                                        }
+                                                                    });
 
-                                                            }
 
                                                         }
-                                                    } else {
-                                                        Log.w(TAG, "Error getting documents.", task.getException());
+
                                                     }
+                                                } else {
+                                                    Log.w(TAG, "Error getting documents.", task1.getException());
                                                 }
                                             });
 
@@ -237,7 +233,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                                                                 if(document11.get("exercise_workout_id").toString().equals(exerciseLogId)) {
 //                                                                                    System.out.println("found, now add " + document11.get("reps"));
-                                                                                    exercise.getReps().put(Integer.parseInt(document11.get("weight").toString()) ,Integer.parseInt(document11.get("reps").toString()));
+                                                                                    HashMap<Integer, Integer> val = new HashMap<>();
+                                                                                    val.put(Integer.parseInt(document11.get("weight").toString()) ,Integer.parseInt(document11.get("reps").toString()));
+                                                                                    exercise.getReps().put(exercise.getReps().size(), val);
                                                                                 }
 
                                                                             }
@@ -246,8 +244,6 @@ public class LoginActivity extends AppCompatActivity {
                                                                             Log.w(TAG, "Error getting documents.", task11.getException());
                                                                         }
                                                                     });
-
-
                                                         }
 
                                                     }

@@ -57,4 +57,13 @@ public class WorkoutPlan {
     public void setExercises(ArrayList<Exercise> exercises) {
         this.exercises = exercises;
     }
+
+    public static WorkoutPlan getWorkoutPlanFromID(String id){
+        for(WorkoutPlan workoutPlan : User.getActiveUser().getWorkoutList()){
+            if(workoutPlan.getId().equals(id)){
+                return workoutPlan;
+            }
+        }
+        return null;
+    }
 }
