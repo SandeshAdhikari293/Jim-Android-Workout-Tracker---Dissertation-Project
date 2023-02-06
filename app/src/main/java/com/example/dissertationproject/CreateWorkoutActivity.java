@@ -28,6 +28,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +52,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        exercises.clear();
         setContentView(R.layout.activity_create_workout);
 
         delete = findViewById(R.id.btnDeleteWorkoutPlan);
@@ -63,6 +67,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         }
 
         if(isUpdating()){
+            exercises.clear();
+            System.out.println("updating");
             ((EditText)findViewById(R.id.etWorkoutPlanName)).setText(workoutPlan.getName());
             ((EditText)findViewById(R.id.etWorkoutPlanDescription)).setText(workoutPlan.getDesc());
 
@@ -110,10 +116,21 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         // in below two lines we are setting layout manager and adapter to our recycler view.
+        wpAdapter = new CreateWorkoutPlanAdapter(this, exercises);
+        // below line is for setting a layout manager for our recycler view.
+        // here we are creating vertical list so we will provide orientation as vertical
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
 
-
+//        System.out.println();
+        System.out.println("size: " + workoutPlan.getExercises().size());
+        for(Exercise ep : workoutPlan.getExercises()){
+            System.out.println(ep.getTemplate().getName());
+            System.out.println(ep.getReps());
+        }
 
         super.onResume();
     }
@@ -124,6 +141,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
 
         if(!isUpdating()) {
+            System.out.println("OK?");
             Map<String, Object> workout = new HashMap<>();
             workout.put("user", User.activeUser.getId());
             workout.put("name", workoutPlan.getName());
@@ -139,6 +157,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                     val.put(0, rep);
                     exercise.getReps().put(exercise.getReps().size(), val);
                 }
+
                 workoutPlan.getExercises().add(exercise);
             }
 
@@ -151,41 +170,32 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
                         workoutPlan.setId(documentReference.getId());
-                        for (WorkoutPlanExercise e : exercises) {
 
-                            Exercise exercise = new Exercise(e.getExerciseTemplate());
+//                        System.out.println("Should exist: " + workoutPlan.getExercises().size());
+                        for (Exercise e : workoutPlan.getExercises()) {
 
-                            for (RepLine repLine : e.getRepLines()) {
-                                int rep = Integer.parseInt(repLine.getReps().getText().toString());
-                                e.getTargetReps().add(rep);
-                                HashMap<Integer, Integer> val = new HashMap<>();
-                                val.put(0, rep);
-                                exercise.getReps().put(exercise.getReps().size(), val);
-                            }
-
-
-//                            workoutPlan.getExercises().add(exercise);
 
                             Map<String, Object> exercises = new HashMap<>();
-                            exercises.put("exercise_template_id", e.getExerciseTemplate().getId());
+                            exercises.put("exercise_template_id", e.getTemplate().getId());
                             exercises.put("workout_plan_id", documentReference.getId());
 
-                            db.collection("exercise_plans")
+                            db.collection("plan_exercises")
                                     .add(exercises)
                                     .addOnSuccessListener(documentReference12 -> {
                                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
 
-                                        for (int reps : e.getTargetReps()) {
+                                        for (HashMap<Integer, Integer> reps : e.getReps().values()) {
+                                            for(int r : reps.values()){
+                                                Map<String, Object> exerciseReps = new HashMap<>();
+                                                exerciseReps.put("exercise_plan_id", documentReference12.getId());
+                                                exerciseReps.put("reps", r);
 
-                                            Map<String, Object> exerciseReps = new HashMap<>();
-                                            exerciseReps.put("exercise_plan_id", documentReference12.getId());
-                                            exerciseReps.put("reps", reps);
-
-                                            db.collection("exercise_plan_sets")
-                                                    .add(exerciseReps)
-                                                    .addOnSuccessListener(documentReference121 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference121.getId()))
-                                                    .addOnFailureListener(e13 -> Log.w(TAG, "Error adding document", e13));
-                                        }
+                                                db.collection("exercise_plan_sets")
+                                                        .add(exerciseReps)
+                                                        .addOnSuccessListener(documentReference121 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference121.getId()))
+                                                        .addOnFailureListener(e13 -> Log.w(TAG, "Error adding document", e13));
+                                            }
+                                            }
                                     })
                                     .addOnFailureListener(e14 -> Log.w(TAG, "Error adding document", e14));
                         }
@@ -198,14 +208,24 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             // i think this would work, because the exercises are exclusively linked to this workout
             // and none others.
 
-            workoutPlan.getExercises().clear();
+            workoutPlan.setExercises(new ArrayList<>());
+
+            System.out.println("BEFORE:");
+            System.out.println("size: " + workoutPlan.getExercises().size());
+            for(Exercise ep : workoutPlan.getExercises()){
+                System.out.println(ep.getTemplate().getName());
+                System.out.println(ep.getReps());
+            }
+
 
             for (WorkoutPlanExercise e : exercises) {
                 Exercise exercise = new Exercise(e.getExerciseTemplate());
 
                 for (RepLine repLine : e.getRepLines()) {
-                    int rep = Integer.parseInt(repLine.getReps().getText().toString());
                     HashMap<Integer, Integer> val = new HashMap<>();
+                    System.out.println("exercise: "+e.getExerciseTemplate().getName());
+
+                    int rep = Integer.parseInt(repLine.getReps().getText().toString());
                     val.put(0, rep);
                     exercise.getReps().put(exercise.getReps().size(), val);
 
@@ -216,11 +236,12 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
             System.out.println("size: " + workoutPlan.getExercises().size());
             for(Exercise ep : workoutPlan.getExercises()){
+                System.out.println(ep.getTemplate().getName());
                 System.out.println(ep.getReps());
             }
 
             //Deleting the exercises
-            CollectionReference itemsRef = db.collection("exercise_plans");
+            CollectionReference itemsRef = db.collection("plan_exercises");
             Query query = itemsRef.whereEqualTo("workout_plan_id", workoutPlan.getId());
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -231,10 +252,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                         query1.get().addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 for (DocumentSnapshot document1 : task1.getResult()) {
-
-
                                     itemsRef1.document(document1.getId()).delete();
                                 }
+
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task1.getException());
                             }
@@ -242,6 +262,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
                         itemsRef.document(document.getId()).delete();
                     }
+
+                    update();
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
@@ -250,93 +272,50 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             //Apparently doesn't work.
             //This adds all the exercises and reps back into the database.
 
-            for(Exercise exercise : workoutPlan.getExercises()){
-
-                Map<String, Object> exerciseInfo = new HashMap<>();
-                exerciseInfo.put("exercise_template_id", exercise.getTemplate().getId());
-                exerciseInfo.put("workout_plan_id", workoutPlan.getId());
-
-//                db.collection("plan").add(exerciseInfo)
-//                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                            @Override
-//                            public void onSuccess(DocumentReference documentReference) {
-//                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w(TAG, "Error adding document", e);
-//                            }
-//                        });
-
-                db.collection("plan_exercises")
-                        .add(exerciseInfo)
-                        .addOnSuccessListener(documentReference -> {
-
-                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-
-                            for(Map.Entry<Integer, HashMap<Integer, Integer>> r : exercise.getReps().entrySet()){
-                                for(int rep : r.getValue().values()){
-
-                                    Map<String, Object> exerciseReps = new HashMap<>();
-                                    exerciseReps.put("exercise_plan_id", documentReference.getId());
-                                    exerciseReps.put("reps", rep);
-
-                                    db.collection("exercise_plan_sets")
-                                            .add(exerciseReps)
-                                            .addOnSuccessListener(documentReference1 -> {
-
-                                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference1.getId());
-
-
-
-                                            }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-                                }
-                            }
-
-                        }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-
-            }
-
-//            for (WorkoutPlanExercise e : exercises) {
-//
-//                Exercise exercise = new Exercise(e.getExerciseTemplate());
-//
-//                for (RepLine repLine : e.getRepLines()) {
-//                    int rep = Integer.parseInt(repLine.getReps().getText().toString());
-//                    e.getTargetReps().add(rep);
-//                    HashMap<Integer, Integer> val = new HashMap<>();
-//                    val.put(0, rep);
-//                    exercise.getReps().put(exercise.getReps().size(), val);
-//                }
-//
-//                Map<String, Object> exerciseInfo = new HashMap<>();
-//                exerciseInfo.put("exercise_template_id", e.getExerciseTemplate().getId());
-//                exerciseInfo.put("workout_plan_id", workoutPlan.getId());
-//
-//                db.collection("exercise_plans")
-//                        .add(exerciseInfo)
-//                        .addOnSuccessListener(documentReference12 -> {
-//                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
-//
-//                            for (int reps : e.getTargetReps()) {
-//
-//                                Map<String, Object> exerciseReps = new HashMap<>();
-//                                exerciseReps.put("exercise_plan_id", documentReference12.getId());
-//                                exerciseReps.put("reps", reps);
-//
-//                                db.collection("exercise_plan_sets")
-//                                        .add(exerciseReps)
-//                                        .addOnSuccessListener(documentReference121 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference121.getId()))
-//                                        .addOnFailureListener(e13 -> Log.w(TAG, "Error adding document", e13));
-//                            }
-//                        })
-//                        .addOnFailureListener(e14 -> Log.w(TAG, "Error adding document", e14));
-//            }
         }
 
         finish();
+    }
+
+    public void update(){
+
+        for(Exercise exercise : workoutPlan.getExercises()){
+            System.out.println("BNne: " + exercise.getTemplate().getName() + " | " + exercise.getReps());
+            Map<String, Object> exerciseInfo = new HashMap<>();
+            exerciseInfo.put("exercise_template_id", exercise.getTemplate().getId());
+            exerciseInfo.put("workout_plan_id", workoutPlan.getId());
+
+            db.collection("plan_exercises")
+                    .add(exerciseInfo)
+                    .addOnSuccessListener(documentReference -> {
+
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+
+                        for(Map.Entry<Integer, HashMap<Integer, Integer>> r : exercise.getReps().entrySet()){
+                            for(int rep : r.getValue().values()){
+
+                                Map<String, Object> exerciseReps = new HashMap<>();
+                                exerciseReps.put("exercise_plan_id", documentReference.getId());
+                                exerciseReps.put("reps", rep);
+
+                                System.out.println("Saving: "+exercise.getTemplate().getName() + " | " + rep +" <-- "+ workoutPlan.getName());
+
+                                db.collection("exercise_plan_sets")
+                                        .add(exerciseReps)
+                                        .addOnSuccessListener(documentReference1 -> {
+
+                                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference1.getId());
+
+
+
+                                        }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                            }
+                        }
+
+                    }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+        }
     }
 
     public void addExerciseToPlan(View view){
@@ -375,7 +354,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         });
 
 
-        db.collection("exercises").document(workoutPlan.getId())
+        db.collection("workout_plans").document(workoutPlan.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "DocumentSnapshot successfully deleted!");

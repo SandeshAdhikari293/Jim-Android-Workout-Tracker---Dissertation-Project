@@ -44,11 +44,11 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(new Intent(DashboardActivity.this, CreateExerciseActivity.class));
     }
 
-//    public void createWorkoutPlan(View v){
-//        CreateWorkoutActivity.exercises = new ArrayList<>();
-//
-//        startActivity(new Intent(DashboardActivity.this, CreateWorkoutActivity.class));
-//    }
+    public void createWorkoutPlan(View v){
+        CreateWorkoutActivity.exercises = new ArrayList<>();
+
+        startActivity(new Intent(DashboardActivity.this, CreateWorkoutActivity.class));
+    }
 
 //    public void startWorkout(View v){
 //        startActivity(new Intent(DashboardActivity.this, ActiveWorkoutActivity.class));

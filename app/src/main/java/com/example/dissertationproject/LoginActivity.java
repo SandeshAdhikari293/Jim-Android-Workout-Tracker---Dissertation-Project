@@ -156,16 +156,18 @@ public class LoginActivity extends AppCompatActivity {
                                                                     .addOnCompleteListener(task11 -> {
                                                                         if (task11.isSuccessful()) {
                                                                             HashMap<Integer, HashMap<Integer,Integer>> reps = new HashMap<>();
-                                                                            for (QueryDocumentSnapshot document11 : task11.getResult()) {
 
+                                                                            for (QueryDocumentSnapshot document11 : task11.getResult()) {
                                                                                 if(document11.get("exercise_plan_id").toString().equals(exercisePlanId)) {
                                                                                     HashMap<Integer, Integer> val = new HashMap<>();
                                                                                     val.put(0,Integer.parseInt(document11.get("reps").toString()));
                                                                                     reps.put(reps.size(), val);
+
                                                                                 }
 
                                                                             }
                                                                             exercise.setReps(reps);
+                                                                            System.out.println("Loading: "+ exercise.getTemplate().getName() + " | "+ reps + " <-- "+ workoutPlan.getName());
 
                                                                         } else {
                                                                             Log.w(TAG, "Error getting documents.", task11.getException());

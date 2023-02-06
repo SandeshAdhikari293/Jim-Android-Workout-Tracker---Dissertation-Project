@@ -41,6 +41,7 @@ public class AddExerciseToPlanActivity extends AppCompatActivity {
 
     public void confirmExerciseToPlan(View v){
         CreateWorkoutActivity.exercises.add(new WorkoutPlanExercise(ExerciseTemplate.getFromName(spinner.getSelectedItem().toString())));
+
         finish();
     }
 }

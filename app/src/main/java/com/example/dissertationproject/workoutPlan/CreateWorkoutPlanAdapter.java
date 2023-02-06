@@ -51,7 +51,9 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 		holder.exerciseDescTV.setText(model.getExerciseTemplate().getDesc());
 
 		if(!model.getTargetReps().isEmpty()){
+			model.getRepLines().clear();
 			int count = 1;
+
 			for(int rep : model.getTargetReps()){
 
 				LinearLayout hor = new LinearLayout(context);
@@ -61,7 +63,6 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 				TextView txt = new TextView(context);
 				txt.setText((count) +") ");
-
 
 				EditText et = new EditText(context);
 				et.setHint("Target reps: "+rep);
