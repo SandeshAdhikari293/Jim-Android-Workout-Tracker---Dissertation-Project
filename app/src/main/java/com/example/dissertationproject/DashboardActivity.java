@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.WorkoutPlan;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,11 +35,22 @@ public class DashboardActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_log, R.id.navigation_stats, R.id.navigation_workouts, R.id.navigation_exercises)
+                R.id.navigation_log, R.id.navigation_stats, R.id.navigation_workouts, R.id.navigation_exercises, R.id.navigation_admin)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_create_exercise);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        if(!User.activeUser.isAdmin()){
+            binding.navView.getMenu().removeItem(R.id.navigation_admin);
+        }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void addExercise(View v){

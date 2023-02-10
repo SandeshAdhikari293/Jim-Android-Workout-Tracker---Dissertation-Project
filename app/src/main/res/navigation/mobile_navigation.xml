@@ -26,4 +26,8 @@
         android:id="@+id/navigation_exercises"
         android:name="com.example.dissertationproject.ui.exercises.ExercisesFragment"
         android:label="@string/title_notifications" />
+    <fragment
+        android:id="@+id/navigation_admin"
+        android:name="com.example.dissertationproject.ui.admin.AdminFragment"
+        android:label="@string/title_notifications" />
 </navigation>

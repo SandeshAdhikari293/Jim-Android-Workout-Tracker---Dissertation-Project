@@ -10,13 +10,14 @@ public class User {
     private ArrayList<ExerciseTemplate> exerciseList;
     private ArrayList<WorkoutPlan> workoutList;
 
+    private boolean admin;
     private ArrayList<Workout> workoutLog;
 
     public User(String id, String name, String email){
         this.id = id;
         this.name = name;
         this.email = email;
-
+        setAdmin(false);
         this.exerciseList = new ArrayList<>();
         this.workoutList = new ArrayList<>();
         this.workoutLog = new ArrayList<>();
@@ -76,5 +77,13 @@ public class User {
 
     public static User getActiveUser() {
         return activeUser;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 }

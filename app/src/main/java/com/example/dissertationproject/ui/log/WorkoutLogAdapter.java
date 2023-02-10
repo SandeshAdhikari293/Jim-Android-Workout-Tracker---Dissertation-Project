@@ -45,8 +45,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		Workout model = workouts.get(position);
 		holder.planName.setText(model.getName());
-//		holder.planDesc.setText("" + model.get);
-//		holder.courseIV.setImageResource(model.getCourse_image());
+
 
 		for(Exercise exercise : model.getExercises()){
 			TextView textView = new TextView(context);
@@ -57,7 +56,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 			for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
 				for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
 					TextView reps = new TextView(context);
-					reps.setText(rep+") "+r.getKey() + " x "+ r.getValue());
+					reps.setText(set+") "+r.getKey() + " x "+ r.getValue());
 					set++;
 
 					holder.linearLayout.addView(reps);

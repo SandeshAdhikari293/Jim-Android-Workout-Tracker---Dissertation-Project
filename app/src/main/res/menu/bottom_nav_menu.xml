@@ -5,12 +5,10 @@
         android:id="@+id/navigation_log"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="Log" />
-
     <item
         android:id="@+id/navigation_stats"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="Stats" />
-
     <item
         android:id="@+id/navigation_workouts"
         android:icon="@drawable/ic_notifications_black_24dp"
@@ -19,5 +17,9 @@
         android:id="@+id/navigation_exercises"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="Exercises" />
+    <item
+        android:id="@+id/navigation_admin"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Admin panel" />
 
 </menu>

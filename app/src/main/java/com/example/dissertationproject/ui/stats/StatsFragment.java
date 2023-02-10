@@ -72,8 +72,8 @@ public class StatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        lineChart = (LineChart) view.findViewById(R.id.chart);
-        radarChart = (RadarChart) view.findViewById(R.id.rchart);
+        lineChart = view.findViewById(R.id.chart);
+        radarChart = view.findViewById(R.id.rchart);
 
         ArrayList<RadarEntry> radarEntries = new ArrayList<>();
 
@@ -187,31 +187,31 @@ public class StatsFragment extends Fragment {
     }
 
     public void displayLineChart(){
+        if(exerciseSpinner.getSelectedItem() != null) {
+            ExerciseTemplate exerciseTemplate = ExerciseTemplate.getFromName(exerciseSpinner.getSelectedItem().toString());
 
-        ExerciseTemplate exerciseTemplate = ExerciseTemplate.getFromName(exerciseSpinner.getSelectedItem().toString());
+            List<Entry> entries = new ArrayList<>();
 
-        List<Entry> entries = new ArrayList<>();
-
-        //Calculate the highest weight lifted
-        for(Workout workout : User.getActiveUser().getWorkoutLog()){
-            int maxWeight = -1;
-            for(Exercise exercise : workout.getExercises()){
-                if(exercise.getTemplate().equals(exerciseTemplate)){
-                    for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
-                        for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
-                            if(rep.getKey() > maxWeight){
-                                maxWeight = r.getKey();
+            //Calculate the highest weight lifted
+            for (Workout workout : User.getActiveUser().getWorkoutLog()) {
+                int maxWeight = -1;
+                for (Exercise exercise : workout.getExercises()) {
+                    if (exercise.getTemplate().equals(exerciseTemplate)) {
+                        for (Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()) {
+                            for (Map.Entry<Integer, Integer> r : rep.getValue().entrySet()) {
+                                if (rep.getKey() > maxWeight) {
+                                    maxWeight = r.getKey();
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if(maxWeight >= 0) {
-                entries.add(new Entry(TimeUnit.MILLISECONDS.toDays(workout.getEndTime()), maxWeight));
-            }
+                if (maxWeight >= 0) {
+                    entries.add(new Entry(TimeUnit.MILLISECONDS.toDays(workout.getEndTime()), maxWeight));
+                }
 
-        }
+            }
 
 //        String[] dataObjects = {"a", "b","c","d"};
 //        List<Entry> entries = new ArrayList<>();
@@ -225,17 +225,18 @@ public class StatsFragment extends Fragment {
 //            x++;
 //        }
 
-        // in this example, a LineChart is initialized from xml
+            // in this example, a LineChart is initialized from xml
 
-        lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
-        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
+            lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
+            lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+            LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
 //        dataSet.setColor();
 //        dataSet.setValueTextColor(...); // styling, ...
 
-        LineData lineData = new LineData(dataSet);
-        lineChart.setData(lineData);
-        lineChart.invalidate(); // refresh
+            LineData lineData = new LineData(dataSet);
+            lineChart.setData(lineData);
+            lineChart.invalidate(); // refresh
+        }
     }
 
     @Override

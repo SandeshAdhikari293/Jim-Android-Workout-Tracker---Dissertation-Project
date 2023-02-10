@@ -2,7 +2,6 @@ package com.example.dissertationproject;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,14 +14,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterActivity extends AppCompatActivity {
-//    FirebaseDatabase database = FirebaseDatabase.getInstance();
-//    DatabaseReference myRef = database.getReference("message");
+
     private FirebaseAuth mAuth;
     EditText password;
     EditText email;
     EditText name;
-//    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,19 @@ public class RegisterActivity extends AppCompatActivity {
                                 Log.d(TAG, "User profile updated.");
                             }
                         });
+
+                Map<String, Object> profile = new HashMap<>();
+                profile.put("user_id", user.getUid());
+                profile.put("is_admin", false);
+
+                // Add a new document with a generated ID
+                db.collection("profiles")
+                        .add(profile)
+                        .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                        .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+//                finish();
+                //TODO: E-mail verification
             }
         });
     }
