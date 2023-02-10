@@ -54,6 +54,8 @@ public class StatsFragment extends Fragment {
 
     RadarChart radarChart;
     Spinner exerciseSpinner;
+    Spinner metricSpinner;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -77,12 +79,6 @@ public class StatsFragment extends Fragment {
 
         ArrayList<RadarEntry> radarEntries = new ArrayList<>();
 
-//        radarEntries.add(new RadarEntry(0, 0.21f));
-//        radarEntries.add(new RadarEntry(1, 0.12f));
-//        radarEntries.add(new RadarEntry(2, 0.20f));
-//        radarEntries.add(new RadarEntry(2, 0.52f));
-//        radarEntries.add(new RadarEntry(3, 0.29f));
-//        radarEntries.add(new RadarEntry(4, 0.62f));
 
         HashMap<String, Integer> categoryCount = new HashMap<>();
         for(Workout workout : User.getActiveUser().getWorkoutLog()){
@@ -103,7 +99,7 @@ public class StatsFragment extends Fragment {
 
         }
 
-//        System.out.println(categoryCount);
+        //Setting default entries.
         radarEntries.add(new RadarEntry(0, 0));
         radarEntries.add(new RadarEntry(0, 1));
         radarEntries.add(new RadarEntry(0, 2));
@@ -112,11 +108,7 @@ public class StatsFragment extends Fragment {
         radarEntries.add(new RadarEntry(0, 5));
         radarEntries.add(new RadarEntry(0, 6));
 
-//        radarEntries.add(new RadarEntry(512, 0));
-//        radarEntries.add(new RadarEntry(90, 1));
-//        radarEntries.add(new RadarEntry(2, 2));
-
-
+        //TODO: Replace with a map or something
         for(Map.Entry<String, Integer> entry : categoryCount.entrySet()){
 
             if(entry.getKey().equals("Chest")){
@@ -157,8 +149,54 @@ public class StatsFragment extends Fragment {
         radarDataSet.setValueTextColor(Color.BLACK);
         radarDataSet.setValueTextSize(18f);
 
-        exerciseSpinner = (Spinner) view.findViewById(R.id.spnChartExercise);
+        exerciseSpinner = view.findViewById(R.id.spnChartExercise);
+        metricSpinner = view.findViewById(R.id.spnChartMetric);
 
+        initExerciseSpinnerData();
+        initMetricSpinnerData();
+
+        displayLineChart();
+
+    }
+
+    public void initMetricSpinnerData(){
+        ArrayList<String> metrics = new ArrayList<>();
+
+        metrics.add("Max Weight");
+        metrics.add("Average Weight");
+        metrics.add("Volume");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, metrics);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        metricSpinner.setAdapter(adapter);
+        metricSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                displayLineChart();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    public void displayLineChart(){
+        String metric = metricSpinner.getSelectedItem().toString();
+        if(metric.equals("Max Weight")){
+            displayMaxWeightChart();
+        } else if (metric.equals("Volume")) {
+            displayVolumeChart();
+        } else if (metric.equals("Average Weight")) {
+            
+        }
+    }
+
+    public void initExerciseSpinnerData(){
         ArrayList<String> exercises = new ArrayList<>();
 
         for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
@@ -182,11 +220,11 @@ public class StatsFragment extends Fragment {
 
             }
         });
-        displayLineChart();
-
     }
 
-    public void displayLineChart(){
+
+
+    public void displayMaxWeightChart(){
         if(exerciseSpinner.getSelectedItem() != null) {
             ExerciseTemplate exerciseTemplate = ExerciseTemplate.getFromName(exerciseSpinner.getSelectedItem().toString());
 
@@ -213,25 +251,43 @@ public class StatsFragment extends Fragment {
 
             }
 
-//        String[] dataObjects = {"a", "b","c","d"};
-//        List<Entry> entries = new ArrayList<>();
-//        int x = 0;
-//        for (String data : dataObjects) {
-//            // turn your data into Entry objects
-////            System.out.println(System.currentTimeMillis());
-//
-//            int val = x * 86400000;
-//            entries.add(new Entry(TimeUnit.MILLISECONDS.toDays((long)System.currentTimeMillis() + val), 23));
-//            x++;
-//        }
-
-            // in this example, a LineChart is initialized from xml
 
             lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
             lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
             LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
-//        dataSet.setColor();
-//        dataSet.setValueTextColor(...); // styling, ...
+
+            LineData lineData = new LineData(dataSet);
+            lineChart.setData(lineData);
+            lineChart.invalidate(); // refresh
+        }
+    }
+
+    public void displayVolumeChart(){
+        if(exerciseSpinner.getSelectedItem() != null) {
+            ExerciseTemplate exerciseTemplate = ExerciseTemplate.getFromName(exerciseSpinner.getSelectedItem().toString());
+
+            List<Entry> entries = new ArrayList<>();
+
+            //Calculate the highest weight lifted
+            for (Workout workout : User.getActiveUser().getWorkoutLog()) {
+                int volume = 0;
+                for (Exercise exercise : workout.getExercises()) {
+                    if (exercise.getTemplate().equals(exerciseTemplate)) {
+                        for (Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()) {
+                            for (Map.Entry<Integer, Integer> r : rep.getValue().entrySet()) {
+
+                                volume = volume + (r.getKey() * r.getValue());
+                            }
+                        }
+                    }
+                }
+                entries.add(new Entry(TimeUnit.MILLISECONDS.toDays(workout.getEndTime()), volume));
+            }
+
+
+            lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
+            lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+            LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
 
             LineData lineData = new LineData(dataSet);
             lineChart.setData(lineData);
