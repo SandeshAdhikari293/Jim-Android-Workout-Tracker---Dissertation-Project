@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,7 +39,35 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void createUser(View v){
-        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
+        String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}";
+        //Compile regular expression to get the pattern
+        Pattern ePattern = Pattern.compile(emailRegex);
+
+        if(!ePattern.matcher(email.getText().toString()).matches()){
+            Utils.errorDialog(this, "E-mail address", "Please enter a valid e-mail address format.", "Continue");
+            return;
+        }
+
+        String passwordRegex = "^(?=.*[0-9])"
+                + "(?=.*[a-z])(?=.*[A-Z])"
+                + "(?=.*[@#$%^&+=])"
+                + "(?=\\S+$).{8,20}$";
+
+        // Compile the ReGex
+        Pattern pPattern = Pattern.compile(passwordRegex);
+        if(!pPattern.matcher(password.getText().toString()).matches()){
+            Utils.errorDialog(this, "Password", "Please enter a valid password It contains at least 8 characters and at most 20 characters.\n" +
+                    "It contains at least one digit.\n" +
+                    "It contains at least one upper case alphabet.\n" +
+                    "It contains at least one lower case alphabet.\n" +
+                    "It contains at least one special character which includes !@#$%&*()-+=^.\n" +
+                    "It doesn’t contain any white space.", "Continue");
+            return;
+        }
+
+
+
+            mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 // Sign in is successful
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -64,7 +93,9 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
 //                finish();
-                //TODO: E-mail verification
+                user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
+            }else{
+                Utils.errorDialog(this, "Registration error", "This account is unable to be created", "Continue");
             }
         });
     }

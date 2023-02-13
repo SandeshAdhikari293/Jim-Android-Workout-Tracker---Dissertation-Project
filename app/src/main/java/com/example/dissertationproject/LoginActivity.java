@@ -5,11 +5,15 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dissertationproject.objects.Exercise;
@@ -19,19 +23,10 @@ import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarMenu;
-import com.google.android.material.navigation.NavigationBarMenuView;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
@@ -62,21 +57,28 @@ public class LoginActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-
-                        new User(user.getUid(), user.getDisplayName(), user.getEmail()).setActiveUser();
-
-
-                        cacheUserData();
+                        if(user.isEmailVerified()){
+                            new User(user.getUid(), user.getDisplayName(), user.getEmail()).setActiveUser();
+                            cacheUserData();
+                        }else{
+                            Utils.errorDialog(this, "E-mail verification", "Please verify your email address.", "Continue");
+                        }
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                        System.out.println("Login failed");
-//                            updateUI(null);
+                        Utils.errorDialog(this, "User login", "Please enter a valid e-mail address and password.", "Continue");
                     }
                 });
     }
+
+    public void errorMessage(Context c, String msg){
+        Toast toast = Toast.makeText(c, msg, Toast.LENGTH_LONG);
+        View view = toast.getView();
+//        view.setBackgroundResource(R.drawable.custom_background);
+        TextView text = view.findViewById(android.R.id.message);
+        /*Here you can do anything with above textview like text.setTextColor(Color.parseColor("#000000"));*/
+        text.setTextColor(Color.parseColor("#000000"));
+        toast.show();
+    }
+
 
     public void cacheUserData(){
         loadProfile();
@@ -91,8 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (task1.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task1.getResult()) {
                             User.getActiveUser().setAdmin( (boolean) document.get("is_admin"));
-//                            System.out.println("IS ADMIN: " + User.getActiveUser().isAdmin());
-
                         }
                     } else {
                         Log.w(TAG, "Error getting documents.", task1.getException());
@@ -229,7 +229,6 @@ public class LoginActivity extends AppCompatActivity {
                                                         System.out.println(exercise.getTemplate().getName() + "");
                                                         workout.getExercises().add(exercise);
 
-
                                                         db.collection("exercise_workout_sets")
                                                                 .get()
                                                                 .addOnCompleteListener(task11 -> {
@@ -265,5 +264,17 @@ public class LoginActivity extends AppCompatActivity {
                 });
         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
 
+    }
+
+    public void forgotPassword(View v){
+        if(!email.getText().toString().equals("")){
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    System.out.println("OK SENT");
+                }
+            });
+            Utils.errorDialog(this, "Password reset", "A E-mail has sent to "+email.getText().toString(),"Continue");
+        }
     }
 }

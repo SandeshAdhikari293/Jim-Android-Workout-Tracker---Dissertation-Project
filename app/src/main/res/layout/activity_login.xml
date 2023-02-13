@@ -64,7 +64,9 @@
         android:layout_width="261dp"
         android:layout_height="32dp"
         android:layout_marginTop="24dp"
-        android:text="Forgotten password?"
+        android:clickable="true"
+        android:onClick="forgotPassword"
+        android:text="Reset Password"
         app:layout_constraintStart_toStartOf="@+id/etPasswordLogin"
         app:layout_constraintTop_toBottomOf="@+id/etPasswordLogin" />
 </androidx.constraintlayout.widget.ConstraintLayout>
