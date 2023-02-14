@@ -23,6 +23,7 @@ import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,7 +58,9 @@ public class LoginActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        if(user.isEmailVerified()){
+
+                        //TODO: Change back the negation to make it work properly again - just for testing purposes.
+                        if(!user.isEmailVerified()){
                             new User(user.getUid(), user.getDisplayName(), user.getEmail()).setActiveUser();
                             cacheUserData();
                         }else{

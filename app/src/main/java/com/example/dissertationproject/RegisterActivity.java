@@ -39,31 +39,33 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void createUser(View v){
-        String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}";
-        //Compile regular expression to get the pattern
-        Pattern ePattern = Pattern.compile(emailRegex);
 
-        if(!ePattern.matcher(email.getText().toString()).matches()){
-            Utils.errorDialog(this, "E-mail address", "Please enter a valid e-mail address format.", "Continue");
-            return;
-        }
-
-        String passwordRegex = "^(?=.*[0-9])"
-                + "(?=.*[a-z])(?=.*[A-Z])"
-                + "(?=.*[@#$%^&+=])"
-                + "(?=\\S+$).{8,20}$";
-
-        // Compile the ReGex
-        Pattern pPattern = Pattern.compile(passwordRegex);
-        if(!pPattern.matcher(password.getText().toString()).matches()){
-            Utils.errorDialog(this, "Password", "Please enter a valid password It contains at least 8 characters and at most 20 characters.\n" +
-                    "It contains at least one digit.\n" +
-                    "It contains at least one upper case alphabet.\n" +
-                    "It contains at least one lower case alphabet.\n" +
-                    "It contains at least one special character which includes !@#$%&*()-+=^.\n" +
-                    "It doesn’t contain any white space.", "Continue");
-            return;
-        }
+        //TODO: UNCOMMENT THIS. This is for debugging and allows accounts to be made without validation
+//        String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}";
+//        //Compile regular expression to get the pattern
+//        Pattern ePattern = Pattern.compile(emailRegex);
+//
+//        if(!ePattern.matcher(email.getText().toString()).matches()){
+//            Utils.errorDialog(this, "E-mail address", "Please enter a valid e-mail address format.", "Continue");
+//            return;
+//        }
+//
+//        String passwordRegex = "^(?=.*[0-9])"
+//                + "(?=.*[a-z])(?=.*[A-Z])"
+//                + "(?=.*[@#$%^&+=])"
+//                + "(?=\\S+$).{8,20}$";
+//
+//        // Compile the ReGex
+//        Pattern pPattern = Pattern.compile(passwordRegex);
+//        if(!pPattern.matcher(password.getText().toString()).matches()){
+//            Utils.errorDialog(this, "Password", "Please enter a valid password It contains at least 8 characters and at most 20 characters.\n" +
+//                    "It contains at least one digit.\n" +
+//                    "It contains at least one upper case alphabet.\n" +
+//                    "It contains at least one lower case alphabet.\n" +
+//                    "It contains at least one special character which includes !@#$%&*()-+=^.\n" +
+//                    "It doesn’t contain any white space.", "Continue");
+//            return;
+//        }
 
 
 
@@ -82,8 +84,11 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
 
+                //TODO: remove the gradle for firebase admin
                 Map<String, Object> profile = new HashMap<>();
                 profile.put("user_id", user.getUid());
+                profile.put("name", name.getText().toString());
+                profile.put("email", user.getEmail());
                 profile.put("is_admin", false);
 
                 // Add a new document with a generated ID
@@ -92,8 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
                         .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
-//                finish();
-                user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
+                finish();
+                //TODO: UNCOMMENT THIS.
+//                user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
             }else{
                 Utils.errorDialog(this, "Registration error", "This account is unable to be created", "Continue");
             }
