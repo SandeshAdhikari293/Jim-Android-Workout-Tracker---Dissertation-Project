@@ -2,6 +2,8 @@ package com.example.dissertationproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.dissertationproject.objects.User;
@@ -16,6 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.dissertationproject.databinding.ActivityCreateExerciseBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -48,6 +51,25 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.mybutton) {
+            Intent intent = new Intent(DashboardActivity.this, ProfileActivity.class);
+            intent.putExtra("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onStart() {
         super.onStart();

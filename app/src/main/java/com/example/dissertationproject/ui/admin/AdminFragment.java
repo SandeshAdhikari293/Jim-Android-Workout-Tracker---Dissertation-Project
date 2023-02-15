@@ -72,6 +72,7 @@ public class AdminFragment extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         AdminViewModel dashboardViewModel =
@@ -91,33 +92,19 @@ public class AdminFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rcvAdminPanel);
         recyclerView.setHasFixedSize(true);
 
-        ArrayList<User> users = new ArrayList<>();
-
-        db.collection("profiles")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            User u = new User(document.get("user_id").toString(), document.get("name").toString(), document.get("email").toString());
-                            users.add(u);
-                        }
-
-                        AdminPanelAdapter wpAdapter = new AdminPanelAdapter(getContext(), users);
+//        ArrayList<User> users = new ArrayList<>();
 
 
-                        // below line is for setting a layout manager for our recycler view.
-                        // here we are creating vertical list so we will provide orientation as vertical
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-                        // in below two lines we are setting layout manager and adapter to our recycler view.
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        recyclerView.setAdapter(wpAdapter);
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                });
+        AdminPanelAdapter wpAdapter = new AdminPanelAdapter(getContext(), User.users);
 
 
+        // below line is for setting a layout manager for our recycler view.
+        // here we are creating vertical list so we will provide orientation as vertical
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        // in below two lines we are setting layout manager and adapter to our recycler view.
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(wpAdapter);
     }
 
     @Override

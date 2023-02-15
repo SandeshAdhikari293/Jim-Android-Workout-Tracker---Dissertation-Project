@@ -97,6 +97,10 @@ public class LoginActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task1.getResult()) {
                             User.getActiveUser().setAdmin( (boolean) document.get("is_admin"));
                         }
+
+                        if(User.getActiveUser().isAdmin()){
+                            loadUsersProfiles();
+                        }
                     } else {
                         Log.w(TAG, "Error getting documents.", task1.getException());
                     }
@@ -267,6 +271,23 @@ public class LoginActivity extends AppCompatActivity {
                 });
         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
 
+    }
+
+    public void loadUsersProfiles(){
+        db.collection("profiles")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User u = new User(document.get("user_id").toString(), document.get("name").toString(), document.get("email").toString());
+                            User.users.add(u);
+                        }
+
+
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                });
     }
 
     public void forgotPassword(View v){

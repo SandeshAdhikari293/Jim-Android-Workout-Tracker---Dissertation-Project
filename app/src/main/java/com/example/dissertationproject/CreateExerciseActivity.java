@@ -86,22 +86,14 @@ public class CreateExerciseActivity extends AppCompatActivity {
             // Add a new document with a generated ID
             db.collection("exercises")
                     .add(exercise)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
-                            ExerciseTemplate exerciseTemplate = new ExerciseTemplate(documentReference.getId(), name.getText().toString(), desc.getText().toString(), category.getSelectedItem().toString());
-                            User.getActiveUser().getExerciseList().add(exerciseTemplate);
-                            finish();
-                        }
+                        ExerciseTemplate exerciseTemplate = new ExerciseTemplate(documentReference.getId(), name.getText().toString(), desc.getText().toString(), category.getSelectedItem().toString());
+                        User.getActiveUser().getExerciseList().add(exerciseTemplate);
+                        finish();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error adding document", e);
-                        }
-                    });
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
         }else{
             //TODO: update the entry
 

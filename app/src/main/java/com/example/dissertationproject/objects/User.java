@@ -1,5 +1,7 @@
 package com.example.dissertationproject.objects;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 public class User {
@@ -12,6 +14,9 @@ public class User {
 
     private boolean admin;
     private ArrayList<Workout> workoutLog;
+
+    public static ArrayList<User> users = new ArrayList<>();
+
 
     public User(String id, String name, String email){
         this.id = id;
@@ -86,4 +91,14 @@ public class User {
     public boolean isAdmin() {
         return admin;
     }
+
+    public static User getUserFromID(String id){
+        for(User u : users){
+            if(u.getId().equals(id)){
+                return u;
+            }
+        }
+        return null;
+    }
+
 }
