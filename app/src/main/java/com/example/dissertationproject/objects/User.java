@@ -13,6 +13,7 @@ public class User {
     private ArrayList<WorkoutPlan> workoutList;
 
     private boolean admin;
+    private boolean activated;
     private ArrayList<Workout> workoutLog;
 
     public static ArrayList<User> users = new ArrayList<>();
@@ -23,6 +24,7 @@ public class User {
         this.name = name;
         this.email = email;
         setAdmin(false);
+        setActivated(true);
         this.exerciseList = new ArrayList<>();
         this.workoutList = new ArrayList<>();
         this.workoutLog = new ArrayList<>();
@@ -90,6 +92,14 @@ public class User {
 
     public boolean isAdmin() {
         return admin;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public boolean isActivated() {
+        return activated;
     }
 
     public static User getUserFromID(String id){

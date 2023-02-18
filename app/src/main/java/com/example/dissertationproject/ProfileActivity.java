@@ -4,9 +4,13 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +26,10 @@ public class ProfileActivity extends AppCompatActivity {
     String uid;
     TextView name;
     EditText changeName;
+    CheckBox makeAdmin;
+    Button delete;
+    boolean admin;
+    User user;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -31,14 +39,33 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         name = findViewById(R.id.tvProfile);
+        makeAdmin = findViewById(R.id.chbAdminProfile);
         changeName = findViewById(R.id.etChangeDisplayName);
-
+        delete = findViewById(R.id.btnDeleteAccount);
         uid = getIntent().getStringExtra("uid");
-
+        user = User.getUserFromID(uid);
         name.setText("User: " + User.getUserFromID(uid).getName());
 
+        makeAdmin.setActivated(false);
+        changeName.setText(user.getName());
+
         if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            //User is editing themself.
+            makeAdmin.setVisibility(View.INVISIBLE);
+        }else{
+            admin = true;
+
+            System.out.println("is admin: " +user.isAdmin());
+            makeAdmin.setChecked(user.isAdmin());
+
+            if(user.isActivated())
+                delete.setText("Deactivate account");
+            else
+                delete.setText("Reactivate account");
+        }
+
+        if(!user.isActivated()){
+            name.setText(name.getText() + " (inactive)");
+            name.setTextColor(Color.RED);
         }
     }
 
@@ -51,25 +78,46 @@ public class ProfileActivity extends AppCompatActivity {
 
                 db.collection("profiles").document(snapshot.getId())
                         .update(
-                                "name", changeName.getText().toString()
+                                "name", changeName.getText().toString(),
+                                "is_admin", makeAdmin.isChecked()
                         );
+                user.setName(changeName.getText().toString());
+                user.setAdmin(makeAdmin.isChecked());
                 finish();
                 return;
             }
         });
 
 
+
     }
 
     public void deleteAccount(View view){
-        if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            user.delete()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User account deleted.");
-                        }
-                    });
+        if(admin){
+            db.collection("profiles").whereEqualTo("user_id", uid).get().addOnCompleteListener(queryDocumentSnapshots -> {
+                for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots.getResult()){
+                    db.collection("profiles").document(snapshot.getId())
+                            .update(
+                                    "active", !user.isActivated()
+                            );
+                    finish();
+                    user.setActivated(!user.isActivated());
+                    return;
+                }
+            });
+        }else{
+            if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user.delete()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                finish();
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+//                            Log.d(TAG, "User account deleted.");
+                            }
+                        });
+            }
         }
     }
 }

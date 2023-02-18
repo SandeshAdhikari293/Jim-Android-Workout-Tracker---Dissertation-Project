@@ -2,6 +2,7 @@ package com.example.dissertationproject.ui.admin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,12 @@ public class AdminPanelAdapter extends RecyclerView.Adapter<AdminPanelAdapter.Vi
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		User model = users.get(position);
 		holder.name.setText(model.getName());
+
+		if(!model.isActivated())
+			holder.name.setTextColor(Color.RED);
+		if(model.isAdmin())
+			holder.name.setTextColor(Color.MAGENTA);
+
 		holder.email.setText(model.getEmail());
 
 		holder.editProfile.setOnClickListener(view -> {

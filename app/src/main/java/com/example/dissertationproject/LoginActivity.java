@@ -63,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
                         if(!user.isEmailVerified()){
                             new User(user.getUid(), user.getDisplayName(), user.getEmail()).setActiveUser();
                             cacheUserData();
+
+                            email.setText("");
+                            password.setText("");
                         }else{
                             Utils.errorDialog(this, "E-mail verification", "Please verify your email address.", "Continue");
                         }
@@ -70,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
                         Utils.errorDialog(this, "User login", "Please enter a valid e-mail address and password.", "Continue");
                     }
                 });
+
+
     }
 
     public void errorMessage(Context c, String msg){
@@ -95,7 +100,10 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task1.getResult()) {
+
                             User.getActiveUser().setAdmin( (boolean) document.get("is_admin"));
+                            User.getActiveUser().setActivated( (boolean) document.get("active"));
+
                         }
 
                         if(User.getActiveUser().isAdmin()){
@@ -280,6 +288,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             User u = new User(document.get("user_id").toString(), document.get("name").toString(), document.get("email").toString());
+                            u.setAdmin((boolean) document.get("is_admin"));
+                            u.setActivated((boolean) document.get("active"));
                             User.users.add(u);
                         }
 

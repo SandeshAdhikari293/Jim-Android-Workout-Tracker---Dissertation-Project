@@ -108,6 +108,22 @@ public class AdminFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        AdminPanelAdapter wpAdapter = new AdminPanelAdapter(getContext(), User.users);
+
+
+        // below line is for setting a layout manager for our recycler view.
+        // here we are creating vertical list so we will provide orientation as vertical
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        // in below two lines we are setting layout manager and adapter to our recycler view.
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(wpAdapter);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

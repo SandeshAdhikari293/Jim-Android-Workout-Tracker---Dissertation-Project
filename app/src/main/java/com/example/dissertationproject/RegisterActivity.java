@@ -89,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                 profile.put("user_id", user.getUid());
                 profile.put("name", name.getText().toString());
                 profile.put("email", user.getEmail());
+                profile.put("active", true);
                 profile.put("is_admin", false);
 
                 // Add a new document with a generated ID
