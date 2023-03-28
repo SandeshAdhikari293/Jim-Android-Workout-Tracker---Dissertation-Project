@@ -79,6 +79,12 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(new Intent(DashboardActivity.this, CreateExerciseActivity.class));
     }
 
+    public void userProfile(View v){
+        Intent intent = new Intent(DashboardActivity.this, ProfileActivity.class);
+        intent.putExtra("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        startActivity(intent);
+    }
+
     public void createWorkoutPlan(View v){
         CreateWorkoutActivity.exercises = new ArrayList<>();
 
