@@ -52,7 +52,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().hide();
         exercises.clear();
         setContentView(R.layout.activity_create_workout);
 

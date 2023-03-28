@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="8dp"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/fb_color"
+    app:cardElevation="10dp"
     app:cardMaxElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
@@ -21,6 +22,7 @@
     <RelativeLayout
         android:id="@+id/rlExerciseReps"
         android:layout_width="match_parent"
+        android:paddingBottom="15dp"
         android:layout_height="wrap_content">
 
         <!-- ImageVIew to display our Course Image -->
@@ -29,13 +31,14 @@
 
         <TextView
             android:id="@+id/idTVExerciseName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:text="course name"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white_dim"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <!-- Text VIew to display Course Rating -->
@@ -46,9 +49,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/idTVExerciseName"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
-            android:drawablePadding="2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+            android:textColor="@color/white_dim"
             android:text="course rating"
             app:drawableStartCompat="@android:drawable/ic_menu_mylocation" />
 
@@ -58,22 +62,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/idTVExerciseDescription"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="43dp"
-            android:layout_marginEnd="4dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="15dp"
             android:clickable="true"
             app:srcCompat="@android:drawable/ic_input_add" />
 
         <LinearLayout
             android:id="@+id/llRepLayout"
-            android:layout_width="313dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/idTVExerciseDescription"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="2dp"
-            android:layout_toStartOf="@+id/fabtnAddSet"
-            android:orientation="vertical"></LinearLayout>
+            android:layout_margin="30dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -5,9 +5,12 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +40,12 @@ public class CreateExerciseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_exercises);
+        getSupportActionBar().hide();
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setNavigationBarColor(Color.parseColor("#0B173B"));
+        window.setStatusBarColor(Color.parseColor("#0B173B"));
 
         String[] categories = {"Chest", "Back", "Shoulders", "Biceps", "Triceps", "Forearms", "Quads",
                 "Hamstrings", "Calves"};

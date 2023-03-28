@@ -76,7 +76,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 	// View holder class for initializing of your views such as TextView and Imageview
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final TextView planName;
-		private final TextView planDesc;
+//		private final TextView planDesc;
 
 		private final LinearLayout linearLayout;
 
@@ -85,7 +85,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
 			planName = itemView.findViewById(R.id.idTVCourseName);
-			planDesc = itemView.findViewById(R.id.idTVCourseRating);
+//			planDesc = itemView.findViewById(R.id.idTVCourseRating);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,75 +9,230 @@
     android:onClick="addExerciseToPlan"
     tools:context=".CreateWorkoutActivity">
 
-    <Button
-        android:id="@+id/btnSaveWorkoutPlan"
-        android:layout_width="168dp"
-        android:layout_height="72dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="16dp"
-        android:onClick="saveWorkoutPlan"
-        android:text="Save workout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/floatingActionButton" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background_image"
+        android:contentDescription="@string/background_image" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcCreateWorkout"
-        android:layout_width="1240dp"
-        android:layout_height="453dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSaveWorkoutPlan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etWorkoutPlanDescription"
-        app:layout_constraintVertical_bias="1.0" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/dialog_color"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
+        app:cardCornerRadius="30dp"
+        android:elevation="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/merriweather_sans_light"
+                android:text="Create New Workout"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:textSize="35dp" />
+
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/etWorkoutPlanName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/custom_edittext"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:padding="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@color/dialog_color"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="-3dp"
+                    android:textSize="20dp"
+                    android:text="Workout Name"
+                    android:textColor="@color/theme_color"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="-10dp"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/etWorkoutPlanDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/custom_edittext"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:hint="Description"
+                    android:inputType="textMultiLine"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:padding="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@color/dialog_color"
+                    android:gravity="center"
+                    android:layout_marginTop="-3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textSize="20dp"
+                    android:text="Description"
+                    android:textColor="@color/theme_color"/>
+
+            </RelativeLayout>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcCreateWorkout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDeleteWorkoutPlan"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_back"
+                    android:backgroundTint="@color/red_2"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:onClick="onDeleteWorkoutPlan"
+                    android:text="Delete"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/black"
+                    app:rippleColor="@color/red_1"
+                    app:strokeColor="@color/red_1"
+                    android:textAllCaps="false"
+                    android:textSize="30sp" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveWorkoutPlan"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_back"
+                    android:backgroundTint="@color/blue_4"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:onClick="saveWorkoutPlan"
+                    android:text="Save"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/black"
+                    app:rippleColor="@color/blue_4"
+                    app:strokeColor="@color/blue_4"
+                    android:textAllCaps="false"
+                    android:textSize="30sp" />
+
+
+
+
+
+            </RelativeLayout>
+
+
+            </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
-        android:layout_width="59dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         android:onClick="addExerciseToPlan"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <EditText
-        android:id="@+id/etWorkoutPlanName"
-        android:layout_width="428dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/etWorkoutPlanDescription"
-        android:layout_width="427dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Description"
-        android:inputType="textMultiLine"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etWorkoutPlanName" />
 
-    <Button
-        android:id="@+id/btnDeleteWorkoutPlan"
-        android:layout_width="145dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="16dp"
-        android:onClick="onDeleteWorkoutPlan"
-        android:text="Delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>

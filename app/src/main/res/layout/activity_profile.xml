@@ -1,62 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
-    <EditText
-        android:id="@+id/etChangeDisplayName"
-        android:layout_width="293dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="72dp"
-        android:ems="10"
-        android:hint="Change your name.."
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvProfile" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background_image"
+        android:contentDescription="@string/background_image" />
 
-    <TextView
-        android:id="@+id/tvProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="User profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnDeleteAccount"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/dialog_color"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="48dp"
-        android:onClick="deleteAccount"
-        android:text="Delete your account."
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="200dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginTop="100dp"
+        app:cardCornerRadius="30dp"
+        android:elevation="10dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnSaveChangesProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="48dp"
-        android:onClick="saveChanges"
-        android:text="Save Changes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/chbAdminProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Provide admin privledges"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etChangeDisplayName" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/merriweather_sans_light"
+                android:text="Profile"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:textSize="35dp" />
+
+
+
+                <TextView
+                    android:id="@+id/tvProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="User profile"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:textColor="@color/theme_color"
+                    android:textSize="30dp"
+                    />
+
+
+
+            <RelativeLayout
+                android:id="@+id/above_rel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/etChangeDisplayName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/custom_edittext"
+                    android:ems="10"
+                    android:hint="Change your name.."
+                    android:inputType="textPersonName"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:padding="20dp"
+                    android:textColorHint="@color/black"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@color/dialog_color"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="-3dp"
+                    android:textSize="20dp"
+                    android:text="Name"
+                    android:textColor="@color/theme_color"/>
+
+            </RelativeLayout>
+
+            <CheckBox
+                android:id="@+id/chbAdminProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:text="Provide admin privledges"
+                app:layout_constraintTop_toBottomOf="@+id/above_rel" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDeleteAccount"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_back"
+                    android:backgroundTint="@color/red_2"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:onClick="deleteAccount"
+                    android:text="Delete"
+                    android:textAlignment="center"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/black"
+                    app:rippleColor="@color/red_1"
+                    app:strokeColor="@color/red_1"
+                    android:textAllCaps="false"
+                    android:textSize="30sp" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveChangesProfile"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_back"
+                    android:backgroundTint="@color/blue_4"
+                    android:fontFamily="@font/merriweather_sans_light"
+                    android:onClick="saveChanges"
+                    android:text="Save"
+                    android:textAlignment="center"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/black"
+                    app:rippleColor="@color/blue_4"
+                    app:strokeColor="@color/blue_4"
+                    android:textAllCaps="false"
+                    android:textSize="30sp" />
+
+
+
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

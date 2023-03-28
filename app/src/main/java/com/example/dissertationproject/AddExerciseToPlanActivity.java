@@ -20,6 +20,7 @@ public class AddExerciseToPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_add_exercise_to_plan);
 
         spinner = findViewById(R.id.spnSelectExercise);

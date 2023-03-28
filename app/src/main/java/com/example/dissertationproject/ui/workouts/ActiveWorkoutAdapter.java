@@ -1,5 +1,6 @@
 package com.example.dissertationproject.ui.workouts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class ActiveWorkoutAdapter extends RecyclerView.Adapter<ActiveWorkoutAdap
 		return new ViewHolder(view);
 	}
 
+	@SuppressLint("ResourceAsColor")
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		WorkoutPlanExercise model = workoutPlanExercises.get(position);

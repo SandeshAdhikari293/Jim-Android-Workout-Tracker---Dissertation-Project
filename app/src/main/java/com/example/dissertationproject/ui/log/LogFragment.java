@@ -1,5 +1,7 @@
 package com.example.dissertationproject.ui.log;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +34,10 @@ public class LogFragment extends Fragment {
 
         binding = FragmentLogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        getActivity().getWindow().setStatusBarColor(Color.parseColor("#0B173B"));
+        getActivity().getWindow().setNavigationBarColor(Color.parseColor("#0B173B"));
 
         final TextView textView = binding.textDashboard;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -53,7 +61,7 @@ public class LogFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         // in below two lines we are setting layout manager and adapter to our recycler view.
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         recyclerView.setAdapter(wpAdapter);
 
     }

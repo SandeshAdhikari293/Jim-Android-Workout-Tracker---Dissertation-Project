@@ -42,6 +42,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_workout);
+        getSupportActionBar().hide();
 
         exercises = new ArrayList<>();
 

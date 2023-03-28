@@ -15,6 +15,7 @@ public class User {
     private boolean admin;
     private boolean activated;
     private ArrayList<Workout> workoutLog;
+    private String profileID;
 
     public static ArrayList<User> users = new ArrayList<>();
 
@@ -100,6 +101,14 @@ public class User {
 
     public boolean isActivated() {
         return activated;
+    }
+
+    public void setProfileID(String profileID) {
+        this.profileID = profileID;
+    }
+
+    public String getProfileID() {
+        return profileID;
     }
 
     public static User getUserFromID(String id){

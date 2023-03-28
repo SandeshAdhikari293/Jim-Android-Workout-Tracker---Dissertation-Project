@@ -1,60 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="55dp"
     tools:context=".ui.log.LogFragment">
 
-    <TextView
-        android:id="@+id/text_home"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background_image"
+        android:contentDescription="@string/background_image" />
+
+
+    <RelativeLayout
+        android:id="@+id/topbar_workout_stats"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/topbar_custom"
+        tools:ignore="MissingConstraints">
+
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/more_offers_close"-->
+        <!--            android:layout_width="40dp"-->
+        <!--            android:layout_height="40dp"-->
+        <!--            android:layout_alignParentStart="true"-->
+        <!--            android:layout_marginStart="20dp"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:layout_marginEnd="10dp"-->
+        <!--            android:layout_marginBottom="10dp"-->
+        <!--            android:scaleType="fitXY"-->
+        <!--            android:src="@drawable/ic_arrow"-->
+        <!--            app:tint="@color/white" />-->
+
+
+        <TextView
+            android:id="@+id/text_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Workout Stats"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/profilepic"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            app:tint="@color/white_dim"
+            android:src="@drawable/ic_baseline_person_24" />
+
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@id/topbar_workout_stats"
+        android:layout_height="wrap_content">
+
+
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
-        android:layout_width="900dp"
-        android:layout_height="251dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/spnChartExercise"
-        app:layout_constraintHorizontal_bias="0.34"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_home">
 
-    </com.github.mikephil.charting.charts.LineChart>
 
-    <Spinner
-        android:id="@+id/spnChartExercise"
-        android:layout_width="323dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spnChartMetric" />
 
-    <com.github.mikephil.charting.charts.RadarChart
-        android:id="@+id/rchart"
-        android:layout_width="615dp"
-        android:layout_height="306dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart" />
 
-    <Spinner
-        android:id="@+id/spnChartMetric"
-        android:layout_width="323dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/spnChartExercise"
-        app:layout_constraintTop_toBottomOf="@+id/text_home" />
+    <LinearLayout
+        android:id="@+id/two_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="1"
+        tools:ignore="MissingConstraints">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.55">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/dialog_color"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                app:cardCornerRadius="20dp"
+                android:elevation="10dp"
+                android:orientation="vertical">
+
+
+
+                <com.github.mikephil.charting.charts.RadarChart
+                    android:id="@+id/rchart"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_margin="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/topbar_workout_stats" />
+
+
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.45">
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:backgroundTint="@color/dialog_color"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="20dp"
+                    android:elevation="10dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/select_E_option"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select Exercise type : "
+                            android:textColor="@color/black"
+                            android:textSize="30dp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_centerVertical="true"/>
+
+
+                        <RelativeLayout
+                            android:id="@+id/speaker_relative_layout1"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:background="@drawable/custom_spinner_back"
+                            >
+
+                            <androidx.appcompat.widget.AppCompatSpinner
+                                android:id="@+id/spnChartMetric"
+                                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="70dp"
+                                android:popupTheme="@style/customSpinnerDialog"
+                                android:spinnerMode="dialog"
+                                tools:ignore="MissingConstraints" />
+
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:id="@+id/speaker_relative_layout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginBottom="20dp"
+                            android:background="@drawable/custom_spinner_back"
+                            >
+
+                            <androidx.appcompat.widget.AppCompatSpinner
+                                android:id="@+id/spnChartExercise"
+                                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="70dp"
+                                android:popupTheme="@style/customSpinnerDialog"
+                                android:spinnerMode="dialog"
+                                tools:ignore="MissingConstraints" />
+
+                        </RelativeLayout>
+
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/dialog_color"
+            android:elevation="10dp"
+            android:orientation="vertical"
+            app:cardCornerRadius="20dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="900dp"
+                android:layout_height="350dp"
+                android:layout_margin="20dp">
+
+
+            </com.github.mikephil.charting.charts.LineChart>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

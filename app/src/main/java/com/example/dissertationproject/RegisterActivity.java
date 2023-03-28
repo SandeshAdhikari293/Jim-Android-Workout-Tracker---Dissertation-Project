@@ -2,9 +2,13 @@ package com.example.dissertationproject;
 
 import static android.content.ContentValues.TAG;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,12 +34,22 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
 
         password = findViewById(R.id.etPassword);
         email = findViewById(R.id.etEmail);
         name = findViewById(R.id.etName);
+
+//        Window window = getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            window.setStatusBarColor(Color.parseColor("#7f77e5"));
+//            window.setNavigationBarColor(Color.parseColor("#db8ccd"));
+//        }
+
     }
 
     public void createUser(View v){

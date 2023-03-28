@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.dissertationproject.objects.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,32 +38,40 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_profile);
 
         name = findViewById(R.id.tvProfile);
         makeAdmin = findViewById(R.id.chbAdminProfile);
         changeName = findViewById(R.id.etChangeDisplayName);
         delete = findViewById(R.id.btnDeleteAccount);
+
         uid = getIntent().getStringExtra("uid");
-        user = User.getUserFromID(uid);
-        name.setText("User: " + User.getUserFromID(uid).getName());
+
 
         makeAdmin.setActivated(false);
-        changeName.setText(user.getName());
 
-        if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+        if (!uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            user = User.getUserFromID(uid);
+
             makeAdmin.setVisibility(View.INVISIBLE);
-        }else{
             admin = true;
 
-            System.out.println("is admin: " +user.isAdmin());
+            name.setText("User: " + User.getUserFromID(uid).getName());
             makeAdmin.setChecked(user.isAdmin());
 
             if(user.isActivated())
-                delete.setText("Deactivate account");
+                delete.setText("Deactivate");
             else
-                delete.setText("Reactivate account");
+                delete.setText("Reactivate");
+        }else{
+            user = User.getActiveUser();
         }
+
+        name.setText(user.getName());
+        changeName.setText(user.getName());
+
 
         if(!user.isActivated()){
             name.setText(name.getText() + " (inactive)");
@@ -70,8 +80,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void saveChanges(View view){
-        System.out.println("USER ID: " + uid);
-
         db.collection("profiles").whereEqualTo("user_id", uid).get().addOnCompleteListener(queryDocumentSnapshots -> {
             for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots.getResult()){
                 System.out.println("PROFILE ID: " + snapshot.getId());
@@ -87,9 +95,6 @@ public class ProfileActivity extends AppCompatActivity {
                 return;
             }
         });
-
-
-
     }
 
     public void deleteAccount(View view){
@@ -106,18 +111,28 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
         }else{
-            if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                user.delete()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                finish();
-                                FirebaseAuth.getInstance().signOut();
-                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-//                            Log.d(TAG, "User account deleted.");
-                            }
-                        });
-            }
+            //Delete the user account then delete the user profile
+            Runnable runnable = () -> {
+                if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user.delete()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+
+                                    db.collection("profiles").document(this.user.getProfileID())
+                                            .delete()
+                                            .addOnCompleteListener(aVoid -> {
+                                                finish();
+                                                FirebaseAuth.getInstance().signOut();
+                                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                            });
+                                }
+                            });
+                }
+            };
+
+            Utils.confirmDialog(this, "Delete your account", "WARNING! You are about to delete your account. This action is irreversible.", "Cancel", "Confirm", () -> {}, runnable);
+
         }
     }
 }

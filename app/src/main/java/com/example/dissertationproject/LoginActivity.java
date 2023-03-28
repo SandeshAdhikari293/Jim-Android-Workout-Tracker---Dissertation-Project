@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,18 +43,31 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
         mAuth = FirebaseAuth.getInstance();
 
         password = findViewById(R.id.etPasswordLogin);
         email = findViewById(R.id.etEmailLogin);
 
+//        Window window = getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            window.setStatusBarColor(Color.parseColor("#f3c7f7"));
+//            window.setNavigationBarColor(Color.parseColor("#e3afe3"));
+//        }
+
     }
+
 
     public void register(View v){
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 
     public void login(View view){
+        if(email.getText().toString().equals("") || password.getText().toString().equals("")){
+            return;
+        }
         mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -90,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void cacheUserData(){
         loadProfile();
-
     }
 
     public void loadProfile(){
@@ -103,7 +118,16 @@ public class LoginActivity extends AppCompatActivity {
 
                             User.getActiveUser().setAdmin( (boolean) document.get("is_admin"));
                             User.getActiveUser().setActivated( (boolean) document.get("active"));
+                            User.getActiveUser().setProfileID(document.getId());
 
+                        }
+
+                        if(!User.getActiveUser().isActivated()){
+                            mAuth.signOut();
+                            Utils.errorDialog(this, "Account deactivated",
+                                    "Your account has been deactivated, please contact" +
+                                            " an admin for support.", "Continue");
+                            return;
                         }
 
                         if(User.getActiveUser().isAdmin()){
@@ -169,6 +193,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                                         String exercisePlanId = document1.getId();
                                                         Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
+
+                                                        if(exercise.getTemplate() == null) continue;
 
                                                         workoutPlan.getExercises().add(exercise);
 
@@ -240,6 +266,8 @@ public class LoginActivity extends AppCompatActivity {
                                                         String exerciseLogId = document1.getId();
                                                         Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
 
+                                                        if(exercise.getTemplate() == null) continue;
+
                                                         System.out.println("workout: " + workout.getId() + " | " + workout.getName());
                                                         System.out.println(exercise.getTemplate().getName() + "");
                                                         workout.getExercises().add(exercise);
@@ -290,6 +318,7 @@ public class LoginActivity extends AppCompatActivity {
                             User u = new User(document.get("user_id").toString(), document.get("name").toString(), document.get("email").toString());
                             u.setAdmin((boolean) document.get("is_admin"));
                             u.setActivated((boolean) document.get("active"));
+                            u.setProfileID(document.getId());
                             User.users.add(u);
                         }
 

@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,7 +104,7 @@ public class AdminFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         // in below two lines we are setting layout manager and adapter to our recycler view.
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         recyclerView.setAdapter(wpAdapter);
     }
 
@@ -119,7 +120,7 @@ public class AdminFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         // in below two lines we are setting layout manager and adapter to our recycler view.
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         recyclerView.setAdapter(wpAdapter);
     }
 

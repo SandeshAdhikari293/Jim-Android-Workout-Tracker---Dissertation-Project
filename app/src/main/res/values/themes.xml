@@ -13,4 +13,22 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style name="BottomNavigationTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/dialog_color</item>
+        <item name="android:textColorSecondary">@color/white_aa</item>
+        <item name="colorSecondary">@color/white_aa</item>
+    </style>
+
+
+    <style name="customSpinnerDialog" >
+
+        <item name="android:background">@color/dialog_color</item>
+        <item name="android:textColor">@color/theme_color</item>
+        <item name="android:padding">10dp</item>
+
+    </style>
+
+
 </resources>
