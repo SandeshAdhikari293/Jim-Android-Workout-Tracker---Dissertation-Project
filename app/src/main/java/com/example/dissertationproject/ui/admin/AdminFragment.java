@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.R;
+import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.databinding.FragmentAdminBinding;
 import com.example.dissertationproject.databinding.FragmentStatsBinding;
 import com.example.dissertationproject.objects.Exercise;
@@ -69,6 +71,7 @@ import java.util.concurrent.TimeUnit;
 public class AdminFragment extends Fragment {
 
     RecyclerView recyclerView;
+    SearchView searchView;
     private FragmentAdminBinding binding;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -93,6 +96,21 @@ public class AdminFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rcvAdminPanel);
         recyclerView.setHasFixedSize(true);
 
+        searchView = view.findViewById(R.id.searchbar_admin);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                updateView(s);
+                return false;
+            }
+        });
+
 //        ArrayList<User> users = new ArrayList<>();
 
 
@@ -112,7 +130,30 @@ public class AdminFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+
         AdminPanelAdapter wpAdapter = new AdminPanelAdapter(getContext(), User.users);
+
+
+        // below line is for setting a layout manager for our recycler view.
+        // here we are creating vertical list so we will provide orientation as vertical
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        // in below two lines we are setting layout manager and adapter to our recycler view.
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        recyclerView.setAdapter(wpAdapter);
+    }
+
+    public void updateView(String search){
+        ArrayList<User> users = new ArrayList<>();
+
+        for(User u : User.users){
+            if(Utils.findSimilarity(u.getName(), search) > 0.3 || Utils.findSimilarity(u.getEmail(), search) > 0.1){
+                users.add(u);
+            }
+        }
+
+
+        AdminPanelAdapter wpAdapter = new AdminPanelAdapter(getContext(), users);
 
 
         // below line is for setting a layout manager for our recycler view.

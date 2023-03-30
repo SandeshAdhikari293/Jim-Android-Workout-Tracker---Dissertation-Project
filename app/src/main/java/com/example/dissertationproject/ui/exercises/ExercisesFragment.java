@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,9 +22,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.R;
+import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.databinding.FragmentExercisesBinding;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
@@ -67,27 +71,49 @@ public class ExercisesFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                updateList(spinner.getSelectedItem().toString());
+                updateList(spinner.getSelectedItem().toString(), "");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                updateList("All Exercises");
+                updateList("All Exercises", "");
             }
         });
 
-        updateList("All Exercises");
 
+        SearchView searchView = view.findViewById(R.id.searchbar_exercise);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                updateList("All Exercises", s);
+                return false;
+            }
+        });
+        updateList("All Exercises", "");
     }
 
-    public void updateList(String filter){
+    public void updateList(String filter, String search){
         recyclerView.setHasFixedSize(true);
 
         ArrayList<ExerciseTemplate> exercises = new ArrayList<>();
 
-        for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
-            if(exerciseTemplate.getCategory().equals(filter) || filter.equals("All Exercises")){
-                exercises.add(exerciseTemplate);
+        if(!search.equals("")){
+            for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
+                if(Utils.findSimilarity(exerciseTemplate.getName(), search) > 0.3){
+                    exercises.add(exerciseTemplate);
+                }
+            }
+        }else{
+            for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
+                if(exerciseTemplate.getCategory().equals(filter) || filter.equals("All Exercises")){
+                    exercises.add(exerciseTemplate);
+                }
             }
         }
 

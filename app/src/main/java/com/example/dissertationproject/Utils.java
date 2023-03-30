@@ -2,6 +2,8 @@ package com.example.dissertationproject;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import org.apache.commons.lang3.StringUtils;
+
 
 public class Utils {
 
@@ -53,5 +55,15 @@ public class Utils {
 
         // show it
         alertDialog.show();
+    }
+
+    public static double findSimilarity(String x, String y) {
+
+        double maxLength = Double.max(x.length(), y.length());
+        if (maxLength > 0) {
+            // optionally ignore case if needed
+            return (maxLength - StringUtils.getLevenshteinDistance(x, y)) / maxLength;
+        }
+        return 1.0;
     }
 }
