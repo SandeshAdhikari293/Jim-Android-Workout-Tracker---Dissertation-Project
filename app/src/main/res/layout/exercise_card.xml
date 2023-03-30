@@ -31,9 +31,9 @@
                 android:id="@+id/tvExerciseCardName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="course name"
-                android:fontFamily="@font/bubbleboddyneue"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif"
+                android:text="course name"
                 android:textColor="@color/theme_color"
                 android:textSize="30sp"
                 android:textStyle="bold" />

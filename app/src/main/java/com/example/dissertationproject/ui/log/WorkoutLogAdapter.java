@@ -1,7 +1,10 @@
 package com.example.dissertationproject.ui.log;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.ActiveWorkoutActivity;
 import com.example.dissertationproject.R;
+import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.objects.Exercise;
+import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +36,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 
 	private final Context context;
 	private final ArrayList<Workout> workouts;
+	FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 	// Constructor
 	public WorkoutLogAdapter(Context context,ArrayList<Workout> workouts) {
@@ -46,9 +57,15 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 		Workout model = workouts.get(position);
 		holder.planName.setText(model.getName());
 
+		TextView duration = new TextView(context);
+		duration.setTextSize(22);
+		duration.setText(model.getDuration());
+		duration.setGravity(View.TEXT_ALIGNMENT_CENTER);
+		holder.linearLayout.addView(duration);
 
 		for(Exercise exercise : model.getExercises()){
 			TextView textView = new TextView(context);
+			textView.setTextSize(22);
 			textView.setText(exercise.getTemplate().getName());
 			holder.linearLayout.addView(textView);
 
@@ -56,6 +73,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 			for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
 				for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
 					TextView reps = new TextView(context);
+					reps.setTextSize(18);
 					reps.setText(set+") "+r.getKey() + " x "+ r.getValue());
 					set++;
 
@@ -63,6 +81,19 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 				}
 			}
 		}
+
+		holder.editButton.setOnClickListener(view -> {
+			Utils.confirmDialog(context,"Delete workout", "Are you sure you want to delete this workout?", "Cancel", "Confirm",() -> {
+			}, ()->{
+				User.getActiveUser().getWorkoutLog().remove(model);
+
+				db.collection("workout_log").document(model.getId()).delete().addOnCompleteListener(task -> {
+					Utils.errorDialog(context,"Deleted", "Workout has been deleted", "Continue");
+					//todo: delete the exercises for this workout log
+				});
+
+			});
+		});
 	}
 
 
@@ -81,6 +112,8 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 		private final LinearLayout linearLayout;
 
 		private final FloatingActionButton playWorkout;
+		private final FloatingActionButton editButton;
+
 
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
@@ -88,9 +121,15 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 //			planDesc = itemView.findViewById(R.id.idTVCourseRating);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);
+			editButton = itemView.findViewById(R.id.fbtnEditWorkoutPlan);
+//			editButton = itemView.findViewById(R.id.fbtn);
+
+//			editButton.setVisibility(View.INVISIBLE);
+//			editButton.setClickable(false);
 
 			playWorkout.setVisibility(View.INVISIBLE);
 			playWorkout.setClickable(false);
+//			playWorkout.setBackgroundDrawable(itemView.getResources().getDrawable(R.drawable.ic_arrow));
 		}
 	}
 }

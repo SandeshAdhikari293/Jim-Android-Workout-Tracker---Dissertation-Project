@@ -37,6 +37,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
 
     EditText name;
     EditText desc;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +79,22 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
         // in below two lines we are setting layout manager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
+
+        startTime = System.currentTimeMillis();
     }
 
     public void saveActiveWorkout(View v){
 
         Workout wk = new Workout(name.getText().toString());
         wk.setEndTime(System.currentTimeMillis());
+        wk.setStartTime(startTime);
 
         Map<String, Object> workout = new HashMap<>();
         workout.put("user", User.activeUser.getId());
         workout.put("name", name.getText().toString());
         workout.put("description", desc.getText().toString());
         workout.put("end_time", wk.getEndTime());
+        workout.put("start_time", wk.getStartTime());
 
         db.collection("workout_log")
                 .add(workout)

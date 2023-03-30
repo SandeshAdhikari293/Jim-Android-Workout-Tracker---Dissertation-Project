@@ -252,6 +252,7 @@ public class LoginActivity extends AppCompatActivity {
                                 workout.setId(document.getId());
 
                                 workout.setEndTime(Long.parseLong(document.get("end_time").toString()));
+                                workout.setStartTime(Long.parseLong(document.get("start_time").toString()));
 
                                 User.getActiveUser().getWorkoutLog().add(workout);
 
@@ -331,13 +332,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void forgotPassword(View v){
         if(!email.getText().toString().equals("")){
-            FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    System.out.println("OK SENT");
-                }
-            });
-            Utils.errorDialog(this, "Password reset", "A E-mail has sent to "+email.getText().toString(),"Continue");
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString());
+            Utils.errorDialog(this, "Password reset", "An E-mail has sent to "+email.getText().toString(),"Continue");
         }
     }
 }

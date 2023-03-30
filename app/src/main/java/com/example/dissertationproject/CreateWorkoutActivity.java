@@ -141,7 +141,6 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
 
         if(!isUpdating()) {
-            System.out.println("OK?");
             Map<String, Object> workout = new HashMap<>();
             workout.put("user", User.activeUser.getId());
             workout.put("name", workoutPlan.getName());

@@ -68,15 +68,15 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 
 		for(Exercise exercise : model.getExercises()){
 			TextView textView = new TextView(context);
+			textView.setTextSize(22);
 			textView.setText(exercise.getTemplate().getName());
 			holder.linearLayout.addView(textView);
 
-			int set = 1;
 			for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
 				for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
 					TextView reps = new TextView(context);
-					reps.setText(rep.getKey()+") 1 x "+ r.getValue());
-					set++;
+					reps.setTextSize(18);
+					reps.setText((rep.getKey() + 1)+") 1 x "+ r.getValue());
 
 					holder.linearLayout.addView(reps);
 				}

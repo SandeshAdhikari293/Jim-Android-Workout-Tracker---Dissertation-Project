@@ -26,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText password;
+    EditText confirmPassword;
     EditText email;
     EditText name;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         password = findViewById(R.id.etPassword);
+        confirmPassword = findViewById(R.id.cnfrmPassword);
+
         email = findViewById(R.id.etEmail);
         name = findViewById(R.id.etName);
 
@@ -81,9 +84,18 @@ public class RegisterActivity extends AppCompatActivity {
 //            return;
 //        }
 
+//        if(password.getText() == null || confirmPassword.getText() == null){
+//            return;
+//        }
+        if(!password.getText().toString().equals(confirmPassword.getText().toString())){
+
+            Utils.errorDialog(this, "Registration error", "Passwords do not match", "Continue");
+
+            return;
+        }
 
 
-            mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
+        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 // Sign in is successful
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

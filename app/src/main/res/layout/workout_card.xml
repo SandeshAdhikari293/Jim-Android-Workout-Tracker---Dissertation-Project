@@ -29,16 +29,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/idTVCourseName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="course name"
-                    android:fontFamily="@font/bubbleboddyneue"
-                    android:layout_gravity="center"
-                    android:textColor="@color/theme_color"
-                    android:textSize="50sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/idTVCourseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif"
+                android:text="course name"
+                android:textColor="@color/theme_color"
+                android:textSize="50sp"
+                android:textStyle="bold" />
 
 
 
