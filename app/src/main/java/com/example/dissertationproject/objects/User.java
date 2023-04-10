@@ -3,6 +3,8 @@ package com.example.dissertationproject.objects;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class User {
     public static User activeUser = null;
@@ -72,6 +74,7 @@ public class User {
     }
 
     public ArrayList<Workout> getWorkoutLog() {
+        Collections.sort(workoutLog, Comparator.comparing(Workout::getEndTime));
         return workoutLog;
     }
 

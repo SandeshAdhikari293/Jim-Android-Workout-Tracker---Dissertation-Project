@@ -92,29 +92,30 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
-            android:layout_weight="0.55">
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.55"
+            android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:backgroundTint="@color/dialog_color"
-                android:layout_height="wrap_content"
+                android:layout_height="439dp"
                 android:layout_margin="20dp"
-                app:cardCornerRadius="20dp"
+                android:backgroundTint="@color/dialog_color"
                 android:elevation="10dp"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                app:cardCornerRadius="20dp">
 
 
                 <com.github.mikephil.charting.charts.RadarChart
                     android:id="@+id/rchart"
                     android:layout_width="match_parent"
-                    android:layout_height="270dp"
+                    android:layout_height="match_parent"
                     android:layout_margin="20dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/topbar_workout_stats" />
+                    app:layout_constraintTop_toBottomOf="@+id/topbar_workout_stats">
 
+                </com.github.mikephil.charting.charts.RadarChart>
 
 
             </androidx.cardview.widget.CardView>
@@ -149,6 +150,40 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="20dp"
                         android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/select_E_option8"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="Select Workout : "
+                            android:textColor="@color/black"
+                            android:textSize="30dp"
+                            android:textStyle="bold" />
+
+                        <RelativeLayout
+                            android:id="@+id/speaker_relative_layout"
+                            android:layout_width="483dp"
+                            android:layout_height="69dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="20dp"
+                            android:background="@drawable/custom_spinner_back">
+
+                            <androidx.appcompat.widget.AppCompatSpinner
+                                android:id="@+id/spnChartWorkout"
+                                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="70dp"
+                                android:popupTheme="@style/customSpinnerDialog"
+                                android:spinnerMode="dialog"
+                                tools:ignore="MissingConstraints" />
+
+                        </RelativeLayout>
 
                         <TextView
                             android:id="@+id/select_E_option"
@@ -224,30 +259,140 @@
     </LinearLayout>
 
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/dialog_color"
-            android:elevation="10dp"
-            android:orientation="vertical"
-            app:cardCornerRadius="20dp">
+            android:orientation="horizontal">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart"
-                android:layout_width="900dp"
-                android:layout_height="350dp"
-                android:layout_margin="20dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="938dp"
+                android:layout_height="386dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/dialog_color"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                app:cardCornerRadius="20dp">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart"
+                    android:layout_width="900dp"
+                    android:layout_height="350dp"
+                    android:layout_margin="20dp">
 
 
-            </com.github.mikephil.charting.charts.LineChart>
+                </com.github.mikephil.charting.charts.LineChart>
 
 
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="386dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/dialog_color"
+                android:elevation="10dp"
+                app:cardCornerRadius="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/select_E_option2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Training predictions:"
+                        android:textColor="@color/black"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtPredictOneWeek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="One week:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtPredictOneMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="One month:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtPredictSixMonths"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Six months:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/select_E_option6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="At your current rate of progression, you may expect these results after each time period. "
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/select_E_option7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Warning! Data is experimental and likely to be inaccurate!"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:textStyle="normal|bold" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
 
 
     </LinearLayout>

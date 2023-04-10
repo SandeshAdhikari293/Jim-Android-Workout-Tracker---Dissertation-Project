@@ -86,7 +86,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
     public void saveActiveWorkout(View v){
 
         Workout wk = new Workout(name.getText().toString());
-        wk.setEndTime(System.currentTimeMillis());
+        wk.setEndTime(System.currentTimeMillis()); //+ (Utils.millisecondsPerDay * 3)
         wk.setStartTime(startTime);
 
         Map<String, Object> workout = new HashMap<>();
@@ -102,12 +102,18 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
                     for(WorkoutPlanExercise e : exercises){
-
                         Exercise exercise = new Exercise(e.getExerciseTemplate());
-
                         for(RepLine repLine : e.getRepLines()){
-                            int rep = Integer.parseInt(repLine.getReps().getText().toString());
-                            int weight = Integer.parseInt(repLine.getWeight().getText().toString());
+                            int rep= 0;
+                            int weight = 0;
+
+                            if(!repLine.getReps().getText().toString().equals("")){
+                                rep = Integer.parseInt(repLine.getReps().getText().toString());
+                            }
+                            if (!repLine.getWeight().getText().toString().equals("")) {
+                                weight = Integer.parseInt(repLine.getWeight().getText().toString());
+                            }
+
                             e.getTargetReps().add(rep);
 
                             HashMap<Integer, Integer> val = new HashMap<>();

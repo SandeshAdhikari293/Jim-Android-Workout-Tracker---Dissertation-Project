@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 
 public class Utils {
+    final static long millisecondsPerDay = 1000L * 60 * 60 * 24;
 
     public static void errorDialog(Context context, String title, String msg, String button){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -66,4 +67,17 @@ public class Utils {
         }
         return 1.0;
     }
+
+    public static long timeInOneWeek(){
+        return System.currentTimeMillis() + (millisecondsPerDay * 7);
+    }
+
+    public static long timeInOneMonth(){
+        return System.currentTimeMillis() + (millisecondsPerDay * 28);
+    }
+
+    public static long timeInSixMonths(){
+        return System.currentTimeMillis() + (millisecondsPerDay * (28 * 6));
+    }
+    
 }
