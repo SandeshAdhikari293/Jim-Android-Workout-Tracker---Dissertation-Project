@@ -79,5 +79,17 @@ public class Utils {
     public static long timeInSixMonths(){
         return System.currentTimeMillis() + (millisecondsPerDay * (28 * 6));
     }
+
+    public static long timeLastOneWeek(){
+        return System.currentTimeMillis() - (millisecondsPerDay * 7);
+    }
+
+    public static long timeLastOneMonth(){
+        return System.currentTimeMillis() - (millisecondsPerDay * 28);
+    }
+
+    public static long timeLastSixMonths(){
+        return System.currentTimeMillis() - (millisecondsPerDay * (28 * 6));
+    }
     
 }

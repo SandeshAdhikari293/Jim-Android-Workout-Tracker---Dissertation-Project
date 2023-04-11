@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.ViewHolder> {
 
@@ -59,7 +61,8 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 
 		TextView duration = new TextView(context);
 		duration.setTextSize(22);
-		duration.setText(model.getDuration());
+		duration.setText(model.getDate() +" | "+model.getDuration());
+		duration.setTypeface(null, Typeface.BOLD);
 		duration.setGravity(View.TEXT_ALIGNMENT_CENTER);
 		holder.linearLayout.addView(duration);
 

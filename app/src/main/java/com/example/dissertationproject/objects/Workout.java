@@ -1,7 +1,9 @@
 package com.example.dissertationproject.objects;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Workout {
@@ -35,10 +37,6 @@ public class Workout {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
-    }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -63,6 +61,15 @@ public class Workout {
         return String.format("%d hours, %d minutes", hours, minutes);
 
     }
+
+    public String getDate(){
+        long time = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(getEndTime()));
+        Date timeMilliseconds = new Date(time);
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd MMM yyyy");
+
+        return dateTimeFormat.format(timeMilliseconds);
+    }
+
 
     public ArrayList<Exercise> getExercises() {
         return exercises;

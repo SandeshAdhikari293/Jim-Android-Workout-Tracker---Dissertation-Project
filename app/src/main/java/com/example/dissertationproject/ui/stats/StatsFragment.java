@@ -62,7 +62,7 @@ public class StatsFragment extends Fragment {
     TextView oneWeek;
     TextView oneMonth;
     TextView sixMonths;
-
+    ArrayList<String> time;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,6 +72,14 @@ public class StatsFragment extends Fragment {
 
         binding = FragmentStatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        time = new ArrayList<>();
+
+
+        time.add("One week");
+        time.add("One month");
+        time.add("Six months");
+        time.add("All time");
 
         final TextView textView = binding.textHome;
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -102,14 +110,8 @@ public class StatsFragment extends Fragment {
     }
 
     public void initWorkoutSpinnerData(){
-        ArrayList<String> workoutplans = new ArrayList<>();
-
-        for(WorkoutPlan workoutPlan : User.getActiveUser().getWorkoutList()){
-            workoutplans.add(workoutPlan.getName());
-        }
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, workoutplans);
+                android.R.layout.simple_spinner_item, time);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
@@ -153,20 +155,30 @@ public class StatsFragment extends Fragment {
         });
     }
 
+    /**
+     *
+     */
     public void displayRadarChart(){
         ArrayList<RadarEntry> radarEntries = new ArrayList<>();
+        long timeFrame = 0;
 
+        if(workoutSpinner.getSelectedItem().toString().equals(time.get(0))){
+            timeFrame = Utils.timeLastOneWeek();
+        }else if(workoutSpinner.getSelectedItem().toString().equals(time.get(1))){
+            timeFrame = Utils.timeLastOneMonth();
+        }else if(workoutSpinner.getSelectedItem().toString().equals(time.get(2))){
+            timeFrame = Utils.timeLastSixMonths();
+        }
 
         HashMap<String, Integer> categoryCount = new HashMap<>();
         for(Workout workout : User.getActiveUser().getWorkoutLog()){
-//            if(workout.getName().equals(workoutSpinner.getSelectedItem().toString())){
+            if(workout.getEndTime() > timeFrame){
                 for(Exercise exercise : workout.getExercises()){
                     String category = exercise.getTemplate().getCategory();
                     int volume = 0;
                     for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
                         for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
                             volume = volume + (r.getKey() * r.getValue());
-//                            volume = volume + 1;
                         }
                     }
                     if(!categoryCount.containsKey(category)){
@@ -174,17 +186,8 @@ public class StatsFragment extends Fragment {
                     }else categoryCount.put(category, categoryCount.get(category) + volume);
 
                 }
-//            }
+            }
         }
-
-        //Setting default entries.
-//        radarEntries.add(new RadarEntry(0, 0));
-//        radarEntries.add(new RadarEntry(0, 1));
-//        radarEntries.add(new RadarEntry(0, 2));
-//        radarEntries.add(new RadarEntry(0, 3));
-//        radarEntries.add(new RadarEntry(0, 4));
-//        radarEntries.add(new RadarEntry(0, 5));
-//        radarEntries.add(new RadarEntry(0, 6));
 
         String[] cats = {"Chest", "Back", "Shoulders", "Triceps", "Biceps", "Quads", "Hamstrings"};
 
@@ -200,37 +203,6 @@ public class StatsFragment extends Fragment {
                 radarEntries.add(new RadarEntry(0, i));
             }
         }
-
-//        //TODO: Replace with a map or something
-//        System.out.println(categoryCount.entrySet());
-//        for(Map.Entry<String, Integer> entry : categoryCount.entrySet()){
-////            if(entry.getKey().equals("Chest")){
-////                radarEntries.add(new RadarEntry(entry.getValue(), 0));
-////            }
-////            if(entry.getKey().equals("Back")){
-////                radarEntries.add(new RadarEntry(entry.getValue(), 1));
-////            }
-////            if(entry.getKey().equals("Shoulders")){
-////                radarEntries.add(new RadarEntry(entry.getValue(), 2));
-////            }
-//            if(entry.getKey().equals("Biceps")){
-//                radarEntries.add(new RadarEntry(entry.getValue(), 4));
-//            }
-////            if(entry.getKey().equals("Triceps")){
-////                radarEntries.add(new RadarEntry(entry.getValue(),3));
-////            }
-////            if(entry.getKey().equals("Quads")){
-////                System.out.println("Here!");
-//////                radarEntries.remove(new RadarEntry(0, 5));
-////                radarEntries.add(new RadarEntry(entry.getValue(), 5));
-////            }
-////            if(entry.getKey().equals("Hamstrings")){
-////                radarEntries.add(new RadarEntry(entry.getValue(), 6));
-////            }
-//        }
-
-        System.out.println(radarEntries);
-
 
         RadarDataSet radarDataSet = new RadarDataSet(radarEntries, "");
         RadarData radarData = new RadarData(radarDataSet);

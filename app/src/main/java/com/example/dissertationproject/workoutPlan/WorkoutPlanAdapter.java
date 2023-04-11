@@ -50,7 +50,7 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		WorkoutPlan model = workoutPlan.get(position);
 		holder.planName.setText(model.getName());
-//		holder.planDesc.setText("" + model.getDesc());
+		holder.planDesc.setText(model.getDesc());
 //		holder.courseIV.setImageResource(model.getCourse_image());
 
 		holder.playWorkout.setOnClickListener(view -> {
@@ -95,7 +95,7 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 	// View holder class for initializing of your views such as TextView and Imageview
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final TextView planName;
-//		private final TextView planDesc;
+		private final TextView planDesc;
 
 		private final LinearLayout linearLayout;
 
@@ -107,7 +107,7 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
 			planName = itemView.findViewById(R.id.idTVCourseName);
-//			planDesc = itemView.findViewById(R.id.idTVCourseRating);
+			planDesc = itemView.findViewById(R.id.idTVWorkoutDescription);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);
 			editWorkout = itemView.findViewById(R.id.fbtnEditWorkoutPlan);

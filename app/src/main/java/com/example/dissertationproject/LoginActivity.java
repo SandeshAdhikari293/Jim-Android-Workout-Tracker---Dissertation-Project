@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText password;
+    ProgressBar progressBar;
     EditText email;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -48,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
 
         password = findViewById(R.id.etPasswordLogin);
         email = findViewById(R.id.etEmailLogin);
+        progressBar = findViewById(R.id.pbLogin);
+        progressBar.setVisibility(View.INVISIBLE);
 
 //        Window window = getWindow();
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -71,6 +75,8 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.VISIBLE);
+
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -307,6 +313,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+        progressBar.setVisibility(View.INVISIBLE);
 
     }
 

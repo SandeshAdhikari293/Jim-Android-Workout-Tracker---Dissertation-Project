@@ -1,6 +1,7 @@
 package com.example.dissertationproject.workoutPlan;
 
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 				EditText et = new EditText(context);
 				et.setHint("Target reps: "+rep);
 				et.setText(rep + "");
+				et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 				Button rm = new Button(context);
 				rm.setText("-");

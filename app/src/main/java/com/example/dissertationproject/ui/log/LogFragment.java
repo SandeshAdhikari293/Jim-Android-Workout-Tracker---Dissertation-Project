@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,12 +21,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.databinding.FragmentLogBinding;
 import com.example.dissertationproject.objects.User;
+import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LogFragment extends Fragment {
 
     private FragmentLogBinding binding;
     private RecyclerView recyclerView;
+
+    private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,8 +62,10 @@ public class LogFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rcvWorkoutLog);
         recyclerView.setHasFixedSize(true);
 
-        WorkoutLogAdapter wpAdapter = new WorkoutLogAdapter(getContext(), User.activeUser.getWorkoutLog());
+        ArrayList<Workout> reverse = (ArrayList<Workout>) User.getActiveUser().getWorkoutLog().clone();
+        Collections.reverse(reverse);
 
+        WorkoutLogAdapter wpAdapter = new WorkoutLogAdapter(getContext(), reverse);
 
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
@@ -63,6 +74,7 @@ public class LogFragment extends Fragment {
         // in below two lines we are setting layout manager and adapter to our recycler view.
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         recyclerView.setAdapter(wpAdapter);
+//        progressBar.setVisibility(View.INVISIBLE);
 
     }
 

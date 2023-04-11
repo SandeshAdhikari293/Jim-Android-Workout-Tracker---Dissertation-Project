@@ -2,6 +2,7 @@ package com.example.dissertationproject.ui.workouts;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +63,11 @@ public class ActiveWorkoutAdapter extends RecyclerView.Adapter<ActiveWorkoutAdap
 
 				EditText etWeight = new EditText(context);
 				etWeight.setHint("Weight: ");
+				etWeight.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 				EditText et = new EditText(context);
 				et.setHint("Target reps: "+rep);
+				et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 				Button rm = new Button(context);
 				rm.setText("-");

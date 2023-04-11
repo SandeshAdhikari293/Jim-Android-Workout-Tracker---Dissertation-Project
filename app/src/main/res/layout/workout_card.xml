@@ -35,14 +35,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif"
-                android:text="course name"
+                android:text="Workout name"
                 android:textColor="@color/theme_color"
                 android:textSize="50sp"
                 android:textStyle="bold" />
 
 
+            <TextView
+                android:id="@+id/idTVWorkoutDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif"
+                android:text="Description"
+                android:textColor="@color/theme_color"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <LinearLayout
+            <LinearLayout
                     android:id="@+id/llExercisesOnPlan"
                     android:layout_width="match_parent"
                     android:layout_below="@id/idTVCourseName"
