@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.RepLine;
@@ -202,6 +203,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
                     })
                     .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+            Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been created",Toast.LENGTH_SHORT).show();
+
         }else{
 
             //TODO: delete all the previous exercises and add entirely new ones?
@@ -273,6 +276,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             //Apparently doesn't work.
             //This adds all the exercises and reps back into the database.
 
+            Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been updated",Toast.LENGTH_SHORT).show();
         }
 
         finish();
@@ -363,5 +367,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
 
         finish();
+
+        Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been deleted",Toast.LENGTH_SHORT).show();
+
     }
 }

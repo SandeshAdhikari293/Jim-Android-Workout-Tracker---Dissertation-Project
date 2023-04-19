@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dissertationproject.objects.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,25 +49,26 @@ public class ProfileActivity extends AppCompatActivity {
 
         uid = getIntent().getStringExtra("uid");
 
+//        makeAdmin.setActivated(false);
 
-        makeAdmin.setActivated(false);
-
-
+        System.out.println("UID: "+ uid);
+        System.out.println("id:: "+ FirebaseAuth.getInstance().getCurrentUser().getUid());
         if (!uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             user = User.getUserFromID(uid);
 
-            makeAdmin.setVisibility(View.INVISIBLE);
-            admin = true;
-
-            name.setText("User: " + User.getUserFromID(uid).getName());
-            makeAdmin.setChecked(user.isAdmin());
+            if(User.activeUser.isAdmin()){
+                makeAdmin.setChecked(user.isAdmin());
+                admin = true;
+            }
 
             if(user.isActivated())
                 delete.setText("Deactivate");
             else
                 delete.setText("Reactivate");
         }else{
+            makeAdmin.setVisibility(View.INVISIBLE);
             user = User.getActiveUser();
+
         }
 
         name.setText(user.getName());
@@ -77,6 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
             name.setText(name.getText() + " (inactive)");
             name.setTextColor(Color.RED);
         }
+
     }
 
     public void saveChanges(View view){
@@ -107,6 +110,13 @@ public class ProfileActivity extends AppCompatActivity {
                             );
                     finish();
                     user.setActivated(!user.isActivated());
+
+                    if(user.isActivated()){
+                        Toast.makeText(getApplicationContext(),user.getName()+" has been set to active",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),user.getName()+" has been deactivated",Toast.LENGTH_SHORT).show();
+                    }
+
                     return;
                 }
             });

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.dissertationproject.objects.Category;
 import com.example.dissertationproject.objects.Exercise;
@@ -107,6 +108,8 @@ public class CreateExerciseActivity extends AppCompatActivity {
                         finish();
                     })
                     .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+            Toast.makeText(getApplicationContext(),name.getText().toString()+" has been created",Toast.LENGTH_SHORT).show();
         }else{
             //TODO: update the entry
 
@@ -120,6 +123,8 @@ public class CreateExerciseActivity extends AppCompatActivity {
                             "category", category.getSelectedItem().toString(),
                             "description",  desc.getText().toString()
                     );
+
+            Toast.makeText(getApplicationContext(),name.getText().toString()+" has been updated",Toast.LENGTH_SHORT).show();
         }
 
         finish();
@@ -136,6 +141,6 @@ public class CreateExerciseActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
         }
         finish();
-
+        Toast.makeText(getApplicationContext(),name.getText().toString()+" has been deleted",Toast.LENGTH_SHORT).show();
     }
 }

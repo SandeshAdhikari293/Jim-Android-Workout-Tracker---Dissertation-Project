@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.RepLine;
@@ -157,6 +158,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
         User.activeUser.getWorkoutLog().add(wk);
+        Toast.makeText(getApplicationContext(),wk.getName()+" has been logged",Toast.LENGTH_SHORT).show();
         finish();
 
     }
