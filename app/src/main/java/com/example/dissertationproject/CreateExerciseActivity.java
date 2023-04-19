@@ -16,11 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.dissertationproject.objects.Category;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.base.Enums;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -47,11 +49,13 @@ public class CreateExerciseActivity extends AppCompatActivity {
         window.setNavigationBarColor(Color.parseColor("#0B173B"));
         window.setStatusBarColor(Color.parseColor("#0B173B"));
 
-        String[] categories = {"Chest", "Back", "Shoulders", "Biceps", "Triceps", "Forearms", "Quads",
-                "Hamstrings", "Calves"};
+//        String[] categories = {"Chest", "Back", "Shoulders", "Biceps", "Triceps", "Forearms", "Quads",
+//                "Hamstrings", "Calves"};
+//        String[] categories = Category.values().to;
+
         Spinner spinner = findViewById(R.id.spinExerciseCateg);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, categories);
+                android.R.layout.simple_spinner_item, Category.categories());
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner

@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         String exercisePlanId = document1.getId();
                                                         Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
 
-                                                        if(exercise.getTemplate() == null) continue;
+                                                        if(exercise == null) continue;
 
                                                         workoutPlan.getExercises().add(exercise);
 
@@ -221,7 +221,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                                         }
                                                                         exercise.setReps(reps);
-                                                                        System.out.println("Loading: "+ exercise.getTemplate().getName() + " | "+ reps + " <-- "+ workoutPlan.getName());
+                                                                        System.out.println("Loading: "+ exercise.getName() + " | "+ reps + " <-- "+ workoutPlan.getName());
 
                                                                     } else {
                                                                         Log.w(TAG, "Error getting documents.", task11.getException());
@@ -273,10 +273,10 @@ public class LoginActivity extends AppCompatActivity {
                                                         String exerciseLogId = document1.getId();
                                                         Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
 
-                                                        if(exercise.getTemplate() == null) continue;
+                                                        if(exercise == null) continue;
 
                                                         System.out.println("workout: " + workout.getId() + " | " + workout.getName());
-                                                        System.out.println(exercise.getTemplate().getName() + "");
+                                                        System.out.println(exercise.getName() + "");
                                                         workout.getExercises().add(exercise);
 
                                                         db.collection("exercise_workout_sets")

@@ -20,6 +20,7 @@ import com.example.dissertationproject.LoginActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.databinding.FragmentStatsBinding;
+import com.example.dissertationproject.objects.Category;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
@@ -174,7 +175,7 @@ public class StatsFragment extends Fragment {
         for(Workout workout : User.getActiveUser().getWorkoutLog()){
             if(workout.getEndTime() > timeFrame){
                 for(Exercise exercise : workout.getExercises()){
-                    String category = exercise.getTemplate().getCategory();
+                    String category = exercise.getCategory();
                     int volume = 0;
                     for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
                         for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
@@ -189,12 +190,10 @@ public class StatsFragment extends Fragment {
             }
         }
 
-        String[] cats = {"Chest", "Back", "Shoulders", "Triceps", "Biceps", "Quads", "Hamstrings"};
-
         for(int i = 0; i <= 6; i++){
             boolean added = false;
             for(Map.Entry<String, Integer> entry : categoryCount.entrySet()){
-                if(entry.getKey().equals(cats[i])){
+                if(entry.getKey().equals(Category.categories()[i])){
                     radarEntries.add(new RadarEntry(entry.getValue(), i));
                     added = true;
                 }
@@ -272,7 +271,7 @@ public class StatsFragment extends Fragment {
             for (Workout workout : User.getActiveUser().getWorkoutLog()) {
                 int maxWeight = -1;
                 for (Exercise exercise : workout.getExercises()) {
-                    if (exercise.getTemplate().equals(exerciseTemplate)) {
+                    if (exercise.getId().equals(exerciseTemplate.getId())) {
                         for (Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()) {
                             for (Map.Entry<Integer, Integer> r : rep.getValue().entrySet()) {
                                 if (rep.getKey() > maxWeight) {
@@ -330,7 +329,7 @@ public class StatsFragment extends Fragment {
             for (Workout workout : User.getActiveUser().getWorkoutLog()) {
                 int volume = 0;
                 for (Exercise exercise : workout.getExercises()) {
-                    if (exercise.getTemplate().equals(exerciseTemplate)) {
+                    if (exercise.getId().equals(exerciseTemplate.getId())) {
                         for (Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()) {
                             for (Map.Entry<Integer, Integer> r : rep.getValue().entrySet()) {
 

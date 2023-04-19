@@ -69,7 +69,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 		for(Exercise exercise : model.getExercises()){
 			TextView textView = new TextView(context);
 			textView.setTextSize(22);
-			textView.setText(exercise.getTemplate().getName());
+			textView.setText(exercise.getName());
 			holder.linearLayout.addView(textView);
 
 			int set = 1;

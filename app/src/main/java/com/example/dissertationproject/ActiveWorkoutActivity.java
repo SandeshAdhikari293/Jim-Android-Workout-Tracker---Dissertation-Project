@@ -59,9 +59,9 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
 
 //        System.out.println(exe);
         for(Exercise exercise : plan.getExercises()){
-            System.out.println(exercise.getTemplate().getName());
+            System.out.println(exercise.getName());
 
-            WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(exercise.getTemplate());
+            WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(exercise);
             for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
                 for(int r : rep.getValue().values()){
                     workoutPlanExercise.getTargetReps().add(r);

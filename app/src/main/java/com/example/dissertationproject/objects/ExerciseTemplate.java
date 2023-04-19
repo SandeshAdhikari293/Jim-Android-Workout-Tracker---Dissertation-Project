@@ -13,6 +13,7 @@ public class ExerciseTemplate {
         this.category = category;
     }
 
+
     public String getId() {
         return id;
     }

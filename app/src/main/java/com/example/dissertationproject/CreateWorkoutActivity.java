@@ -73,7 +73,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             ((EditText)findViewById(R.id.etWorkoutPlanDescription)).setText(workoutPlan.getDesc());
 
             for(Exercise e : workoutPlan.getExercises()) {
-                WorkoutPlanExercise exercise = new WorkoutPlanExercise(e.getTemplate());
+                WorkoutPlanExercise exercise = new WorkoutPlanExercise(e);
                 for (Map.Entry<Integer, HashMap<Integer, Integer>> entry : e.getReps().entrySet()) {
                     for(int r : entry.getValue().values()){
                         exercise.getTargetReps().add(r);
@@ -128,7 +128,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 //        System.out.println();
         System.out.println("size: " + workoutPlan.getExercises().size());
         for(Exercise ep : workoutPlan.getExercises()){
-            System.out.println(ep.getTemplate().getName());
+            System.out.println(ep.getName());
             System.out.println(ep.getReps());
         }
 
@@ -176,7 +176,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
 
                             Map<String, Object> exercises = new HashMap<>();
-                            exercises.put("exercise_template_id", e.getTemplate().getId());
+                            exercises.put("exercise_template_id", e.getId());
                             exercises.put("workout_plan_id", documentReference.getId());
 
                             db.collection("plan_exercises")
@@ -213,7 +213,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             System.out.println("BEFORE:");
             System.out.println("size: " + workoutPlan.getExercises().size());
             for(Exercise ep : workoutPlan.getExercises()){
-                System.out.println(ep.getTemplate().getName());
+                System.out.println(ep.getName());
                 System.out.println(ep.getReps());
             }
 
@@ -237,7 +237,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
             System.out.println("size: " + workoutPlan.getExercises().size());
             for(Exercise ep : workoutPlan.getExercises()){
-                System.out.println(ep.getTemplate().getName());
+                System.out.println(ep.getName());
                 System.out.println(ep.getReps());
             }
 
@@ -281,9 +281,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     public void update(){
 
         for(Exercise exercise : workoutPlan.getExercises()){
-            System.out.println("BNne: " + exercise.getTemplate().getName() + " | " + exercise.getReps());
+            System.out.println("BNne: " + exercise.getName() + " | " + exercise.getReps());
             Map<String, Object> exerciseInfo = new HashMap<>();
-            exerciseInfo.put("exercise_template_id", exercise.getTemplate().getId());
+            exerciseInfo.put("exercise_template_id", exercise.getId());
             exerciseInfo.put("workout_plan_id", workoutPlan.getId());
 
             db.collection("plan_exercises")
@@ -300,7 +300,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                                 exerciseReps.put("exercise_plan_id", documentReference.getId());
                                 exerciseReps.put("reps", rep);
 
-                                System.out.println("Saving: "+exercise.getTemplate().getName() + " | " + rep +" <-- "+ workoutPlan.getName());
+                                System.out.println("Saving: "+exercise.getName() + " | " + rep +" <-- "+ workoutPlan.getName());
 
                                 db.collection("exercise_plan_sets")
                                         .add(exerciseReps)
