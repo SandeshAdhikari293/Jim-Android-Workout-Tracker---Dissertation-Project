@@ -83,14 +83,17 @@ public class RegisterActivity extends AppCompatActivity {
 //                    "It doesn’t contain any white space.", "Continue");
 //            return;
 //        }
-
 //        if(password.getText() == null || confirmPassword.getText() == null){
 //            return;
 //        }
+
+        if(email.getText().toString().equals("") || password.getText().toString().equals("") || confirmPassword.getText().toString().equals("")){
+            Utils.errorDialog(this, "Registration error", "Fields can not be empty", "Continue");
+            return;
+        }
+
         if(!password.getText().toString().equals(confirmPassword.getText().toString())){
-
             Utils.errorDialog(this, "Registration error", "Passwords do not match", "Continue");
-
             return;
         }
 

@@ -10,20 +10,21 @@
 
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/background_image"/>
+        android:src="@drawable/background_image" />
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        tools:layout_editor_absoluteX="80dp"
-        tools:layout_editor_absoluteY="30dp">
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView">
 
 
         <ImageView
@@ -43,7 +44,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
+                android:layout_margin="10dp"
                 android:layout_weight="0.47"
                 android:backgroundTint="@color/dialog_color"
                 android:elevation="10dp"
