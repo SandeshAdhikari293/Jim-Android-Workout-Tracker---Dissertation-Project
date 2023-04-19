@@ -107,6 +107,7 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 				EditText et = new EditText(context);
 				et.setHint("Enter the target reps");
 				et.setText(line.getReps().getText());
+				et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 				Button rm = new Button(context);
 				rm.setText("-");
@@ -145,10 +146,12 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 			EditText et = new EditText(view.getContext());
 			et.setHint("Enter the target reps");
+			et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 			Button rm = new Button(view.getContext());
 			rm.setText("-");
-
+			rm.setTextSize(14);
+			rm.setBackgroundTintList(context.getResources().getColorStateList(R.color.dialog_color));
 			RepLine rl = new RepLine(txt, et, rm, hor);
 
 			model.getRepLines().add(rl);

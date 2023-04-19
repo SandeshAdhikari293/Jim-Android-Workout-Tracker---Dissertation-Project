@@ -53,6 +53,7 @@ public class WorkoutPlanAdapter extends RecyclerView.Adapter<WorkoutPlanAdapter.
 		holder.planDesc.setText(model.getDesc());
 //		holder.courseIV.setImageResource(model.getCourse_image());
 
+
 		holder.playWorkout.setOnClickListener(view -> {
 			ActiveWorkoutActivity.plan = model;
 			context.startActivity(new Intent(context, ActiveWorkoutActivity.class));

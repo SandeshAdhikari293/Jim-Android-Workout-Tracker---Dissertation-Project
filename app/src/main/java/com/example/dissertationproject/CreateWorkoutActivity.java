@@ -150,8 +150,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                 Exercise exercise = new Exercise(e.getExerciseTemplate());
 
                 for (RepLine repLine : e.getRepLines()) {
-                    int rep = Integer.parseInt(repLine.getReps().getText().toString());
-//                int weight = Integer.parseInt(repLine.getWeight().getText().toString());
+                    int rep = 0;
+                    if(!repLine.getReps().getText().toString().isEmpty())
+                        rep = Integer.parseInt(repLine.getReps().getText().toString());
                     HashMap<Integer, Integer> val = new HashMap<>();
                     val.put(0, rep);
                     exercise.getReps().put(exercise.getReps().size(), val);
@@ -229,6 +230,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                     exercise.getReps().put(exercise.getReps().size(), val);
 
                     System.out.println("rep: "+ rep);
+//                    repLine.getRemove()
                 }
                 workoutPlan.getExercises().add(exercise);
             }
