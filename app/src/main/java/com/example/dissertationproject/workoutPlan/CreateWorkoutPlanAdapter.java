@@ -1,6 +1,7 @@
 package com.example.dissertationproject.workoutPlan;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,8 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 				Button rm = new Button(context);
 				rm.setText("-");
+				rm.setTextSize(14);
+				rm.setBackgroundTintList(context.getResources().getColorStateList(R.color.dialog_color));
 
 				RepLine rl = new RepLine(txt, et, rm, hor);
 
@@ -107,6 +110,8 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 				Button rm = new Button(context);
 				rm.setText("-");
+				rm.setTextSize(14);
+				rm.setBackgroundTintList(context.getResources().getColorStateList(R.color.dialog_color));
 
 				RepLine rl = new RepLine(txt, et, rm, hor);
 

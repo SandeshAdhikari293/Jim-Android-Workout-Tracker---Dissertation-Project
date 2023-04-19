@@ -8,6 +8,11 @@
     android:layout_height="match_parent"
     tools:context=".ActiveWorkoutActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,18 +36,18 @@
 
     <RelativeLayout
         android:id="@+id/above_edit"
-        android:layout_width="1226dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/edit_back"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="2dp">
 
 
         <EditText
             android:id="@+id/etActiveWorkoutName"
-            android:layout_width="446dp"
+            android:layout_width="440dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
@@ -53,36 +58,23 @@
             android:fontFamily="@font/merriweather_sans_light"
             android:hint="Name"
             android:inputType="textPersonName"
-            android:padding="20dp"
+            android:padding="10dp"
             android:textColor="@color/black"
-            android:textSize="25sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="-5dp"
-            android:background="@color/dialog_color"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Name"
-            android:textColor="@color/theme_color"
-            android:textSize="20dp" />
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
 
     <RelativeLayout
         android:id="@+id/below_edit"
-        android:layout_width="1225dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/above_edit"
         android:layout_marginStart="30dp"
         android:layout_marginTop="-2dp"
         android:background="@drawable/edit_back"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="2dp">
 
         <EditText
             android:id="@+id/etActiveWorkoutDesc"
@@ -97,23 +89,10 @@
             android:gravity="start|top"
             android:hint="Description"
             android:inputType="textMultiLine"
-            android:padding="20dp"
+            android:padding="10dp"
             android:textColor="@color/black"
-            android:textSize="25sp" />
+            android:textSize="16sp" />
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="-5dp"
-            android:background="@color/dialog_color"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Description"
-            android:textColor="@color/theme_color"
-            android:textSize="20dp" />
 
     </RelativeLayout>
 

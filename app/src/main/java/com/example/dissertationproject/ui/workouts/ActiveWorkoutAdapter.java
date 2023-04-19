@@ -2,6 +2,7 @@ package com.example.dissertationproject.ui.workouts;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +72,8 @@ public class ActiveWorkoutAdapter extends RecyclerView.Adapter<ActiveWorkoutAdap
 
 				Button rm = new Button(context);
 				rm.setText("-");
+				rm.setTextSize(14);
+				rm.setBackgroundTintList(context.getResources().getColorStateList(R.color.dialog_color));
 
 				RepLine rl = new RepLine(txt, et, rm, hor);
 				rl.setWeight(etWeight);
