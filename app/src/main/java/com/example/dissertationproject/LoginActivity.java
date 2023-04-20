@@ -99,16 +99,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void errorMessage(Context c, String msg){
-        Toast toast = Toast.makeText(c, msg, Toast.LENGTH_LONG);
-        View view = toast.getView();
-//        view.setBackgroundResource(R.drawable.custom_background);
-        TextView text = view.findViewById(android.R.id.message);
-        /*Here you can do anything with above textview like text.setTextColor(Color.parseColor("#000000"));*/
-        text.setTextColor(Color.parseColor("#000000"));
-        toast.show();
-    }
-
 
     public void cacheUserData(){
         loadProfile();

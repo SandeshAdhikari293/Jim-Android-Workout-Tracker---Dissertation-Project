@@ -1,3 +1,6 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.objects;
 
 import android.widget.Button;
@@ -27,33 +30,10 @@ public class RepLine {
         return txt;
     }
 
-    public void setTxt(TextView txt) {
-        this.txt = txt;
-    }
-
     public EditText getReps() {
         return reps;
     }
 
-    public void setReps(EditText reps) {
-        this.reps = reps;
-    }
-
-    public Button getRemove() {
-        return remove;
-    }
-
-    public void setRemove(Button remove) {
-        this.remove = remove;
-    }
-
-    public LinearLayout getHorizontalLine() {
-        return horizontalLine;
-    }
-
-    public void setHorizontalLine(LinearLayout horizontalLine) {
-        this.horizontalLine = horizontalLine;
-    }
 
     public EditText getWeight() {
         return weight;

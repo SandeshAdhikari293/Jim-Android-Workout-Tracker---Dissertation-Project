@@ -31,6 +31,9 @@ public class RegisterActivity extends AppCompatActivity {
     EditText name;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    CredentialValidation validation;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.etEmail);
         name = findViewById(R.id.etName);
 
+        validation = new CredentialValidation();
+
 //        Window window = getWindow();
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //
@@ -55,43 +60,36 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+
     public void createUser(View v){
+        if(password.getText() == null || confirmPassword.getText() == null){
+            return;
+        }
 
-        //TODO: UNCOMMENT THIS. This is for debugging and allows accounts to be made without validation
-//        String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}";
-//        //Compile regular expression to get the pattern
-//        Pattern ePattern = Pattern.compile(emailRegex);
-//
-//        if(!ePattern.matcher(email.getText().toString()).matches()){
-//            Utils.errorDialog(this, "E-mail address", "Please enter a valid e-mail address format.", "Continue");
-//            return;
-//        }
-//
-//        String passwordRegex = "^(?=.*[0-9])"
-//                + "(?=.*[a-z])(?=.*[A-Z])"
-//                + "(?=.*[@#$%^&+=])"
-//                + "(?=\\S+$).{8,20}$";
-//
-//        // Compile the ReGex
-//        Pattern pPattern = Pattern.compile(passwordRegex);
-//        if(!pPattern.matcher(password.getText().toString()).matches()){
-//            Utils.errorDialog(this, "Password", "Please enter a valid password It contains at least 8 characters and at most 20 characters.\n" +
-//                    "It contains at least one digit.\n" +
-//                    "It contains at least one upper case alphabet.\n" +
-//                    "It contains at least one lower case alphabet.\n" +
-//                    "It contains at least one special character which includes !@#$%&*()-+=^.\n" +
-//                    "It doesn’t contain any white space.", "Continue");
-//            return;
-//        }
-//        if(password.getText() == null || confirmPassword.getText() == null){
-//            return;
-//        }
+        //Check if the email is valid
+        if(!validation.isEmailValid(email.getText().toString())){
+            Utils.errorDialog(this, "E-mail address", "Please enter a valid e-mail address format.", "Continue");
+            return;
+        }
 
+        //Check if password is valid
+        if(!validation.isPasswordValid(password.getText().toString())){
+            Utils.errorDialog(this, "Password", "Please enter a valid password It contains at least 8 characters and at most 20 characters.\n" +
+                    "It contains at least one digit.\n" +
+                    "It contains at least one upper case alphabet.\n" +
+                    "It contains at least one lower case alphabet.\n" +
+                    "It contains at least one special character which includes !@#$%&*()-+=^.\n" +
+                    "It doesn’t contain any white space.", "Continue");
+            return;
+        }
+
+        //Check if fields are empty
         if(email.getText().toString().equals("") || password.getText().toString().equals("") || confirmPassword.getText().toString().equals("")){
             Utils.errorDialog(this, "Registration error", "Fields can not be empty", "Continue");
             return;
         }
 
+        //Check that the confirmation password matches
         if(!password.getText().toString().equals(confirmPassword.getText().toString())){
             Utils.errorDialog(this, "Registration error", "Passwords do not match", "Continue");
             return;
@@ -128,8 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
                 finish();
-                //TODO: UNCOMMENT THIS.
-//                user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
+                user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
             }else{
                 Utils.errorDialog(this, "Registration error", "This account is unable to be created", "Continue");
             }

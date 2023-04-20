@@ -1,3 +1,6 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.ui.admin;
 
 import android.content.Context;
@@ -12,26 +15,35 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dissertationproject.DashboardActivity;
 import com.example.dissertationproject.ProfileActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class AdminPanelAdapter extends RecyclerView.Adapter<AdminPanelAdapter.ViewHolder> {
-
 	private final Context context;
 	private final ArrayList<User> users;
 
-	// Constructor
+	/**
+	 * Constructor for when the adapter is created
+	 * @param context	the context of the application
+	 * @param users		the list of users being displayed
+	 */
 	public AdminPanelAdapter(Context context, ArrayList<User> users) {
 		this.context = context;
 		this.users = users;
 	}
 
+	/**
+	 * When the view holder is created
+	 * @param parent The ViewGroup into which the new View will be added after it is bound to
+	 *               an adapter position.
+	 * @param viewType The view type of the new View.
+	 *
+	 * @return
+	 */
 	@NonNull
 	@Override
 	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,8 +52,15 @@ public class AdminPanelAdapter extends RecyclerView.Adapter<AdminPanelAdapter.Vi
 		return new ViewHolder(view);
 	}
 
+	/**
+	 * Apply changes for each item in the data set
+	 * @param holder The ViewHolder which should be updated to represent the contents of the
+	 *        item at the given position in the data set.
+	 * @param position The position of the item within the adapter's data set.
+	 */
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
 		User model = users.get(position);
 		holder.name.setText(model.getName());
 
@@ -52,7 +71,10 @@ public class AdminPanelAdapter extends RecyclerView.Adapter<AdminPanelAdapter.Vi
 
 		holder.email.setText(model.getEmail());
 
+		//The editing profile button listener
 		holder.editProfile.setOnClickListener(view -> {
+
+			//Pass the unique id to the next activity
 			Intent intent = new Intent(context, ProfileActivity.class);
 			intent.putExtra("uid", model.getId());
 			context.startActivity(intent);
@@ -60,23 +82,29 @@ public class AdminPanelAdapter extends RecyclerView.Adapter<AdminPanelAdapter.Vi
 
 	}
 
-
+	/**
+	 * The number of times in the data set
+	 * @return	an integer telling the size of the dataset
+	 */
 	@Override
 	public int getItemCount() {
-		// this method is used for showing number of card items in recycler view
 		return users.size();
 	}
 
 
-	// View holder class for initializing of your views such as TextView and Imageview
+	/**
+	 * Viewholder initialising UI components such as TextViews
+	 */
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final TextView name;
 		private final TextView email;
-
 		private final LinearLayout linearLayout;
-
 		private final FloatingActionButton editProfile;
 
+		/**
+		 * Initialise the variables
+		 * @param itemView
+		 */
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
 			name = itemView.findViewById(R.id.idTVAdminName);

@@ -1,3 +1,6 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.objects;
 
 import java.text.SimpleDateFormat;
@@ -8,13 +11,15 @@ import java.util.concurrent.TimeUnit;
 
 public class Workout {
     private String name;
-    private String date;
     private long endTime;
     private long startTime;
     private ArrayList<Exercise> exercises;
-
     private String id;
 
+    /**
+     * Constructor which creates the object
+     * @param name  the name of the workout
+     */
     public Workout(String name) {
         this.name = name;
 
@@ -37,10 +42,6 @@ public class Workout {
         this.name = name;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
@@ -48,28 +49,6 @@ public class Workout {
     public long getStartTime() {
         return startTime;
     }
-
-    public String getDuration(){
-        long time = getEndTime() - getStartTime();
-
-        int hours = (int) (time / 3600000);
-
-        int minutes = (int) ((time - (hours * 3600000)) / 60000);
-
-//        int seconds = (int) ((time - (minutes * 60000)) / 1000);
-
-        return String.format("%d hours, %d minutes", hours, minutes);
-
-    }
-
-    public String getDate(){
-        long time = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(getEndTime()));
-        Date timeMilliseconds = new Date(time);
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd MMM yyyy");
-
-        return dateTimeFormat.format(timeMilliseconds);
-    }
-
 
     public ArrayList<Exercise> getExercises() {
         return exercises;
@@ -85,5 +64,30 @@ public class Workout {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
+    }
+
+    /**
+     * Calculates the duration of the workout based on start and end time
+     * @return  a String which tells the duration in hours and minutes
+     */
+    public String getDuration(){
+        long time = getEndTime() - getStartTime();
+        int hours = (int) (time / 3600000);
+        int minutes = (int) ((time - (hours * 3600000)) / 60000);
+
+        return String.format("%d hours, %d minutes", hours, minutes);
+
+    }
+
+    /**
+     * The date which the workout was run calculated from milliseconds
+     * @return  formatted String of the date
+     */
+    public String getDate(){
+        long time = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(getEndTime()));
+        Date timeMilliseconds = new Date(time);
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd MMM yyyy");
+
+        return dateTimeFormat.format(timeMilliseconds);
     }
 }

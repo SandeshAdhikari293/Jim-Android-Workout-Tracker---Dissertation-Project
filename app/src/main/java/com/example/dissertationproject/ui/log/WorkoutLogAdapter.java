@@ -1,11 +1,10 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.ui.log;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,24 +14,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dissertationproject.ActiveWorkoutActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.Workout;
-import com.example.dissertationproject.objects.WorkoutPlan;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.ViewHolder> {
 
@@ -110,29 +102,19 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 	// View holder class for initializing of your views such as TextView and Imageview
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final TextView planName;
-//		private final TextView planDesc;
-
 		private final LinearLayout linearLayout;
-
 		private final FloatingActionButton playWorkout;
 		private final FloatingActionButton editButton;
-
 
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
 			planName = itemView.findViewById(R.id.idTVCourseName);
-//			planDesc = itemView.findViewById(R.id.idTVCourseRating);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);
 			editButton = itemView.findViewById(R.id.fbtnEditWorkoutPlan);
-//			editButton = itemView.findViewById(R.id.fbtn);
-
-//			editButton.setVisibility(View.INVISIBLE);
-//			editButton.setClickable(false);
 
 			playWorkout.setVisibility(View.INVISIBLE);
 			playWorkout.setClickable(false);
-//			playWorkout.setBackgroundDrawable(itemView.getResources().getDrawable(R.drawable.ic_arrow));
 		}
 	}
 }

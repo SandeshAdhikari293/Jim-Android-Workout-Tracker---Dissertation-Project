@@ -4,9 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class Utils {
-    final static long millisecondsPerDay = 1000L * 60 * 60 * 24;
 
     public static void errorDialog(Context context, String title, String msg, String button){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -20,9 +21,7 @@ public class Utils {
         alertDialogBuilder
                 .setMessage(msg)
                 .setCancelable(false)
-                .setPositiveButton(button, (dialog, id) -> {
-                    dialog.dismiss();
-                });
+                .setPositiveButton(button, (dialog, id) -> dialog.dismiss());
 
         // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -69,27 +68,27 @@ public class Utils {
     }
 
     public static long timeInOneWeek(){
-        return System.currentTimeMillis() + (millisecondsPerDay * 7);
+        return System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS);
     }
 
     public static long timeInOneMonth(){
-        return System.currentTimeMillis() + (millisecondsPerDay * 28);
+        return System.currentTimeMillis() + (TimeUnit.MILLISECONDS.convert(28, TimeUnit.DAYS));
     }
 
     public static long timeInSixMonths(){
-        return System.currentTimeMillis() + (millisecondsPerDay * (28 * 6));
+        return System.currentTimeMillis() + (TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS) * 6);
     }
 
     public static long timeLastOneWeek(){
-        return System.currentTimeMillis() - (millisecondsPerDay * 7);
+        return System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS);
     }
 
     public static long timeLastOneMonth(){
-        return System.currentTimeMillis() - (millisecondsPerDay * 28);
+        return System.currentTimeMillis() - (TimeUnit.MILLISECONDS.convert(28, TimeUnit.DAYS));
     }
 
     public static long timeLastSixMonths(){
-        return System.currentTimeMillis() - (millisecondsPerDay * (28 * 6));
+        return System.currentTimeMillis() - (TimeUnit.MILLISECONDS.convert(28, TimeUnit.DAYS) * 6);
     }
     
 }

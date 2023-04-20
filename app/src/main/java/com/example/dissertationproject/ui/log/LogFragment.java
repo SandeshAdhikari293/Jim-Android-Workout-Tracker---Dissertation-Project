@@ -1,45 +1,47 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.ui.log;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.databinding.FragmentLogBinding;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.Workout;
-import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class LogFragment extends Fragment {
-
     private FragmentLogBinding binding;
     private RecyclerView recyclerView;
 
-    private ProgressBar progressBar;
-
+    /**
+     * V
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        LogViewModel homeViewModel =
-                new ViewModelProvider(this).get(LogViewModel.class);
 
         binding = FragmentLogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -48,13 +50,15 @@ public class LogFragment extends Fragment {
         getActivity().getWindow().setStatusBarColor(Color.parseColor("#0B173B"));
         getActivity().getWindow().setNavigationBarColor(Color.parseColor("#0B173B"));
 
-        final TextView textView = binding.textDashboard;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-
         return root;
     }
 
+    /**
+     * Initialse recycler view and dataset
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -67,14 +71,8 @@ public class LogFragment extends Fragment {
 
         WorkoutLogAdapter wpAdapter = new WorkoutLogAdapter(getContext(), reverse);
 
-        // below line is for setting a layout manager for our recycler view.
-        // here we are creating vertical list so we will provide orientation as vertical
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-        // in below two lines we are setting layout manager and adapter to our recycler view.
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         recyclerView.setAdapter(wpAdapter);
-//        progressBar.setVisibility(View.INVISIBLE);
 
     }
 

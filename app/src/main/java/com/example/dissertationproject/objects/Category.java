@@ -1,8 +1,15 @@
+/**
+ * @author: Sandesh Adhikari
+ */
 package com.example.dissertationproject.objects;
 
 public enum Category {
     Chest, BACK, SHOULDERS, BICEPS, TRICEPS, FOREARMS, QUADS, HAMSTRINGS, CALVES;
 
+    /**
+     * Iterates each category, capitalising the first letter
+     * @return Camel cased string array
+     */
     public static String[] categories() {
         String[] categories = new String[Category.values().length];
 
