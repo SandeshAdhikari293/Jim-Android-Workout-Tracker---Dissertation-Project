@@ -122,7 +122,7 @@ public class ExercisesFragment extends Fragment {
         }else{
             //Filter by category
             for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
-                if(exerciseTemplate.getCategory().equals(filter) || filter.equals("All Exercises")){
+                if(exerciseTemplate.getCategory().equals(Category.enumFromName(filter))){
                     exercises.add(exerciseTemplate);
                 }
             }
