@@ -10,6 +10,15 @@ public enum Metric {
 
     private String name;
     Metric(String name) {
+        this.name = name;
+    }
+
+    /**
+     * gets the name of the enum
+     * @return  the name as a string
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -21,9 +30,7 @@ public enum Metric {
 
         int count = 0;
         for(Metric m : Metric.values()){
-            String camelCase = m.toString().substring(0, 1)+ m.toString().substring(1).toLowerCase();
-            camelCase = camelCase.replaceAll("_", " ");
-            metrics.add(camelCase);
+            metrics.add(m.getName());
             count++;
         }
         return metrics;

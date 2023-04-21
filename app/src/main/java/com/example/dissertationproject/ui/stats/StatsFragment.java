@@ -253,11 +253,12 @@ public class StatsFragment extends Fragment {
      */
     public void displayLineChart(){
         String metric = metricSpinner.getSelectedItem().toString();
-        if(metric.equals(Metric.MAX_WEIGHT.name())){
+
+        if(metric.equals(Metric.MAX_WEIGHT.getName())){
             displayMaxWeightChart();
-        } else if (metric.equals(Metric.VOLUME.name())) {
+        } else if (metric.equals(Metric.VOLUME.getName())) {
             displayVolumeChart();
-        } else if (metric.equals(Metric.AVG_WEIGHT.name())) {
+        } else if (metric.equals(Metric.AVG_WEIGHT.getName())) {
             
         }
     }
