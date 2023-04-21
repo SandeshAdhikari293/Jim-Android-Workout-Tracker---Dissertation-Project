@@ -3,11 +3,13 @@
  */
 package com.example.dissertationproject.objects;
 
+import com.example.dissertationproject.objects.enums.Category;
+
 public class ExerciseTemplate {
     private String id;
     private String name;
     private String desc;
-    private String category;
+    private Category category;
 
     /**
      * Create an Exercise Template object
@@ -16,7 +18,7 @@ public class ExerciseTemplate {
      * @param desc      the description set by the user
      * @param category  the category of muscle groups which it belongs to
      */
-    public ExerciseTemplate(String id, String name, String desc, String category){
+    public ExerciseTemplate(String id, String name, String desc, Category category){
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -47,11 +49,11 @@ public class ExerciseTemplate {
         this.desc = desc;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

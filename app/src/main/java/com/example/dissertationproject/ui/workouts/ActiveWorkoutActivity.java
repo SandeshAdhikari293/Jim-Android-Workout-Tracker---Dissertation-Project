@@ -1,10 +1,9 @@
-package com.example.dissertationproject;
+/**
+ * @author Sandesh Adhikari
+ */
+package com.example.dissertationproject.ui.workouts;
 
 import static android.content.ContentValues.TAG;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +11,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.RepLine;
 import com.example.dissertationproject.objects.User;
@@ -19,49 +23,42 @@ import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.objects.WorkoutPlanExercise;
 import com.example.dissertationproject.ui.workouts.ActiveWorkoutAdapter;
-import com.example.dissertationproject.workoutPlan.CreateWorkoutPlanAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActiveWorkoutActivity extends AppCompatActivity {
-
     public static WorkoutPlan plan;
-    RecyclerView recyclerView;
     public static ArrayList<WorkoutPlanExercise> exercises;
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-    EditText name;
-    EditText desc;
+    private RecyclerView recyclerView;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private EditText name;
+    private EditText desc;
     private long startTime;
 
+    /**
+     * Method for when the view is first created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_workout);
         getSupportActionBar().hide();
 
+        //initialise variables
         exercises = new ArrayList<>();
-
         recyclerView = findViewById(R.id.rcvActiveWorkout);
         recyclerView.setHasFixedSize(true);
-//        plan = User.activeUser.getWorkoutList().get(0);
-
         name = findViewById(R.id.etActiveWorkoutName);
         desc = findViewById(R.id.etActiveWorkoutDesc);
-
         name.setText(plan.getName());
         desc.setText(plan.getDesc());
 
-//        System.out.println(exe);
+        //Iterate all the exercises in the workout plan and add them to the recycler view
         for(Exercise exercise : plan.getExercises()){
-            System.out.println(exercise.getName());
-
             WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(exercise);
             for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
                 for(int r : rep.getValue().values()){
@@ -69,27 +66,29 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                 }
             }
             exercises.add(workoutPlanExercise);
-
         }
 
+        //set up the recycler view
         ActiveWorkoutAdapter wpAdapter = new ActiveWorkoutAdapter(this, exercises);
-        // below line is for setting a layout manager for our recycler view.
-        // here we are creating vertical list so we will provide orientation as vertical
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
-        // in below two lines we are setting layout manager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
 
-        startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis(); // get the time the workout was started
     }
 
+    /**
+     * Save the workout to the database
+     * @param v the current view
+     */
     public void saveActiveWorkout(View v){
 
+        //create a workout object and add the corresponding variables
         Workout wk = new Workout(name.getText().toString());
-        wk.setEndTime(System.currentTimeMillis()); //+ (Utils.millisecondsPerDay * 3)
+        wk.setEndTime(System.currentTimeMillis());
         wk.setStartTime(startTime);
 
+        //Create a hashmap with variables for the database
         Map<String, Object> workout = new HashMap<>();
         workout.put("user", User.activeUser.getId());
         workout.put("name", name.getText().toString());
@@ -97,11 +96,12 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
         workout.put("end_time", wk.getEndTime());
         workout.put("start_time", wk.getStartTime());
 
+        //store the information in the database
         db.collection("workout_log")
                 .add(workout)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
+                    //Store each exercise
                     for(WorkoutPlanExercise e : exercises){
                         Exercise exercise = new Exercise(e.getExerciseTemplate());
                         for(RepLine repLine : e.getRepLines()){
@@ -122,17 +122,17 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                             exercise.getReps().put(exercise.getReps().size(), val);
                         }
 
+                        //add each exercise to the workout object
                         wk.getExercises().add(exercise);
 
                         Map<String, Object> exercises = new HashMap<>();
                         exercises.put("exercise_template_id", e.getExerciseTemplate().getId());
                         exercises.put("workout_id", documentReference.getId());
 
-
+                        //Store each exercise of the workout in the database
                         db.collection("exercise_workout_log")
                                 .add(exercises)
                                 .addOnSuccessListener(documentReference12 -> {
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
 
                                     for(Map.Entry<Integer, HashMap<Integer, Integer>> reps : exercise.getReps().entrySet()){
 
@@ -142,12 +142,10 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                                             exerciseReps.put("reps", r.getValue());
                                             exerciseReps.put("weight", r.getKey());
 
-
+                                            //Store all the information about the sets for each exercise
                                             db.collection("exercise_workout_sets")
                                                     .add(exerciseReps)
-                                                    .addOnSuccessListener(documentReference1 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference1.getId()))
                                                     .addOnFailureListener(e1 -> Log.w(TAG, "Error adding document", e1));
-
                                         }
                                     }
                                 })
@@ -157,6 +155,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
+        //Add the workout object to the users cached data and inform them
         User.activeUser.getWorkoutLog().add(wk);
         Toast.makeText(getApplicationContext(),wk.getName()+" has been logged",Toast.LENGTH_SHORT).show();
         finish();

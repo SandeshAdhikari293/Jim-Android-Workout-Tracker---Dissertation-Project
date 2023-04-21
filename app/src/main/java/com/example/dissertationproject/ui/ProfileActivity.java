@@ -1,13 +1,11 @@
-package com.example.dissertationproject;
-
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import androidx.appcompat.app.AppCompatActivity;
+/**
+ * @author Sandesh Adhikari
+ */
+package com.example.dissertationproject.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,27 +13,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.dissertationproject.R;
+import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.objects.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class ProfileActivity extends AppCompatActivity {
-    String uid;
-    TextView name;
-    EditText changeName;
-    CheckBox makeAdmin;
-    Button delete;
-    boolean admin;
-    User user;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String uid;
+    private TextView name;
+    private EditText changeName;
+    private CheckBox makeAdmin;
+    private Button delete;
+    private boolean admin;
+    private User user;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-
+    /**
+     * Initialise all the variables when the view is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +48,10 @@ public class ProfileActivity extends AppCompatActivity {
         changeName = findViewById(R.id.etChangeDisplayName);
         delete = findViewById(R.id.btnDeleteAccount);
 
+        //get the unique id of the user profile being displayed, as admins and view
+        //others profiles
         uid = getIntent().getStringExtra("uid");
 
-//        makeAdmin.setActivated(false);
-
-        System.out.println("UID: "+ uid);
-        System.out.println("id:: "+ FirebaseAuth.getInstance().getCurrentUser().getUid());
         if (!uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             user = User.getUserFromID(uid);
 
@@ -61,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
                 admin = true;
             }
 
+            //toggle the activation if an admin presses it.
             if(user.isActivated())
                 delete.setText("Deactivate");
             else
@@ -68,12 +68,10 @@ public class ProfileActivity extends AppCompatActivity {
         }else{
             makeAdmin.setVisibility(View.INVISIBLE);
             user = User.getActiveUser();
-
         }
 
         name.setText(user.getName());
         changeName.setText(user.getName());
-
 
         if(!user.isActivated()){
             name.setText(name.getText() + " (inactive)");
@@ -82,11 +80,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Save the changes to the profile in the database
+     * @param view
+     */
     public void saveChanges(View view){
+        //update the correct field with the changed attributes
         db.collection("profiles").whereEqualTo("user_id", uid).get().addOnCompleteListener(queryDocumentSnapshots -> {
             for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots.getResult()){
-                System.out.println("PROFILE ID: " + snapshot.getId());
-
                 db.collection("profiles").document(snapshot.getId())
                         .update(
                                 "name", changeName.getText().toString(),
@@ -100,7 +101,12 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Permanently delete a users account
+     * @param view
+     */
     public void deleteAccount(View view){
+        //Admins can't delete accounts from the app, but can deactivate or reactivate them
         if(admin){
             db.collection("profiles").whereEqualTo("user_id", uid).get().addOnCompleteListener(queryDocumentSnapshots -> {
                 for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots.getResult()){
@@ -141,6 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             };
 
+            //warning message to user
             Utils.confirmDialog(this, "Delete your account", "WARNING! You are about to delete your account. This action is irreversible.", "Cancel", "Confirm", () -> {}, runnable);
 
         }

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dissertationproject.CreateExerciseActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

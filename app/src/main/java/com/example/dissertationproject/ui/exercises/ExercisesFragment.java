@@ -16,13 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.databinding.FragmentExercisesBinding;
-import com.example.dissertationproject.objects.Category;
+import com.example.dissertationproject.objects.enums.Category;
 import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
 

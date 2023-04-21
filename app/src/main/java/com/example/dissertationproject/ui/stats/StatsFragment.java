@@ -1,7 +1,9 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.ui.stats;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,23 +16,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.dissertationproject.LoginActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.databinding.FragmentStatsBinding;
-import com.example.dissertationproject.objects.Category;
+import com.example.dissertationproject.objects.enums.Category;
 import com.example.dissertationproject.objects.Exercise;
 import com.example.dissertationproject.objects.ExerciseTemplate;
+import com.example.dissertationproject.objects.enums.Metric;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.Workout;
-import com.example.dissertationproject.objects.WorkoutPlan;
 import com.example.dissertationproject.statisitics.LineChartXAxisValueFormatter;
 import com.example.dissertationproject.statisitics.RadarChartXAxisValueFormatter;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.RadarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -38,9 +37,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -53,40 +49,51 @@ import java.util.concurrent.TimeUnit;
 public class StatsFragment extends Fragment {
 
     private FragmentStatsBinding binding;
-    LineChart lineChart;
+    private LineChart lineChart;
+    private RadarChart radarChart;
+    private Spinner exerciseSpinner;
+    private Spinner workoutSpinner;
+    private Spinner metricSpinner;
+    private TextView oneWeek;
+    private TextView oneMonth;
+    private TextView sixMonths;
+    private ArrayList<String> time;
 
-    RadarChart radarChart;
-    Spinner exerciseSpinner;
-    Spinner workoutSpinner;
-    Spinner metricSpinner;
-
-    TextView oneWeek;
-    TextView oneMonth;
-    TextView sixMonths;
-    ArrayList<String> time;
-
-
+    /**
+     * View is created
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return the stats view
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        StatsViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(StatsViewModel.class);
 
         binding = FragmentStatsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        time = new ArrayList<>();
 
+        time = new ArrayList<>();
 
         time.add("One week");
         time.add("One month");
         time.add("Six months");
         time.add("All time");
 
-        final TextView textView = binding.textHome;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
+    /**
+     * Initialise UI components and data
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -110,13 +117,18 @@ public class StatsFragment extends Fragment {
 
     }
 
-    public void initWorkoutSpinnerData(){
+    /**
+     * Initialises the workout spinner data
+     */
+    private void initWorkoutSpinnerData(){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, time);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+        // Apply the adapter to the spinner
         workoutSpinner.setAdapter(adapter);
+
+        //Update the radar chart when a new item is selected
         workoutSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -130,19 +142,18 @@ public class StatsFragment extends Fragment {
         });
     }
 
-    public void initMetricSpinnerData(){
-        ArrayList<String> metrics = new ArrayList<>();
-
-        metrics.add("Max Weight");
-        metrics.add("Average Weight");
-        metrics.add("Volume");
-
+    /**
+     * Initialise the metric spinner data
+     */
+    private void initMetricSpinnerData(){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, metrics);
+                android.R.layout.simple_spinner_item, Metric.getList());
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+        // Apply the adapter to the spinner
         metricSpinner.setAdapter(adapter);
+
+        //update the line chart to display new information when spinner item is changed
         metricSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -157,12 +168,44 @@ public class StatsFragment extends Fragment {
     }
 
     /**
-     *
+     * Calculates the volume distribution of workouts in a particular time frame
+     * @param timeFrame the time frame of exercises to sample
+     * @return          a hashmap containing volume distribution between categories
      */
-    public void displayRadarChart(){
-        ArrayList<RadarEntry> radarEntries = new ArrayList<>();
+    private HashMap<Category, Double> calculateVolumeDistribution(long timeFrame){
+
+        HashMap<Category, Double> volumeDistribution = new HashMap<>();
+        for(Workout workout : User.getActiveUser().getWorkoutLog()){
+            if(workout.getEndTime() > timeFrame){ //if the workout is within the timeframe
+                for(Exercise exercise : workout.getExercises()){
+                    Category category = exercise.getCategory();
+
+                    //calculate the volume distribution for each muscle category for workouts within
+                    // that timeframe.
+                    double volume = 0;
+                    for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
+                        for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
+                            volume = volume + (r.getKey() * r.getValue()); //add the volume together
+                        }
+                    }
+                    //add the data to a hashmap, with the muscle group as key and volume as value
+                    if(!volumeDistribution.containsKey(category)){
+                        volumeDistribution.put(category, volume);
+                    }else volumeDistribution.put(category, volumeDistribution.get(category) + volume);
+
+                }
+            }
+        }
+        return volumeDistribution;
+    }
+
+    /**
+     * Display the radar chart information based upon data from the corresponding spinner
+     */
+    private void displayRadarChart(){
         long timeFrame = 0;
 
+        //Select the desired time frame from the spinner item selected
         if(workoutSpinner.getSelectedItem().toString().equals(time.get(0))){
             timeFrame = Utils.timeLastOneWeek();
         }else if(workoutSpinner.getSelectedItem().toString().equals(time.get(1))){
@@ -171,30 +214,14 @@ public class StatsFragment extends Fragment {
             timeFrame = Utils.timeLastSixMonths();
         }
 
-        HashMap<String, Integer> categoryCount = new HashMap<>();
-        for(Workout workout : User.getActiveUser().getWorkoutLog()){
-            if(workout.getEndTime() > timeFrame){
-                for(Exercise exercise : workout.getExercises()){
-                    String category = exercise.getCategory();
-                    int volume = 0;
-                    for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
-                        for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
-                            volume = volume + (r.getKey() * r.getValue());
-                        }
-                    }
-                    if(!categoryCount.containsKey(category)){
-                        categoryCount.put(category, volume);
-                    }else categoryCount.put(category, categoryCount.get(category) + volume);
-
-                }
-            }
-        }
-
+        //iterate over each muscle group and populate an array with entries
+        ArrayList<RadarEntry> radarEntries = new ArrayList<>();
         for(int i = 0; i <= 6; i++){
             boolean added = false;
-            for(Map.Entry<String, Integer> entry : categoryCount.entrySet()){
-                if(entry.getKey().equals(Category.categories()[i])){
-                    radarEntries.add(new RadarEntry(entry.getValue(), i));
+            for(Map.Entry<Category, Double> entry : calculateVolumeDistribution(timeFrame).entrySet()){
+
+                if(entry.getKey().getPosition() == i){
+                    radarEntries.add(new RadarEntry(entry.getValue().floatValue(), i));
                     added = true;
                 }
             }
@@ -203,6 +230,7 @@ public class StatsFragment extends Fragment {
             }
         }
 
+        //Initialise radar data set and object
         RadarDataSet radarDataSet = new RadarDataSet(radarEntries, "");
         RadarData radarData = new RadarData(radarDataSet);
 
@@ -211,6 +239,7 @@ public class StatsFragment extends Fragment {
         xAxis.setYOffset(0f);
         xAxis.setTextSize(8f);
 
+        //format values
         xAxis.setValueFormatter(new RadarChartXAxisValueFormatter());
 
         radarChart.setData(radarData);
@@ -219,20 +248,25 @@ public class StatsFragment extends Fragment {
         radarDataSet.setValueTextSize(18f);
     }
 
+    /**
+     * Method which determines what metric to display on the line chart
+     */
     public void displayLineChart(){
         String metric = metricSpinner.getSelectedItem().toString();
-        if(metric.equals("Max Weight")){
+        if(metric.equals(Metric.MAX_WEIGHT.name())){
             displayMaxWeightChart();
-        } else if (metric.equals("Volume")) {
+        } else if (metric.equals(Metric.VOLUME.name())) {
             displayVolumeChart();
-        } else if (metric.equals("Average Weight")) {
+        } else if (metric.equals(Metric.AVG_WEIGHT.name())) {
             
         }
     }
 
+    /**
+     * Initialises the spinner data for selecting different exercises
+     */
     public void initExerciseSpinnerData(){
         ArrayList<String> exercises = new ArrayList<>();
-
         for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
             exercises.add(exerciseTemplate.getName());
         }
@@ -241,8 +275,9 @@ public class StatsFragment extends Fragment {
                 android.R.layout.simple_spinner_item, exercises);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
         exerciseSpinner.setAdapter(adapter);
+
+        //Display a different chart when the exercises
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -257,7 +292,9 @@ public class StatsFragment extends Fragment {
     }
 
 
-
+    /**
+     * Displays the data for the max weight chart
+     */
     public void displayMaxWeightChart(){
         ArrayList<Long> x = new ArrayList<>();
         ArrayList<Double> y = new ArrayList<>();
@@ -268,6 +305,7 @@ public class StatsFragment extends Fragment {
             List<Entry> entries = new ArrayList<>();
 
             //Calculate the highest weight lifted
+            //Iterate to find the max weight per workout per exercise
             for (Workout workout : User.getActiveUser().getWorkoutLog()) {
                 int maxWeight = -1;
                 for (Exercise exercise : workout.getExercises()) {
@@ -291,6 +329,7 @@ public class StatsFragment extends Fragment {
             }
 
 
+            //Display the chart
             lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
             lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
             LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
@@ -299,11 +338,17 @@ public class StatsFragment extends Fragment {
             lineChart.setData(lineData);
             lineChart.invalidate(); // refresh
 
+            //Update predictions for this data set
             calculatePredictions(x, y);
 
         }
     }
 
+    /**
+     * Calculates and updates the predictions and dislpays them to user
+     * @param x the x dataset
+     * @param y the y dataset
+     */
     public void calculatePredictions(ArrayList<Long> x, ArrayList<Double> y){
         LinearRegression linearRegression = new LinearRegression();
         linearRegression.fit(x, y);
@@ -315,17 +360,18 @@ public class StatsFragment extends Fragment {
         oneWeek.setText("One week: ~ "+ oneWeekRounded +"kg");
         oneMonth.setText("One Month: ~ "+ oneMonthRounded + "kg");
         sixMonths.setText("Six Months: ~ "+ sixMonthsRounded + "kg");
-
-        System.out.println("Calculating predictions");
     }
 
+    /**
+     * Displays the chart showing volume for each exercise
+     */
     public void displayVolumeChart(){
         if(exerciseSpinner.getSelectedItem() != null) {
             ExerciseTemplate exerciseTemplate = ExerciseTemplate.getFromName(exerciseSpinner.getSelectedItem().toString());
 
             List<Entry> entries = new ArrayList<>();
 
-            //Calculate the highest weight lifted
+            //Calculate the volume of each exercise per workout
             for (Workout workout : User.getActiveUser().getWorkoutLog()) {
                 int volume = 0;
                 for (Exercise exercise : workout.getExercises()) {
@@ -342,6 +388,7 @@ public class StatsFragment extends Fragment {
             }
 
 
+            //Update the line chart
             lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
             lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
             LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset

@@ -32,25 +32,43 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 	private final ArrayList<Workout> workouts;
 	FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-	// Constructor
+	/**
+	 * Constructor for adapter
+	 * @param context	the context of the application
+	 * @param workouts	the data set of workouts
+	 */
 	public WorkoutLogAdapter(Context context,ArrayList<Workout> workouts) {
 		this.context = context;
 		this.workouts = workouts;
 	}
 
+	/**
+	 * Inflate the layout for each item of the recycler view
+	 * @param parent The ViewGroup into which the new View will be added after it is bound to
+	 *               an adapter position.
+	 * @param viewType The view type of the new View.
+	 *
+	 * @return view holder
+	 */
 	@NonNull
 	@Override
 	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		// to inflate the layout for each item of recycler view.
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_card, parent, false);
 		return new ViewHolder(view);
 	}
 
+	/**
+	 * 	Manipulates the variables for each card
+	 * @param holder The ViewHolder which should be updated to represent the contents of the
+	 *        item at the given position in the data set.
+	 * @param position The position of the item within the adapter's data set.
+	 */
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		Workout model = workouts.get(position);
 		holder.planName.setText(model.getName());
 
+		//Create a new text view to display the date and duration of the workout
 		TextView duration = new TextView(context);
 		duration.setTextSize(22);
 		duration.setText(model.getDate() +" | "+model.getDuration());
@@ -58,12 +76,15 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 		duration.setGravity(View.TEXT_ALIGNMENT_CENTER);
 		holder.linearLayout.addView(duration);
 
+		//Iterate all exercises from the workout object
 		for(Exercise exercise : model.getExercises()){
+			//Create a new text view of the exercise name
 			TextView textView = new TextView(context);
 			textView.setTextSize(22);
 			textView.setText(exercise.getName());
 			holder.linearLayout.addView(textView);
 
+			//Create a new text view for each set of the exercise and display it
 			int set = 1;
 			for(Map.Entry<Integer, HashMap<Integer, Integer>> rep : exercise.getReps().entrySet()){
 				for(Map.Entry<Integer, Integer> r : rep.getValue().entrySet()){
@@ -77,29 +98,37 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 			}
 		}
 
+		//onClick listener for the delete button
 		holder.editButton.setOnClickListener(view -> {
 			Utils.confirmDialog(context,"Delete workout", "Are you sure you want to delete this workout?", "Cancel", "Confirm",() -> {
 			}, ()->{
+				//remove from cached data
 				User.getActiveUser().getWorkoutLog().remove(model);
 
+				//remove from database
 				db.collection("workout_log").document(model.getId()).delete().addOnCompleteListener(task -> {
 					Utils.errorDialog(context,"Deleted", "Workout has been deleted", "Continue");
 					//todo: delete the exercises for this workout log
 				});
-
 			});
 		});
 	}
 
 
+	/**
+	 * @return	the number of card items in recycler view
+	 */
 	@Override
 	public int getItemCount() {
-		// this method is used for showing number of card items in recycler view
 		return workouts.size();
 	}
 
 
 	// View holder class for initializing of your views such as TextView and Imageview
+
+	/**
+	 * View holder class for initialising views (e.g. TextViews)
+	 */
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final TextView planName;
 		private final LinearLayout linearLayout;
@@ -108,6 +137,7 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
+			//Initialise the variables
 			planName = itemView.findViewById(R.id.idTVCourseName);
 			linearLayout = itemView.findViewById(R.id.llExercisesOnPlan);
 			playWorkout = itemView.findViewById(R.id.fbtnStartWorkout);

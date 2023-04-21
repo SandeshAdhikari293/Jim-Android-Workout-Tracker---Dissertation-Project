@@ -14,7 +14,7 @@
         android:theme="@style/Theme.DissertationProject"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,26 +23,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".ui.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ActiveWorkoutActivity"
+            android:name=".ui.workouts.ActiveWorkoutActivity"
             android:exported="false" />
         <activity
-            android:name=".AddExerciseToPlanActivity"
+            android:name=".ui.exercises.AddExerciseToPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateWorkoutActivity"
+            android:name=".ui.workouts.workoutPlan.CreateWorkoutActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateExerciseActivity"
+            android:name=".ui.exercises.CreateExerciseActivity"
             android:exported="false" />
         <activity
-            android:name=".DashboardActivity"
+            android:name=".ui.DashboardActivity"
             android:exported="false"
             android:label="@string/title_activity_create_exercise" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.RegisterActivity"
             android:exported="false" />
 
         <meta-data

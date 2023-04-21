@@ -1,50 +1,64 @@
+/**
+ * @author Sandesh Adhikari
+ */
 package com.example.dissertationproject.ui.workouts;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dissertationproject.CreateWorkoutActivity;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.Utils;
 import com.example.dissertationproject.databinding.FragmentWorkoutsBinding;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.WorkoutPlan;
-import com.example.dissertationproject.workoutPlan.WorkoutPlanAdapter;
+import com.example.dissertationproject.ui.workouts.workoutPlan.WorkoutPlanAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class WorkoutsFragment extends Fragment {
 
     private FragmentWorkoutsBinding binding;
-    RecyclerView recyclerView;
-    SearchView search;
+    private RecyclerView recyclerView;
+    private SearchView search;
+    private static final double SEARCH_SIMILARITY = 0.3;
 
+    /**
+     * Initialise the binding
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return the card view
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        WorkoutsViewModel workoutsViewModel =
-                new ViewModelProvider(this).get(WorkoutsViewModel.class);
 
         binding = FragmentWorkoutsBinding.inflate(inflater, container, false);
-//        View view =  inflater.inflate(R.layout.fragment_workouts, container, false);
 
         View root = binding.getRoot();
 
         return root;
     }
 
+    /**
+     * Initialise adapter and variables
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -53,18 +67,13 @@ public class WorkoutsFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         search = view.findViewById(R.id.searchbar_workout);
 
+        //Initialise recycler view and adapter
         WorkoutPlanAdapter wpAdapter = new WorkoutPlanAdapter(getContext(), User.activeUser.getWorkoutList());
-
-
-        // below line is for setting a layout manager for our recycler view.
-        // here we are creating vertical list so we will provide orientation as vertical
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-        // in below two lines we are setting layoutmanager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
 
-
+        //Update the display when the user types in the search view
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -80,33 +89,27 @@ public class WorkoutsFragment extends Fragment {
 
     }
 
+    /**
+     * Update the recycler view to show relevant information based on the search
+     * @param search    the search query from the user
+     */
     public void update(String search){
-
         ArrayList<WorkoutPlan> plan = new ArrayList<>();
 
         for(WorkoutPlan workoutPlan : User.getActiveUser().getWorkoutList()){
-            if(Utils.findSimilarity(workoutPlan.getName(), search) > 0.3 || search.equals("")){
+            //if similarity between the name of the workout plan and the search result are greater
+            //than a similarity threshold, display that data
+            if(Utils.findSimilarity(workoutPlan.getName(), search) > SEARCH_SIMILARITY || search.equals("")){
                 plan.add(workoutPlan);
 
             }
         }
 
+        //update the recyclerview
         WorkoutPlanAdapter wpAdapter = new WorkoutPlanAdapter(getContext(), plan);
-
-
-        // below line is for setting a layout manager for our recycler view.
-        // here we are creating vertical list so we will provide orientation as vertical
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-        // in below two lines we are setting layoutmanager and adapter to our recycler view.
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(wpAdapter);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
     }
 
     @Override

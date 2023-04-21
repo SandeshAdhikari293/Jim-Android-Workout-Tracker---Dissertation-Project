@@ -3,7 +3,7 @@
  */
 package com.example.dissertationproject.statisitics;
 
-import com.example.dissertationproject.objects.Category;
+import com.example.dissertationproject.objects.enums.Category;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 public class RadarChartXAxisValueFormatter extends IndexAxisValueFormatter {

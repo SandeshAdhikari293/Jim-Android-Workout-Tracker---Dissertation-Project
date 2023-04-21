@@ -1,18 +1,20 @@
-package com.example.dissertationproject;
+/**
+ * @author Sandesh Adhikari
+ */
+package com.example.dissertationproject.ui;
 
 import static android.content.ContentValues.TAG;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dissertationproject.CredentialValidation;
+import com.example.dissertationproject.R;
+import com.example.dissertationproject.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -20,20 +22,22 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    EditText password;
-    EditText confirmPassword;
-    EditText email;
-    EditText name;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private EditText password;
+    private EditText confirmPassword;
+    private EditText email;
+    private EditText name;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CredentialValidation validation;
 
-    CredentialValidation validation;
 
-
+    /**
+     * Initialise variables when the screen is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,18 +54,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         validation = new CredentialValidation();
 
-//        Window window = getWindow();
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            window.setStatusBarColor(Color.parseColor("#7f77e5"));
-//            window.setNavigationBarColor(Color.parseColor("#db8ccd"));
-//        }
-
     }
 
 
+    /**
+     * Create a new user in the database through firebase auth
+     * @param v
+     */
     public void createUser(View v){
+        //check that text fields aren't null, which would throw an error
         if(password.getText() == null || confirmPassword.getText() == null){
             return;
         }
@@ -96,6 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
+        //Create a new user through firebase auth
         mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 // Sign in is successful
@@ -111,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
 
-                //TODO: remove the gradle for firebase admin
+                //attributes for the user profile
                 Map<String, Object> profile = new HashMap<>();
                 profile.put("user_id", user.getUid());
                 profile.put("name", name.getText().toString());
@@ -119,13 +121,14 @@ public class RegisterActivity extends AppCompatActivity {
                 profile.put("active", true);
                 profile.put("is_admin", false);
 
-                // Add a new document with a generated ID
+                // Add a new document with a generated ID for the profile of that user
                 db.collection("profiles")
                         .add(profile)
                         .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
                         .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
                 finish();
+                //send a verification email to the user email
                 user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
             }else{
                 Utils.errorDialog(this, "Registration error", "This account is unable to be created", "Continue");
@@ -133,21 +136,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Takes the user back to the login screen
+     * @param v
+     */
     public void login(View v){
         finish();
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-//            reload();
-            System.out.println("NAME IS: " +currentUser.getDisplayName());
-
-        }
-    }
-
 
 }
