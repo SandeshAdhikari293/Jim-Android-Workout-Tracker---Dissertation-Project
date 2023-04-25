@@ -117,6 +117,9 @@ public class RepLine {
         model.getRepLines().add(rl);
         //This boolean is for when this rep line is being used to create a plan
         // and therefore this weight box is not needed
+        hor.addView(txt);
+
+
         if(!isPlan) {
             rl.setWeight(etWeight);
             hor.addView(etWeight);
@@ -129,7 +132,6 @@ public class RepLine {
         });
 
         //add all components to the horizontal view
-        hor.addView(txt);
         hor.addView(et);
         hor.addView(rm);
 
