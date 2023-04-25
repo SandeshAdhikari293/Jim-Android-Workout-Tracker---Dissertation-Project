@@ -15,6 +15,6 @@ public class RadarChartXAxisValueFormatter extends IndexAxisValueFormatter {
      */
     @Override
     public String getFormattedValue(float value) {
-        return Category.categories()[0];
+        return Category.categories()[(int) value];
     }
 }
