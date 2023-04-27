@@ -31,7 +31,7 @@ import java.util.Arrays;
 public class ExercisesFragment extends Fragment {
     private FragmentExercisesBinding binding;
     RecyclerView recyclerView;
-
+    Spinner spinner;
     /**
      * Method when the view is created
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -67,7 +67,7 @@ public class ExercisesFragment extends Fragment {
 
 
         //fill spinner with categories
-        Spinner spinner = view.findViewById(R.id.spinnerSortCategory);
+        spinner = view.findViewById(R.id.spinnerSortCategory);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, Category.categoriesForSpinner());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -145,5 +145,7 @@ public class ExercisesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        updateList(spinner.getSelectedItem().toString(), "");
     }
 }

@@ -123,9 +123,9 @@ public class CreateExerciseActivity extends AppCompatActivity {
                                 Category.enumFromName(category.getSelectedItem().toString()));
 
                         User.getActiveUser().getExerciseList().add(exerciseTemplate);
+
                         finish();
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                    });
 
             Toast.makeText(getApplicationContext(),name.getText().toString()+" has been created",Toast.LENGTH_SHORT).show();
         }else{
@@ -143,9 +143,10 @@ public class CreateExerciseActivity extends AppCompatActivity {
                     );
 
             Toast.makeText(getApplicationContext(),name.getText().toString()+" has been updated",Toast.LENGTH_SHORT).show();
+
+            finish();
         }
 
-        finish();
     }
 
     public void deleteExercise(View v){
@@ -153,12 +154,10 @@ public class CreateExerciseActivity extends AppCompatActivity {
             db.collection("exercises").document(updating.getId())
                     .delete()
                     .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         User.getActiveUser().getExerciseList().remove(updating);
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
+                        finish();
+                        Toast.makeText(getApplicationContext(),name.getText().toString()+" has been deleted",Toast.LENGTH_SHORT).show();
+                    });
         }
-        finish();
-        Toast.makeText(getApplicationContext(),name.getText().toString()+" has been deleted",Toast.LENGTH_SHORT).show();
     }
 }
