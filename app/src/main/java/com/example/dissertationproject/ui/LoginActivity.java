@@ -80,15 +80,12 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void login(View view){
         //check if the fields are empty
+        if(email.getText().toString().equals("") || password.getText().toString().equals("")){
+            return;
+        }
 
-
-//        if(email.getText().toString().equals("") || password.getText().toString().equals("")){
-//            return;
-//        }
         //check that the user account exists
-        //email.getText().toString()
-        //password.getText().toString()
-        mAuth.signInWithEmailAndPassword("sandeshadhikari55@gmail.com", "Password$123")
+        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.VISIBLE);
