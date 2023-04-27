@@ -26,6 +26,7 @@ import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ExercisesFragment extends Fragment {
     private FragmentExercisesBinding binding;
@@ -64,10 +65,11 @@ public class ExercisesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.rcvExerciseList);
 
+
         //fill spinner with categories
         Spinner spinner = view.findViewById(R.id.spinnerSortCategory);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, Category.categories());
+                android.R.layout.simple_spinner_item, Category.categoriesForSpinner());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -95,11 +97,11 @@ public class ExercisesFragment extends Fragment {
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                updateList("All Exercises", s);
+                updateList(Category.categoriesForSpinner()[0], s);
                 return false;
             }
         });
-        updateList("All Exercises", "");
+        updateList(Category.categoriesForSpinner()[0], "");
     }
 
     /**
@@ -122,7 +124,8 @@ public class ExercisesFragment extends Fragment {
         }else{
             //Filter by category
             for(ExerciseTemplate exerciseTemplate : User.activeUser.getExerciseList()){
-                if(exerciseTemplate.getCategory().equals(Category.enumFromName(filter))){
+                if(exerciseTemplate.getCategory().equals(Category.enumFromName(filter))
+                        || filter.equals(Category.categoriesForSpinner()[0])){
                     exercises.add(exerciseTemplate);
                 }
             }
@@ -137,5 +140,10 @@ public class ExercisesFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

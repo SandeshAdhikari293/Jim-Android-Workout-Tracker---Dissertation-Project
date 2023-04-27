@@ -5,6 +5,7 @@ package com.example.dissertationproject.ui;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -23,11 +24,23 @@ import com.example.dissertationproject.objects.ExerciseTemplate;
 import com.example.dissertationproject.objects.User;
 import com.example.dissertationproject.objects.Workout;
 import com.example.dissertationproject.objects.WorkoutPlan;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
+import com.google.firestore.v1.WriteResult;
+
+import java.lang.ref.Reference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.RunnableScheduledFuture;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -67,11 +80,15 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void login(View view){
         //check if the fields are empty
-        if(email.getText().toString().equals("") || password.getText().toString().equals("")){
-            return;
-        }
+
+
+//        if(email.getText().toString().equals("") || password.getText().toString().equals("")){
+//            return;
+//        }
         //check that the user account exists
-        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+        //email.getText().toString()
+        //password.getText().toString()
+        mAuth.signInWithEmailAndPassword("sandeshadhikari55@gmail.com", "Password$123")
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.VISIBLE);
@@ -79,8 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         FirebaseUser user = mAuth.getCurrentUser();
 
-                        //TODO: Change back the negation to make it work properly again - just for testing purposes.
-                        if(!user.isEmailVerified()){
+                        if(user.isEmailVerified()){
                             //create a local instance of the user and cache their data
                             new User(user.getUid(), user.getDisplayName(), user.getEmail()).setActiveUser();
                             cacheUserData();
@@ -90,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                             password.setText("");
                         }else{
                             Utils.errorDialog(this, "E-mail verification", "Please verify your email address.", "Continue");
+                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     } else {
                         Utils.errorDialog(this, "User login", "Please enter a valid e-mail address and password.", "Continue");
@@ -144,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+
     /**
      * Load all the users exercises from the database and cache them
      */
@@ -154,18 +172,18 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         String s = "";
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            if(document.get("user").toString().equals(User.activeUser.getId())){
+                            if(document.get("user").toString().equals(User.activeUser.getId())) {
                                 s = s + document.getData();
+
+                                //create new objects and assign the correct attributes
+                                ExerciseTemplate exerciseTemplate = new ExerciseTemplate(
+                                        document.getId(), document.get("name").toString(),
+                                        document.get("description").toString(),
+                                        Category.enumFromName(document.get("category").toString()));
+
+                                //give the user this object
+                                User.activeUser.getExerciseList().add(exerciseTemplate);
                             }
-                            //create new objects and assign the correct attributes
-                            ExerciseTemplate exerciseTemplate = new ExerciseTemplate(
-                                    document.getId(), document.get("name").toString(),
-                                    document.get("description").toString(),
-                                    Category.enumFromName(document.get("category").toString()));
-
-                            //give the user this object
-                            User.activeUser.getExerciseList().add(exerciseTemplate);
-
                         }
 
                     } else {
@@ -197,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
                                 User.activeUser.getWorkoutList().add(workoutPlan);
 
                                 //get all exercises from that workout plan
-                                db.collection("plan_exercises")
+                                db.collection("plan_exercises").whereEqualTo("workout_plan_id", workoutPlan.getId().toString())
                                         .get()
                                         .addOnCompleteListener(task1 -> {
                                             if (task1.isSuccessful()) {
@@ -207,6 +225,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                                         //create a variable for it with attributes
                                                         String exercisePlanId = document1.getId();
+                                                        if(document1.get("exercise_template_id").toString().equals("")) continue;
+
                                                         Exercise exercise = new Exercise(ExerciseTemplate.getFromID(document1.get("exercise_template_id").toString()));
 
                                                         if(exercise == null) continue;
@@ -324,6 +344,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
         startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+        //load default data if no workouts or exercises available for user
+        if(User.getActiveUser().getExerciseList().isEmpty()
+                && User.getActiveUser().getWorkoutList().isEmpty()){
+            addDefaultData();
+        }
         //Hide the progress bar as all the data has been loaded
         progressBar.setVisibility(View.INVISIBLE);
 
@@ -365,5 +390,157 @@ public class LoginActivity extends AppCompatActivity {
         }else {
             Utils.errorDialog(this, "Password reset", "Please enter an E-mail address in the form above and click again.", "Continue");
         }
+    }
+
+    /**
+     * Create the default exercises and workouts for users when they register
+     */
+    public void addDefaultData(){
+        //A list of all default exercises
+        ArrayList<ExerciseTemplate> defaultExercises = new ArrayList<>();
+        ExerciseTemplate benchPress = new ExerciseTemplate("", "Bench Press", "Barbell", Category.CHEST);
+        ExerciseTemplate pullUps = new ExerciseTemplate("", "Pull-ups", "Pronated grip", Category.BACK);
+        ExerciseTemplate squats = new ExerciseTemplate("", "Squats", "Barbell back squats", Category.QUADS);
+        ExerciseTemplate OHP = new ExerciseTemplate("", "Military Press", "Barbell", Category.SHOULDERS);
+        ExerciseTemplate tricepPushdown = new ExerciseTemplate("", "Tricep Pushdown", "Cable machine, rope attachment", Category.TRICEPS);
+        ExerciseTemplate bicepCurls = new ExerciseTemplate("", "Bicep Curls", "EZ-Bar bicep curls", Category.BICEPS);
+
+        ExerciseTemplate legCurl = new ExerciseTemplate("", "Leg Curl", "Seated machine", Category.HAMSTRINGS);
+        ExerciseTemplate legExtension = new ExerciseTemplate("", "Leg Extensions", "Machine", Category.QUADS);
+        ExerciseTemplate calfRaise = new ExerciseTemplate("", "Calf Raises", "Machine", Category.CALVES);
+        ExerciseTemplate deadLift = new ExerciseTemplate("", "Deadlift", "Barbell", Category.BACK);
+
+        defaultExercises.add(benchPress);
+        defaultExercises.add(pullUps);
+        defaultExercises.add(squats);
+        defaultExercises.add(tricepPushdown);
+        defaultExercises.add(bicepCurls);
+        defaultExercises.add(legCurl);
+        defaultExercises.add(legExtension);
+        defaultExercises.add(legCurl);
+        defaultExercises.add(calfRaise);
+        defaultExercises.add(deadLift);
+
+        // Get a new write batch
+
+
+
+        WriteBatch batch = db.batch();
+
+
+
+// Commit the batch
+        //add default exercises to database
+        for(ExerciseTemplate template : defaultExercises){
+            User.getActiveUser().getExerciseList().add(template);
+
+            Map<String, Object> exercise = new HashMap<>();
+            exercise.put("user", User.getActiveUser().getId());
+            exercise.put("name", template.getName());
+            exercise.put("category", template.getCategory().getName());
+            exercise.put("description", template.getDesc());
+
+//            Reference newRef1 = db.collection("exercises");
+            DocumentReference exercisesRef = db.collection("exercises").document();
+            template.setId(exercisesRef.getId());
+            batch.set(exercisesRef, exercise);
+
+            // Add a new document with a generated ID
+//            db.collection("exercises")
+//                    .add(exercise)
+//                    .addOnSuccessListener(documentReference -> {
+//                        template.setId(documentReference.getId());
+//                    });
+        }
+
+        batch.commit().addOnCompleteListener(task -> {
+
+            //Now create the default workouts
+            ArrayList<WorkoutPlan> defaultWorkoutPlans = new ArrayList<>();
+            WorkoutPlan legs = new WorkoutPlan("", User.getActiveUser(), "Leg day",
+                    "A basic workout targeting quads, hamstrings and calves");
+            legs.getExercises().add(addExercise(squats, 3, 10));
+            legs.getExercises().add(addExercise(legExtension, 4, 8));
+            legs.getExercises().add(addExercise(legCurl, 3, 10));
+            legs.getExercises().add(addExercise(calfRaise, 4, 12));
+
+            WorkoutPlan fullBody = new WorkoutPlan("", User.getActiveUser(), "Full body",
+                    "A basic workout targeting most muscle groups");
+            fullBody.getExercises().add(addExercise(squats, 5, 5));
+            fullBody.getExercises().add(addExercise(benchPress, 5, 5));
+            fullBody.getExercises().add(addExercise(pullUps, 3, 10));
+            fullBody.getExercises().add(addExercise(tricepPushdown, 4, 12));
+            fullBody.getExercises().add(addExercise(bicepCurls, 4, 12));
+
+            WorkoutPlan upperBody = new WorkoutPlan("", User.getActiveUser(), "Upper body",
+                    "A basic workout targeting most muscle groups");
+            upperBody.getExercises().add(addExercise(benchPress, 5, 5));
+            upperBody.getExercises().add(addExercise(OHP, 3, 8));
+            upperBody.getExercises().add(addExercise(pullUps, 3, 10));
+            upperBody.getExercises().add(addExercise(tricepPushdown, 4, 12));
+            upperBody.getExercises().add(addExercise(bicepCurls, 4, 12));
+
+            defaultWorkoutPlans.add(legs);
+            defaultWorkoutPlans.add(fullBody);
+            defaultWorkoutPlans.add(upperBody);
+
+            //Save the workouts to the database
+            for(WorkoutPlan workoutPlan : defaultWorkoutPlans){
+                User.getActiveUser().getWorkoutList().add(workoutPlan);
+
+                Map<String, Object> workout = new HashMap<>();
+                workout.put("user", User.getActiveUser().getId());
+                workout.put("name", workoutPlan.getName());
+                workout.put("description", workoutPlan.getDesc());
+
+                // Add a new document with a generated ID
+                db.collection("workout_plans")
+                        .add(workout)
+                        .addOnSuccessListener(documentReference -> {
+                            workoutPlan.setId(documentReference.getId());
+
+                            for (Exercise e : workoutPlan.getExercises()) {
+
+                                Map<String, Object> exercises = new HashMap<>();
+                                exercises.put("exercise_template_id", e.getId());
+                                exercises.put("workout_plan_id", documentReference.getId());
+
+                                db.collection("plan_exercises")
+                                        .add(exercises)
+                                        .addOnSuccessListener(documentReference12 -> {
+                                            for (HashMap<Integer, Integer> reps : e.getReps().values()) {
+                                                for(int r : reps.values()){
+                                                    Map<String, Object> exerciseReps = new HashMap<>();
+                                                    exerciseReps.put("exercise_plan_id", documentReference12.getId());
+                                                    exerciseReps.put("reps", r);
+
+                                                    db.collection("exercise_plan_sets")
+                                                            .add(exerciseReps);
+                                                }
+                                            }
+                                        });
+                            }
+
+                        });
+            }
+        });
+    }
+
+    /**
+     * Adds exercises to a default workout
+     * @param template      the exercise template
+     * @param sets          the number of sets for the exercise
+     * @param targetReps    the number of reps to achieve
+     * @return              an exercise object
+     */
+    public Exercise addExercise(ExerciseTemplate template, int sets, int targetReps){
+        Exercise exercise = new Exercise(template);
+        HashMap<Integer, Integer> reps = new HashMap<>();
+        for(int i = 0; i < sets; i++){
+            reps.put(0, targetReps);
+            exercise.getReps().put(exercise.getReps().size(), reps);
+        }
+
+        return exercise;
     }
 }

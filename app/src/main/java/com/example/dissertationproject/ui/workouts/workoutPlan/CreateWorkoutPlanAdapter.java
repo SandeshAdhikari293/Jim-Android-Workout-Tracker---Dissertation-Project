@@ -68,7 +68,7 @@ public class CreateWorkoutPlanAdapter extends RecyclerView.Adapter<CreateWorkout
 
 			for(int rep : model.getTargetReps()){
 				RepLine.addRepLine(context, holder.linearLayout, count, rep, model, false,
-						false);
+						true);
 
 				count++;
 			}

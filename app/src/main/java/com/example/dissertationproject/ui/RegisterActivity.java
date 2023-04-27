@@ -15,11 +15,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.dissertationproject.CredentialValidation;
 import com.example.dissertationproject.R;
 import com.example.dissertationproject.Utils;
+import com.example.dissertationproject.objects.Exercise;
+import com.example.dissertationproject.objects.ExerciseTemplate;
+import com.example.dissertationproject.objects.RepLine;
+import com.example.dissertationproject.objects.User;
+import com.example.dissertationproject.objects.WorkoutPlan;
+import com.example.dissertationproject.objects.WorkoutPlanExercise;
+import com.example.dissertationproject.objects.enums.Category;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,9 +135,15 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
                         .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
-                finish();
                 //send a verification email to the user email
-                user.sendEmailVerification().addOnCompleteListener(task12 -> finish());
+//                addDefaultData(user.getUid());
+                user.sendEmailVerification().addOnCompleteListener(task12 -> {
+                    Runnable exit = () -> finish();
+                    Utils.confirmDialog(this, "Account verifcation",
+                            "Please verify your email address", "Cancel",
+                            "Continue", exit, exit);
+                });
+
             }else{
                 Utils.errorDialog(this, "Registration error", "This account is unable to be created", "Continue");
             }
@@ -143,5 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void login(View v){
         finish();
     }
+
+
 
 }

@@ -99,6 +99,10 @@ public class RepLine {
         if(rep != 0)
             et.setHint(reps+rep);
         else et.setHint(reps);
+
+        if(!isNew){
+            et.setText(rep + "");
+        }
         et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         //button to remove the line of data

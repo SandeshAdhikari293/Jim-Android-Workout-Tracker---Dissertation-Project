@@ -42,6 +42,24 @@ public enum Category {
     }
 
     /**
+     * Iterates each category and adds them to an array, includes all categories used for the spinner
+     * @return string array of all items
+     */
+    public static String[] categoriesForSpinner() {
+        String[] categories = new String[Category.values().length + 1];
+
+        categories[0] = "All Exercises";
+
+        int count = 1;
+        for(Category c : Category.values()){
+            categories[count] = c.getName();;
+            count++;
+        }
+
+        return categories;
+    }
+
+    /**
      * Gets the category object from its name
      * @param name  the name of the category
      * @return      the category object

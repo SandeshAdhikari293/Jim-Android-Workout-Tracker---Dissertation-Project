@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,6 +70,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
         if(isUpdating()){
             //add all the current data from the workout plan being updated
+            TextView title = findViewById(R.id.tvTitle);
+            title.setText("Editing a workout");
+
             exercises.clear();
             ((EditText)findViewById(R.id.etWorkoutPlanName)).setText(workoutPlan.getName());
             ((EditText)findViewById(R.id.etWorkoutPlanDescription)).setText(workoutPlan.getDesc());
@@ -204,7 +208,14 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
                 for (RepLine repLine : e.getRepLines()) {
                     HashMap<Integer, Integer> val = new HashMap<>();
-                    int rep = Integer.parseInt(repLine.getReps().getText().toString());
+                    String value = repLine.getReps().getText().toString();
+
+                    //Ensure that a value is entered to be parsed
+                    if(value.equals("")){
+                        value = "0";
+                    }
+
+                    int rep = Integer.parseInt(value);
                     val.put(0, rep);
                     exercise.getReps().put(exercise.getReps().size(), val);
                 }

@@ -108,7 +108,6 @@ public class WorkoutLogAdapter extends RecyclerView.Adapter<WorkoutLogAdapter.Vi
 				//remove from database
 				db.collection("workout_log").document(model.getId()).delete().addOnCompleteListener(task -> {
 					Utils.errorDialog(context,"Deleted", "Workout has been deleted", "Continue");
-					//todo: delete the exercises for this workout log
 				});
 			});
 		});

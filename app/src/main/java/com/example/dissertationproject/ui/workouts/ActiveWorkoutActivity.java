@@ -100,7 +100,7 @@ public class ActiveWorkoutActivity extends AppCompatActivity {
         db.collection("workout_log")
                 .add(workout)
                 .addOnSuccessListener(documentReference -> {
-
+                    wk.setId(documentReference.getId());
                     //Store each exercise
                     for(WorkoutPlanExercise e : exercises){
                         Exercise exercise = new Exercise(e.getExerciseTemplate());

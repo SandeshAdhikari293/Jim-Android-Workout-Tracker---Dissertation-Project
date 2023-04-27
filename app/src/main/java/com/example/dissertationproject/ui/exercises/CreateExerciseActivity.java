@@ -96,6 +96,11 @@ public class CreateExerciseActivity extends AppCompatActivity {
      */
     public void createExercise(View v){
 
+        if(name.getText().toString().equals("")){
+            Toast.makeText(getApplicationContext(),"You must enter a name for the exercise",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
 
         if(!isUpdating()) {
             //Store the data in a hashmap for the exercise
@@ -109,14 +114,13 @@ public class CreateExerciseActivity extends AppCompatActivity {
             db.collection("exercises")
                     .add(exercise)
                     .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
                         //create a new exercise template object and
                         //store the exercise in cached data as well
                         ExerciseTemplate exerciseTemplate = new ExerciseTemplate(
                                 documentReference.getId(), name.getText().toString(),
                                 desc.getText().toString(),
-                                Category.valueOf(category.getSelectedItem().toString()));
+                                Category.enumFromName(category.getSelectedItem().toString()));
 
                         User.getActiveUser().getExerciseList().add(exerciseTemplate);
                         finish();
@@ -129,7 +133,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
             //update the existing exercise in the database
             updating.setName(name.getText().toString());
             updating.setDesc(desc.getText().toString());
-            updating.setCategory(Category.valueOf(category.getSelectedItem().toString()));
+            updating.setCategory(Category.enumFromName(category.getSelectedItem().toString()));
 
             db.collection("exercises").document(updateID)
                     .update(
