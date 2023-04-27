@@ -161,11 +161,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             db.collection("workout_plans")
                     .add(workout)
                     .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
                         workoutPlan.setId(documentReference.getId());
 
-//                        System.out.println("Should exist: " + workoutPlan.getExercises().size());
                         for (Exercise e : workoutPlan.getExercises()) {
 
 
@@ -176,7 +174,6 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                             db.collection("plan_exercises")
                                     .add(exercises)
                                     .addOnSuccessListener(documentReference12 -> {
-                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference12.getId());
 
                                         for (HashMap<Integer, Integer> reps : e.getReps().values()) {
                                             for(int r : reps.values()){
@@ -185,18 +182,17 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                                                 exerciseReps.put("reps", r);
 
                                                 db.collection("exercise_plan_sets")
-                                                        .add(exerciseReps)
-                                                        .addOnSuccessListener(documentReference121 -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference121.getId()))
-                                                        .addOnFailureListener(e13 -> Log.w(TAG, "Error adding document", e13));
+                                                        .add(exerciseReps);
                                             }
-                                            }
-                                    })
-                                    .addOnFailureListener(e14 -> Log.w(TAG, "Error adding document", e14));
+                                        }
+
+                                    });
                         }
 
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-            Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been created",Toast.LENGTH_SHORT).show();
+                        finish();
+                        Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been created",Toast.LENGTH_SHORT).show();
+
+                    });
 
         }else{
             //update the current entry in the database
@@ -247,8 +243,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
                     //Once the previous entries are deleted, populate with new entries.
                     update();
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
+
                 }
             });
 
@@ -258,7 +253,6 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been updated",Toast.LENGTH_SHORT).show();
         }
 
-        finish();
     }
 
     /**
@@ -287,11 +281,11 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                                 db.collection("exercise_plan_sets")
                                         .add(exerciseReps)
                                         .addOnSuccessListener(documentReference1 -> {
-                                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference1.getId());
-                                        }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                                        });
                             }
+                            finish();
                         }
-                    }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                    });
 
         }
     }
@@ -330,15 +324,10 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                                 //delete the database item
                                 itemsRef1.document(document1.getId()).delete();
                             }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task1.getException());
                         }
                     });
-
                     itemsRef.document(document.getId()).delete();
                 }
-            } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
             }
         });
 
@@ -346,14 +335,10 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         db.collection("workout_plans").document(workoutPlan.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                })
-                .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
-
-        finish();
-
-        //inform the user
-        Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been deleted",Toast.LENGTH_SHORT).show();
+                    finish();
+                    //inform the user
+                    Toast.makeText(getApplicationContext(),workoutPlan.getName()+" has been deleted",Toast.LENGTH_SHORT).show();
+                });
 
     }
 }
